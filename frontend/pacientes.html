@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pacientes - Analitic Laboratorio Clínico</title>
+    <link rel="stylesheet" href="/css/styles.css">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f1f8e9 0%, #e8f5e9 100%);
+            min-height: 100vh;
+            color: #1b5e20;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 60px 0;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            margin: 0;
+            color: #2e7d32;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        .back {
+            padding: 12px 32px;
+            background: #388e3c;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .back:hover {
+            background: #2e7d32;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(56, 142, 60, 0.3);
+        }
+
+        .container {
+            padding: 20px 60px 60px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 420px 1fr;
+            gap: 40px;
+        }
+
+        .panel {
+            background: white;
+            border-radius: 18px;
+            padding: 32px;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.07);
+            border-left: 5px solid #81c784;
+        }
+
+        .panel h3 {
+            color: #2e7d32;
+            text-align: center;
+            margin-bottom: 28px;
+            font-size: 1.6rem;
+            font-weight: 600;
+        }
+
+        .panel input,
+        .panel select,
+        .panel textarea {
+            width: 100%;
+            padding: 14px 18px;
+            margin-bottom: 20px;
+            border: 2px solid #a5d6a7;
+            border-radius: 10px;
+            font-size: 1.02rem;
+            transition: all 0.25s;
+        }
+
+        .panel input:focus,
+        .panel select:focus,
+        .panel textarea:focus {
+            border-color: #388e3c;
+            box-shadow: 0 0 0 4px rgba(56, 142, 60, 0.15);
+            outline: none;
+        }
+
+        .panel button {
+            width: 100%;
+            padding: 16px;
+            background: #388e3c;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .panel button:hover {
+            background: #2e7d32;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(56, 142, 60, 0.3);
+        }
+
+        .search-container {
+            position: relative;
+            margin-bottom: 28px;
+        }
+
+        .search-container input {
+            width: 100%;
+            padding: 14px 18px 14px 50px;
+            border: 2px solid #a5d6a7;
+            border-radius: 10px;
+            font-size: 1.02rem;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.3rem;
+            color: #66bb6a;
+        }
+
+        .patients-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+            gap: 28px;
+        }
+
+        .patient-card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.07);
+            transition: all 0.3s ease;
+            border-left: 5px solid #81c784;
+        }
+
+        .patient-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 16px 45px rgba(102, 187, 106, 0.22);
+        }
+
+        .patient-header {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            margin-bottom: 16px;
+        }
+
+        .patient-avatar {
+            width: 64px;
+            height: 64px;
+            background: #66bb6a;
+            border-radius: 50%;
+            color: white;
+            font-size: 1.8rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 3px 10px rgba(102, 187, 106, 0.35);
+        }
+
+        .patient-info h4 {
+            margin: 0;
+            font-size: 1.35rem;
+            color: #2e7d32;
+        }
+
+        .patient-info p {
+            margin: 5px 0;
+            color: #424242;
+            font-size: 0.98rem;
+            line-height: 1.4;
+        }
+
+        .patient-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .patient-actions button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s;
+        }
+
+        .edit-btn {
+            background: #ffb300;
+            color: #333;
+        }
+
+        .edit-btn:hover {
+            background: #ffa000;
+            transform: translateY(-2px);
+        }
+
+        .delete-btn {
+            background: #e53935;
+            color: white;
+        }
+
+        .delete-btn:hover {
+            background: #c62828;
+            transform: translateY(-2px);
+        }
+
+
+        .modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 18px;
+            padding: 36px;
+            box-shadow: 0 20px 70px rgba(0, 0, 0, 0.25);
+            z-index: 1000;
+            width: 90%;
+            max-width: 560px;
+            border-left: 8px solid #81c784;
+        }
+
+        .modal h3 {
+            color: #2e7d32;
+            text-align: center;
+            margin-bottom: 28px;
+            font-size: 1.8rem;
+        }
+
+        .modal .form-group {
+            margin-bottom: 22px;
+        }
+
+        .modal label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #1b5e20;
+        }
+
+        .modal .required::after {
+            content: " *";
+            color: #e53935;
+        }
+
+        .modal input,
+        .modal select,
+        .modal textarea {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid #a5d6a7;
+            border-radius: 10px;
+            font-size: 1.02rem;
+        }
+
+        .modal .buttons {
+            display: flex;
+            gap: 18px;
+            margin-top: 36px;
+        }
+
+        .modal button {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .modal .save {
+            background: #388e3c;
+            color: white;
+        }
+
+        .modal .save:hover {
+            background: #2e7d32;
+        }
+
+        .modal .cancel {
+            background: #757575;
+            color: white;
+        }
+
+        .modal .cancel:hover {
+            background: #616161;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <h1>Pacientes</h1>
+        <button class="back" onclick="volver()">Volver al Dashboard</button>
+    </div>
+
+    <div class="container">
+
+        <div class="layout">
+
+
+            <div class="panel">
+                <h3>Registrar nuevo paciente</h3>
+                <input id="nombre" type="text" placeholder="Nombre completo *" required>
+                <input id="edad" type="number" placeholder="Edad *" min="1" required>
+                <input id="telefono" type="text" placeholder="Teléfono (10 dígitos) *" maxlength="10" required>
+                <select id="sexo">
+                    <option value="">Sexo</option>
+                    <option value="Masculino">Masculino</option>
+                    <option value="Femenino">Femenino</option>
+                    <option value="Otro">Otro</option>
+                </select>
+                <input id="correo" type="email" placeholder="Correo electrónico">
+                <input id="direccion" type="text" placeholder="Dirección">
+                <textarea id="observaciones"
+                    placeholder="Observaciones generales (alergias, medicamentos, notas, etc.)"></textarea>
+                <button onclick="guardarPaciente()">Guardar Paciente</button>
+            </div>
+
+
+            <div class="panel">
+                <h3>Pacientes registrados</h3>
+
+                <div class="search-container">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" placeholder="Buscar por nombre o teléfono..."
+                        onkeyup="buscarPaciente(this.value)">
+                </div>
+
+                <div class="patients-list" id="listaPacientes"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div id="editModal" class="modal" style="display:none;">
+        <h3>Editar Paciente</h3>
+        <div class="form-group">
+            <label for="editNombre" class="required">Nombre completo</label>
+            <input id="editNombre" type="text" required>
+        </div>
+        <div class="form-group">
+            <label for="editEdad" class="required">Edad</label>
+            <input id="editEdad" type="number" min="1" required>
+        </div>
+        <div class="form-group">
+            <label for="editTelefono" class="required">Teléfono</label>
+            <input id="editTelefono" type="text" maxlength="10" required>
+        </div>
+        <div class="form-group">
+            <label for="editSexo">Sexo</label>
+            <select id="editSexo">
+                <option value="">Seleccionar</option>
+                <option value="Masculino">Masculino</option>
+                <option value="Femenino">Femenino</option>
+                <option value="Otro">Otro</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="editCorreo">Correo electrónico</label>
+            <input id="editCorreo" type="email">
+        </div>
+        <div class="form-group">
+            <label for="editDireccion">Dirección</label>
+            <input id="editDireccion" type="text">
+        </div>
+        <div class="form-group">
+            <label for="editObservaciones">Observaciones generales</label>
+            <textarea id="editObservaciones"></textarea>
+        </div>
+        <div class="buttons">
+            <button class="save" onclick="guardarEdicion()">Guardar Cambios</button>
+            <button class="cancel" onclick="cerrarEditModal()">Cancelar</button>
+        </div>
+    </div>
+
+
+    <div id="deleteModal" class="modal" style="display:none;">
+        <h3>Confirmar eliminación</h3>
+        <p>¿Realmente quieres eliminar a <strong id="deleteName"></strong>?</p>
+        <div class="buttons">
+            <button class="save" onclick="confirmarEliminar()">Sí, eliminar</button>
+            <button class="cancel" onclick="cerrarDeleteModal()">Cancelar</button>
+        </div>
+    </div>
+
+    <script>
+        let pacienteEditId = null;
+        let pacienteDeleteId = null;
+        let allPacientes = [];
+
+
+        async function guardarPaciente() {
+            const nombre = document.getElementById("nombre").value.trim();
+            const edadStr = document.getElementById("edad").value.trim();
+            const telefono = document.getElementById("telefono").value.trim();
+            const sexo = document.getElementById("sexo").value;
+            const correo = document.getElementById("correo").value.trim();
+            const direccion = document.getElementById("direccion").value.trim();
+            const observaciones = document.getElementById("observaciones").value.trim();
+
+            if (!nombre || !edadStr || !telefono) {
+                alert("Completa los campos obligatorios (*)");
+                return;
+            }
+
+            const edad = parseInt(edadStr, 10);
+            if (isNaN(edad) || edad <= 0) {
+                alert("La edad debe ser un número positivo");
+                return;
+            }
+
+            if (telefono.length !== 10 || isNaN(telefono)) {
+                alert("El teléfono debe tener exactamente 10 dígitos numéricos");
+                return;
+            }
+
+            try {
+                const exito = await window.pywebview.api.guardarPaciente(
+                    nombre, edad, telefono, sexo, correo, direccion, observaciones
+                );
+
+                if (exito) {
+                    alert("Paciente guardado con éxito");
+                    cargarPacientes();
+                    document.getElementById("nombre").value = "";
+                    document.getElementById("edad").value = "";
+                    document.getElementById("telefono").value = "";
+                    document.getElementById("sexo").value = "";
+                    document.getElementById("correo").value = "";
+                    document.getElementById("direccion").value = "";
+                    document.getElementById("observaciones").value = "";
+                } else {
+                    alert("No se pudo guardar el paciente");
+                }
+            } catch (err) {
+                console.error("Error al guardar paciente:", err);
+                alert("Error al conectar con el sistema");
+            }
+        }
+
+
+        async function cargarPacientes() {
+            try {
+                const pacientes = await window.pywebview.api.obtenerTodosLosPacientes();
+                allPacientes = pacientes || [];
+                console.log("Pacientes recibidos:", allPacientes);
+                renderPacientes(allPacientes);
+            } catch (err) {
+                console.error("Error al cargar pacientes:", err);
+                document.getElementById("listaPacientes").innerHTML =
+                    "<p style='text-align:center; color:#777; padding:30px;'>Error al cargar la lista de pacientes</p>";
+            }
+        }
+
+
+        function renderPacientes(pacientes) {
+            const lista = document.getElementById("listaPacientes");
+            lista.innerHTML = "";
+
+            if (!pacientes || pacientes.length === 0) {
+                lista.innerHTML = "<p style='text-align:center; color:#777; padding:40px 20px;'>No hay pacientes registrados aún.</p>";
+                return;
+            }
+
+            pacientes.forEach(p => {
+                const inicial = (p.nombre || "?").charAt(0).toUpperCase();
+                const nombreEsc = (p.nombre || '').replace(/'/g, "\\'");
+                const telEsc = (p.telefono || '').replace(/'/g, "\\'");
+                const sexoEsc = (p.sexo || '').replace(/'/g, "\\'");
+                const correoEsc = (p.correo || '').replace(/'/g, "\\'");
+                const dirEsc = (p.direccion || '').replace(/'/g, "\\'");
+                const obsEsc = (p.observaciones || '').replace(/'/g, "\\'");
+
+                const card = document.createElement("div");
+                card.className = "patient-card";
+                card.innerHTML = `
+                    <div class="patient-header">
+                        <div class="patient-avatar">${inicial}</div>
+                        <div class="patient-info">
+                            <h4>${p.nombre || 'Sin nombre'}</h4>
+                            <p>Edad: ${p.edad || '?'} años • ${p.sexo || 'No especificado'}</p>
+                            <p>Tel: ${p.telefono || 'No registrado'}</p>
+                            <p>Correo: ${p.correo || 'No registrado'}</p>
+                            <p>Dirección: ${p.direccion || 'No registrada'}</p>
+                            <p style="font-size:0.9rem; color:#757575;">
+                                Registrado: ${p.fecha_registro || 'No disponible'}
+                            </p>
+                        </div>
+                    </div>
+                    <p style="color:#555; font-size:0.95rem; margin:12px 0;">
+                        Observaciones: ${p.observaciones || 'Ninguna'}
+                    </p>
+                    <div class="patient-actions">
+                        <button class="edit-btn" onclick="mostrarModalEdicion(${p.id}, '${nombreEsc}', ${p.edad || 0}, '${telEsc}', '${sexoEsc}', '${correoEsc}', '${dirEsc}', '${obsEsc}')">Editar</button>
+                        <button class="delete-btn" onclick="mostrarModalEliminar(${p.id}, '${nombreEsc}')">Eliminar</button>
+                    </div>
+                `;
+                lista.appendChild(card);
+            });
+        }
+
+
+        function buscarPaciente(texto) {
+            if (!texto.trim()) {
+                renderPacientes(allPacientes);
+                return;
+            }
+            const term = texto.toLowerCase().trim();
+            const filtrados = allPacientes.filter(p =>
+                (p.nombre || '').toLowerCase().includes(term) ||
+                (p.telefono || '').includes(term)
+            );
+            renderPacientes(filtrados);
+        }
+
+
+        function mostrarModalEdicion(id, nombre, edad, telefono, sexo, correo, direccion, observaciones) {
+            pacienteEditId = id;
+            document.getElementById("editNombre").value = nombre;
+            document.getElementById("editEdad").value = edad;
+            document.getElementById("editTelefono").value = telefono;
+            document.getElementById("editSexo").value = sexo;
+            document.getElementById("editCorreo").value = correo;
+            document.getElementById("editDireccion").value = direccion;
+            document.getElementById("editObservaciones").value = observaciones;
+            document.getElementById("editModal").style.display = "block";
+        }
+
+        function cerrarEditModal() {
+            document.getElementById("editModal").style.display = "none";
+            pacienteEditId = null;
+        }
+
+        async function guardarEdicion() {
+            const nombre = document.getElementById("editNombre").value.trim();
+            const edadStr = document.getElementById("editEdad").value.trim();
+            const telefono = document.getElementById("editTelefono").value.trim();
+            const sexo = document.getElementById("editSexo").value;
+            const correo = document.getElementById("editCorreo").value.trim();
+            const direccion = document.getElementById("editDireccion").value.trim();
+            const observaciones = document.getElementById("editObservaciones").value.trim();
+
+            if (!nombre || !edadStr || !telefono) {
+                alert("Completa los campos obligatorios");
+                return;
+            }
+
+            const edad = parseInt(edadStr, 10);
+            if (isNaN(edad) || edad <= 0) {
+                alert("La edad debe ser un número positivo");
+                return;
+            }
+            if (telefono.length !== 10 || isNaN(telefono)) {
+                alert("El teléfono debe tener exactamente 10 dígitos numéricos");
+                return;
+            }
+
+            try {
+                const exito = await window.pywebview.api.editarPaciente(
+                    pacienteEditId, nombre, edad, telefono, sexo, correo, direccion, observaciones
+                );
+
+                if (exito) {
+                    alert("Paciente actualizado con éxito");
+                    cerrarEditModal();
+                    cargarPacientes();
+                } else {
+                    alert("No se pudo actualizar el paciente");
+                }
+            } catch (err) {
+                console.error("Error al editar:", err);
+                alert("Error al actualizar");
+            }
+        }
+
+        function mostrarModalEliminar(id, nombre) {
+            pacienteDeleteId = id;
+            document.getElementById("deleteName").textContent = nombre;
+            document.getElementById("deleteModal").style.display = "block";
+        }
+
+        function cerrarDeleteModal() {
+            document.getElementById("deleteModal").style.display = "none";
+            pacienteDeleteId = null;
+        }
+
+        async function confirmarEliminar() {
+            try {
+                const exito = await window.pywebview.api.eliminarPaciente(pacienteDeleteId);
+                if (exito) {
+                    alert("Paciente eliminado correctamente");
+                    cargarPacientes();
+                } else {
+                    alert("No se pudo eliminar el paciente (puede tener solicitudes asociadas)");
+                }
+                cerrarDeleteModal();
+            } catch (err) {
+                console.error("Error al eliminar:", err);
+                alert("Error al eliminar");
+            }
+        }
+
+        function volver() {
+            window.location.assign("dashboard.html");
+        }
+
+        window.addEventListener('pywebviewready', () => {
+            console.log("pywebview listo → cargando pacientes");
+            cargarPacientes();
+        }, { once: true });
+    </script>
+
+</body>
+
+</html>

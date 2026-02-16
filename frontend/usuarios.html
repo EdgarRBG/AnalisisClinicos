@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Usuarios - Analitic</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #2e7d32;
+            --primary-dark: #1b5e20;
+            --primary-light: #81c784;
+            --bg: #f1f8e9;
+            --card: #ffffff;
+            --text: #1b5e20;
+            --text-light: #424242;
+            --border: #a5d6a7;
+            --danger: #e53935;
+            --warning: #ffb300;
+            --success: #43a047;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--bg), #e8f5e9);
+            min-height: 100vh;
+            color: var(--text);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 60px 0;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            margin: 0;
+            color: var(--primary);
+            font-size: 2.8rem;
+            font-weight: 700;
+        }
+
+        .back {
+            padding: 12px 32px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .back:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(46, 125, 50, 0.3);
+        }
+
+        .container {
+            padding: 24px 60px 60px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 420px 1fr;
+            gap: 40px;
+        }
+
+        .panel {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+            border-left: 5px solid var(--primary-light);
+        }
+
+        .panel h3 {
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 28px;
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+
+        .form-group {
+            position: relative;
+            margin-bottom: 24px;
+        }
+
+        .form-group label {
+            position: absolute;
+            top: 14px;
+            left: 16px;
+            color: #757575;
+            font-size: 1rem;
+            transition: all 0.3s;
+            pointer-events: none;
+        }
+
+        .form-group input:focus+label,
+        .form-group input:not(:placeholder-shown)+label,
+        .form-group select:focus+label,
+        .form-group select:not(:placeholder-shown)+label {
+            top: -8px;
+            left: 12px;
+            font-size: 0.85rem;
+            color: var(--primary);
+            background: var(--card);
+            padding: 0 6px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(46, 125, 50, 0.15);
+            outline: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(46, 125, 50, 0.3);
+        }
+
+        .users-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 24px;
+        }
+
+        .user-card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s ease;
+            border-left: 5px solid var(--primary-light);
+        }
+
+        .user-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 16px 45px rgba(46, 125, 50, 0.18);
+        }
+
+        .user-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .user-avatar {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 50%;
+            color: white;
+            font-size: 1.8rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
+        }
+
+        .user-info h4 {
+            margin: 0;
+            font-size: 1.4rem;
+            color: var(--text);
+        }
+
+        .user-info p {
+            margin: 4px 0 0;
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        .role-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+
+        .role-admin {
+            background: #1976d2;
+            color: white;
+        }
+
+        .role-laboratorista {
+            background: #388e3c;
+            color: white;
+        }
+
+        .role-recepcion {
+            background: #ffb300;
+            color: #333;
+        }
+
+        .role-capturista {
+            background: #757575;
+            color: white;
+        }
+
+        .user-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .edit-btn {
+            flex: 1;
+            padding: 12px;
+            background: var(--warning);
+            color: #333;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .edit-btn:hover {
+            background: #ffa000;
+        }
+
+        .delete-btn {
+            flex: 1;
+            padding: 12px;
+            background: var(--danger);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .delete-btn:hover {
+            background: #c62828;
+        }
+
+        /* Modal */
+        .modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--card);
+            border-radius: 16px;
+            padding: 36px;
+            box-shadow: 0 20px 70px rgba(0, 0, 0, 0.25);
+            z-index: 2000;
+            max-width: 520px;
+            width: 90%;
+            border-left: 8px solid var(--primary-light);
+        }
+
+        .modal h3 {
+            color: var(--primary);
+            margin-bottom: 24px;
+            font-size: 1.8rem;
+            text-align: center;
+        }
+
+        .modal .form-group {
+            margin-bottom: 24px;
+        }
+
+        .modal label {
+            position: absolute;
+            top: 14px;
+            left: 16px;
+            color: #757575;
+            font-size: 1rem;
+            transition: all 0.3s;
+            pointer-events: none;
+        }
+
+        .modal input:focus+label,
+        .modal input:not(:placeholder-shown)+label,
+        .modal select:focus+label {
+            top: -8px;
+            left: 12px;
+            font-size: 0.85rem;
+            color: var(--primary);
+            background: var(--card);
+            padding: 0 6px;
+        }
+
+        .modal .buttons {
+            display: flex;
+            gap: 16px;
+            margin-top: 32px;
+        }
+
+        .modal button {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .modal .save {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+        }
+
+        .modal .save:hover {
+            transform: translateY(-2px);
+        }
+
+        .modal .confirm {
+            background: var(--danger);
+            color: white;
+        }
+
+        .modal .cancel {
+            background: #757575;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <h1>Gestión de Usuarios</h1>
+        <button class="back" onclick="volver()">Volver al Dashboard</button>
+    </div>
+
+    <div class="container">
+        <div class="layout">
+
+            <!-- Panel: Nuevo usuario -->
+            <div class="panel">
+                <h3>Agregar Nuevo Usuario</h3>
+                <div class="form-group">
+                    <input id="nuevoUsuario" type="text" placeholder=" " required>
+                    <label for="nuevoUsuario">Nombre de usuario *</label>
+                </div>
+                <div class="form-group">
+                    <input id="nuevaContrasena" type="password" placeholder=" " required>
+                    <label for="nuevaContrasena">Contraseña *</label>
+                </div>
+                <div class="form-group">
+                    <select id="nuevoRol" required>
+                        <option value="" disabled selected>Selecciona rol</option>
+                        <option value="admin">Admin</option>
+                        <option value="recepcion">Recepción</option>
+                        <option value="laboratorista">Laboratorista</option>
+                        <option value="capturista">Capturista</option>
+                    </select>
+                    <label for="nuevoRol">Rol *</label>
+                </div>
+                <button onclick="crearUsuario()">Agregar Usuario</button>
+            </div>
+
+            <!-- Panel: Lista de usuarios -->
+            <div class="panel">
+                <h3>Usuarios Registrados</h3>
+                <div class="users-list" id="listaUsuarios"></div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Modal edición -->
+    <div id="editModal" class="modal" style="display:none;">
+        <h3>Editar Usuario</h3>
+        <input type="hidden" id="editUserId">
+        <div class="form-group">
+            <input id="editUsuario" type="text" disabled>
+            <label for="editUsuario">Usuario</label>
+        </div>
+        <div class="form-group">
+            <input id="editNuevaContrasena" type="password" placeholder=" ">
+            <label for="editNuevaContrasena">Nueva contraseña (opcional)</label>
+        </div>
+        <div class="form-group">
+            <select id="editRol">
+                <option value="admin">Admin</option>
+                <option value="recepcion">Recepción</option>
+                <option value="laboratorista">Laboratorista</option>
+                <option value="capturista">Capturista</option>
+            </select>
+            <label for="editRol">Rol</label>
+        </div>
+        <div class="buttons">
+            <button class="save" onclick="guardarEdicionUsuario()">Guardar</button>
+            <button class="confirm" onclick="confirmarEliminarUsuario()">Eliminar</button>
+            <button class="cancel" onclick="cerrarModal('editModal')">Cancelar</button>
+        </div>
+    </div>
+
+    <!-- Modal eliminación -->
+    <div id="deleteModal" class="modal" style="display:none;">
+        <h3>¿Eliminar usuario?</h3>
+        <p>Esta acción no se puede deshacer.</p>
+        <div class="buttons">
+            <button class="confirm" onclick="eliminarUsuario()">Sí, eliminar</button>
+            <button class="cancel" onclick="cerrarModal('deleteModal')">No</button>
+        </div>
+    </div>
+
+    <script>
+        let usuarios = [];
+        let userEditId = null;
+        let userDeleteId = null;
+
+        window.addEventListener('pywebviewready', async () => {
+            cargarUsuarios();
+        }, { once: true });
+
+        async function cargarUsuarios() {
+            try {
+                usuarios = await window.pywebview.api.obtenerUsuarios() || [];
+                renderUsuarios();
+            } catch (err) {
+                console.error("Error al cargar usuarios:", err);
+                document.getElementById("listaUsuarios").innerHTML = "<p style='text-align:center; color:#777;'>Error al cargar usuarios</p>";
+            }
+        }
+
+        function renderUsuarios() {
+            const lista = document.getElementById("listaUsuarios");
+            lista.innerHTML = "";
+
+            if (usuarios.length === 0) {
+                lista.innerHTML = "<p style='text-align:center; color:#777; padding:30px;'>No hay usuarios registrados aún.</p>";
+                return;
+            }
+
+            usuarios.forEach(u => {
+                const inicial = u.usuario.charAt(0).toUpperCase();
+                const rolClass = `role-${u.rol.toLowerCase()}`;
+                const card = document.createElement("div");
+                card.className = "user-card";
+                card.innerHTML = `
+                    <div class="user-header">
+                        <div class="user-avatar">${inicial}</div>
+                        <div class="user-info">
+                            <h4>${u.usuario}</h4>
+                            <span class="role-badge ${rolClass}">${u.rol}</span>
+                        </div>
+                    </div>
+                    <div class="user-actions">
+                        <button class="edit-btn" onclick="mostrarModalEdicion(${u.id}, '${u.usuario.replace(/'/g, "\\'")}', '${u.rol}')">Editar</button>
+                        <button class="delete-btn" onclick="confirmarEliminarUsuario(${u.id})">Eliminar</button>
+                    </div>
+                `;
+                lista.appendChild(card);
+            });
+        }
+
+        async function crearUsuario() {
+            const usuario = document.getElementById("nuevoUsuario").value.trim();
+            const contrasena = document.getElementById("nuevaContrasena").value.trim();
+            const rol = document.getElementById("nuevoRol").value;
+
+            if (!usuario || !contrasena || !rol) {
+                alert("Completa todos los campos");
+                return;
+            }
+
+            try {
+                const exito = await window.pywebview.api.crearUsuario(usuario, contrasena, rol);
+                if (exito) {
+                    alert("Usuario creado con éxito");
+                    document.getElementById("nuevoUsuario").value = "";
+                    document.getElementById("nuevaContrasena").value = "";
+                    document.getElementById("nuevoRol").value = "";
+                    cargarUsuarios();
+                } else {
+                    alert("No se pudo crear el usuario");
+                }
+            } catch (err) {
+                console.error("Error al crear usuario:", err);
+                alert("Error al conectar con el sistema");
+            }
+        }
+
+        function mostrarModalEdicion(id, usuario, rol) {
+            userEditId = id;
+            document.getElementById("editUsuario").value = usuario;
+            document.getElementById("editNuevaContrasena").value = "";
+            document.getElementById("editRol").value = rol;
+            document.getElementById("editModal").style.display = "block";
+        }
+
+        async function guardarEdicionUsuario() {
+            const nuevaContrasena = document.getElementById("editNuevaContrasena").value.trim();
+            const nuevoRol = document.getElementById("editRol").value;
+
+            if (!nuevoRol) {
+                alert("El rol es obligatorio");
+                return;
+            }
+
+            try {
+                let exito = true;
+                if (nuevaContrasena) {
+                    exito = exito && await window.pywebview.api.actualizarContrasenaUsuario(userEditId, nuevaContrasena);
+                }
+                exito = exito && await window.pywebview.api.actualizarRolUsuario(userEditId, nuevoRol);
+
+                if (exito) {
+                    alert("Usuario actualizado");
+                    cerrarModal('editModal');
+                    cargarUsuarios();
+                } else {
+                    alert("No se pudo actualizar");
+                }
+            } catch (err) {
+                console.error("Error al editar:", err);
+                alert("Error al actualizar");
+            }
+        }
+
+        function confirmarEliminarUsuario(id) {
+            userDeleteId = id;
+            document.getElementById("deleteModal").style.display = "block";
+        }
+
+        async function eliminarUsuario() {
+            try {
+                const exito = await window.pywebview.api.eliminarUsuario(userDeleteId);
+                if (exito) {
+                    alert("Usuario eliminado");
+                    cerrarModal('deleteModal');
+                    cargarUsuarios();
+                } else {
+                    alert("No se pudo eliminar");
+                }
+            } catch (err) {
+                console.error("Error al eliminar:", err);
+                alert("Error al eliminar");
+            }
+        }
+
+        function cerrarModal(id) {
+            document.getElementById(id).style.display = "none";
+        }
+
+        function volver() {
+            window.location.assign("dashboard.html");
+        }
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analitic - Iniciar Sesión</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #2e7d32;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
+            overflow: hidden;
+            width: 100%;
+            max-width: 1080px;
+            display: flex;
+            height: 620px;
+        }
+
+        .login-left {
+            flex: 1;
+            background: linear-gradient(135deg, #4caf50 0%, #66bb6a 100%);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 40px;
+            text-align: center;
+        }
+
+        .logo-container {
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            font-size: 4.5rem;
+            font-weight: bold;
+            margin: 0;
+            line-height: 1;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+        }
+
+        .logo-sub {
+            font-size: 1.6rem;
+            font-weight: 500;
+            margin: 8px 0 0;
+            opacity: 0.95;
+        }
+
+        .slogan {
+            font-size: 1.35rem;
+            margin-top: 30px;
+            max-width: 420px;
+            line-height: 1.5;
+            opacity: 0.92;
+        }
+
+        .login-right {
+            flex: 1.3;
+            padding: 80px 70px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: #ffffff;
+        }
+
+        .login-right h1 {
+            font-size: 2.6rem;
+            color: #2e7d32;
+            margin-bottom: 50px;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .form-group {
+            margin-bottom: 32px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #1b5e20;
+            font-size: 1.1rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 16px 20px;
+            border: 2px solid #a5d6a7;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #388e3c;
+            box-shadow: 0 0 0 5px rgba(56, 142, 60, 0.18);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 18px;
+            background: #388e3c;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.25rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .login-btn:hover {
+            background: #2e7d32;
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(56, 142, 60, 0.35);
+        }
+
+        #error {
+            color: #c62828;
+            font-size: 1rem;
+            text-align: center;
+            margin-top: 20px;
+            min-height: 24px;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            color: #558b2f;
+            font-size: 0.95rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-container">
+
+
+        <div class="login-left">
+            <div class="logo-container">
+                <div class="logo">Analitic</div>
+                <div class="logo-sub">Laboratorio Clínico</div>
+            </div>
+            <p class="slogan">
+                Gestión integral de solicitudes, análisis y resultados clínicos<br>
+                con calidad, precisión y confianza
+            </p>
+        </div>
+
+
+        <div class="login-right">
+            <h1>Iniciar Sesión</h1>
+
+            <div class="form-group">
+                <label for="user">Usuario</label>
+                <input id="user" type="text" placeholder="Ingresa tu usuario">
+            </div>
+
+            <div class="form-group">
+                <label for="pass">Contraseña</label>
+                <input id="pass" type="password" placeholder="Ingresa tu contraseña">
+            </div>
+
+            <button class="login-btn" onclick="login()">Acceder al Sistema</button>
+
+            <p id="error"></p>
+
+            <div class="footer">
+                Sistema de Gestión de Laboratorio Clínico v1.0
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function login() {
+            const usuario = document.getElementById("user").value.trim();
+            const contraseña = document.getElementById("pass").value.trim();
+            const errorElement = document.getElementById("error");
+
+            errorElement.innerText = "";
+
+            if (!usuario || !contraseña) {
+                errorElement.innerText = "Por favor ingresa usuario y contraseña";
+                return;
+            }
+
+            window.pywebview.api.login(usuario, contraseña)
+                .then(respuesta => {
+                    if (respuesta.ok) {
+                        localStorage.setItem("rolUsuario", respuesta.rol);
+                        localStorage.setItem("usuarioLogueado", usuario);
+                        window.location.href = "dashboard.html";
+                    } else {
+                        errorElement.innerText = "Usuario o contraseña incorrectos";
+                    }
+                })
+                .catch(err => {
+                    console.error("Error en login:", err);
+                    errorElement.innerText = "Error al conectar con el sistema";
+                });
+        }
+
+
+        if (localStorage.getItem("rolUsuario")) {
+            window.location.href = "dashboard.html";
+        }
+
+
+        document.addEventListener("keypress", function (event) {
+            if (event.key === "Enter") {
+                login();
+            }
+        });
+    </script>
+
+</body>
+
+</html>

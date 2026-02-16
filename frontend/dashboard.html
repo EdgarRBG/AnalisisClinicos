@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Analitic Laboratorio Clínico</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+    <style>
+        :root {
+            --primary: #2e7d32;
+            --primary-dark: #1b5e20;
+            --primary-light: #4caf50;
+            --accent: #a5d6a7;
+            --sidebar-bg: rgba(46, 125, 50, 0.82);
+            --card-bg: rgba(255, 255, 255, 0.97);
+            --text: #1a5c22;
+            --shadow: 0 12px 32px rgba(0, 0, 0, 0.09);
+            --hover-shadow: 0 24px 60px rgba(46, 125, 50, 0.18);
+            --blur: blur(16px);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f5f9f0 0%, #e8f5e9 100%);
+            min-height: 100vh;
+            color: var(--text);
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: var(--sidebar-bg);
+            color: white;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            z-index: 1000;
+            transition: transform 0.45s cubic-bezier(0.25, 0.8, 0.25, 1);
+            backdrop-filter: var(--blur);
+            box-shadow: 8px 0 40px rgba(0, 0, 0, 0.14);
+        }
+
+        .sidebar.collapsed {
+            transform: translateX(-280px);
+        }
+
+        .sidebar-header {
+            padding: 28px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .sidebar-header h2 {
+            margin: 0;
+            font-size: 2.1rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            flex: 1;
+            min-width: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .hamburger {
+            position: fixed;
+            top: 28px;
+            left: 220px;
+            z-index: 1101;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 2.2rem;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            transition: all 0.4s ease;
+        }
+
+        .hamburger.collapsed {
+            left: 12px;
+            background: rgba(46, 125, 50, 0.9);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+        }
+
+        .hamburger:hover {
+            transform: rotate(90deg);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .menu {
+            padding: 16px 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .menu button {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 15px 20px 15px 32px;
+            border: none;
+            background: transparent;
+            color: rgba(255, 255, 255, 0.94);
+            font-size: 1.05rem;
+            font-weight: 500;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.28s ease;
+            border-left: 5px solid transparent;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .menu button:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-left-color: var(--accent);
+            padding-left: 36px;
+        }
+
+        .menu button.active {
+            background: rgba(255, 255, 255, 0.24);
+            border-left-color: #c8e6c9;
+            font-weight: 600;
+        }
+
+        .logout-btn {
+            margin-top: auto;
+            color: #ff8a80;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 138, 128, 0.18);
+            border-left-color: #ef5350;
+        }
+
+        .content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 40px 60px;
+            transition: margin-left 0.45s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .content.collapsed {
+            margin-left: 80px;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 48px;
+        }
+
+        .top-bar h1 {
+            margin: 0;
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: rgba(255, 255, 255, 0.90);
+            padding: 12px 20px;
+            border-radius: 50px;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.07);
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+
+        .user-info .avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--primary-light);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.3rem;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 32px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 32px;
+            box-shadow: var(--shadow);
+            transition: all 0.4s ease;
+            border-left: 6px solid var(--primary-light);
+            backdrop-filter: blur(10px);
+        }
+
+        .card:hover {
+            transform: translateY(-12px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .card h3 {
+            margin: 0 0 16px;
+            color: var(--primary);
+            font-size: 1.55rem;
+            font-weight: 600;
+        }
+
+        .admin-card {
+            background: linear-gradient(135deg, rgba(255, 245, 157, 0.90), rgba(255, 224, 130, 0.90));
+            border-left: 6px solid #ffb74d;
+        }
+
+        .admin-card button {
+            margin-top: 24px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .admin-card button:hover {
+            background: var(--primary-dark);
+        }
+    </style>
+</head>
+
+<body>
+
+    <button class="hamburger" id="toggleBtn">☰</button>
+
+    <div class="container">
+
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>Analitic</h2>
+            </div>
+
+            <p id="rol-actual">Rol: Cargando...</p>
+
+            <div class="menu">
+                <!-- Solo ADMIN -->
+                <button data-role="admin" onclick="window.location.href='pacientes.html'">
+                    Pacientes
+                </button>
+                <button data-role="admin" onclick="window.location.href='citas.html'">
+                    Solicitudes / Órdenes
+                </button>
+                <button data-role="admin" onclick="window.location.href='analisis.html'">
+                    Análisis Clínicos
+                </button>
+                <button data-role="admin" onclick="window.location.href='resultados.html'">
+                    Resultados Finalizados
+                </button>
+                <button data-role="admin" onclick="window.location.href='usuarios.html'">
+                    Gestión de Usuarios
+                </button>
+
+                <!-- Solo RECEPCION -->
+                <button data-role="recepcion" onclick="window.location.href='pacientes.html'">
+                    Pacientes
+                </button>
+                <button data-role="recepcion" onclick="window.location.href='citas.html'">
+                    Solicitudes / Órdenes
+                </button>
+                <button data-role="recepcion">
+                    Ventas / Cobros
+                </button>
+                <button data-role="recepcion">
+                    Reportes
+                </button>
+
+                <!-- Solo LABORATORISTA -->
+                <button data-role="laboratorista" onclick="window.location.href='analisis.html'">
+                    Análisis Clínicos
+                </button>
+                <button data-role="laboratorista" onclick="window.location.href='resultados.html'">
+                    Resultados Finalizados
+                </button>
+                <button data-role="laboratorista">
+                    Generar XML
+                </button>
+
+                <!-- Solo CAPTURISTA -->
+                <button data-role="capturista">
+                    Captura de Datos
+                </button>
+                <button data-role="capturista">
+                    Consultas
+                </button>
+
+                <!-- Siempre visible -->
+                <button class="logout-btn" onclick="cerrarSesion()">
+                    Cerrar sesión
+                </button>
+            </div>
+        </div>
+
+        <div class="content" id="content">
+            <div class="top-bar">
+                <h1>Laboratorio de Análisis Clínicos</h1>
+                <div class="user-info">
+                    <div class="avatar">EB</div>
+                    <span id="rol-actual-top">Rol: Cargando...</span>
+                </div>
+            </div>
+
+            <div class="cards">
+                <div class="card">
+                    <h3>Resumen del día</h3>
+                    <p>Solicitudes recibidas y estudios procesados hoy.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Actividad reciente</h3>
+                    <p>Últimos estudios finalizados y resultados entregados.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Notificaciones</h3>
+                    <p>No hay alertas pendientes.</p>
+                </div>
+
+                <div class="card admin-card" id="adminCard" style="display: none;">
+                    <h3>Gestión de Usuarios</h3>
+                    <p>Agregar, editar o eliminar usuarios del sistema.</p>
+                    <button onclick="window.location.href='usuarios.html'">Ir a Gestión de Usuarios</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let rolUsuario = localStorage.getItem("rolUsuario");
+
+        if (!rolUsuario) {
+            alert("Por favor inicia sesión primero.");
+            window.location.href = "login.html";
+        } else {
+            const rolText = "Rol: " + rolUsuario.charAt(0).toUpperCase() + rolUsuario.slice(1);
+            document.getElementById("rol-actual").innerText = rolText;
+            document.getElementById("rol-actual-top").innerText = rolText;
+
+            document.querySelectorAll(".menu button").forEach(btn => {
+                const rolPermitido = btn.getAttribute("data-role");
+
+                // Mostrar botones según rol
+                if (rolUsuario === "admin") {
+                    btn.style.display = "flex";  // Admin ve TODO
+                } else if (rolPermitido === rolUsuario) {
+                    btn.style.display = "flex";  // Muestra solo del rol actual
+                } else if (!rolPermitido) {
+                    btn.style.display = "flex";  // Siempre visible (logout)
+                } else {
+                    btn.style.display = "none";
+                }
+            });
+
+            if (rolUsuario === "admin") {
+                document.getElementById("adminCard").style.display = "block";
+            }
+        }
+
+        const toggleBtn = document.getElementById("toggleBtn");
+        const sidebar = document.getElementById("sidebar");
+        const content = document.getElementById("content");
+
+        toggleBtn.onclick = function () {
+            const isCollapsed = sidebar.classList.toggle("collapsed");
+            content.classList.toggle("collapsed");
+            toggleBtn.classList.toggle("collapsed", isCollapsed);
+        };
+
+        function cerrarSesion() {
+            localStorage.removeItem("rolUsuario");
+            localStorage.removeItem("usuarioLogueado");
+            window.location.href = "login.html";
+        }
+    </script>
+
+</body>
+
+</html>

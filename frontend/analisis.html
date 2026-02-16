@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Análisis Clínicos - Analitic</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles.css">
+
+    <style>
+        :root {
+            --primary: #0ea5e9;
+            --primary-dark: #0284c7;
+            --accent: #10b981;
+            --gray: #6b7280;
+            --light-bg: #f9fafb;
+            --border: #d1d5db;
+            --text: #1f2937;
+            --readonly-bg: #f3f4f6;
+        }
+
+        body {
+            background: var(--light-bg);
+            font-family: 'Segoe UI', sans-serif;
+            color: var(--text);
+            margin: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: var(--text);
+        }
+
+        .new-btn {
+            background: var(--primary);
+            color: white;
+            padding: 0.9rem 2rem;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            display: block;
+            margin: 0 auto 2.5rem;
+            transition: all 0.3s;
+        }
+
+        .new-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 380px 1fr;
+            gap: 2rem;
+        }
+
+        .pending-list,
+        .new-solicitud-form,
+        .form-container {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .pending-item {
+            padding: 1.2rem;
+            margin-bottom: 1rem;
+            border-radius: 10px;
+            background: #f8fafc;
+            cursor: pointer;
+            transition: all 0.25s;
+            border-left: 4px solid transparent;
+            position: relative;
+        }
+
+        .pending-item:hover,
+        .pending-item.selected {
+            background: #f0f9ff;
+            transform: translateX(4px);
+            border-left-color: var(--primary);
+        }
+
+        .pending-item .pending-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .pending-item .content {
+            flex: 1;
+        }
+
+        .delete-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 0.6rem 1rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            min-width: 90px;
+            text-align: center;
+        }
+
+        .delete-btn:hover {
+            background: #dc2626;
+            transform: translateY(-1px);
+        }
+
+        .form-group {
+            margin-bottom: 1.8rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #374151;
+            font-size: 1rem;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 0.9rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+            background: white;
+        }
+
+        input[readonly],
+        textarea[readonly] {
+            background: var(--readonly-bg);
+            cursor: default;
+            color: #374151;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15);
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .finish-section {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 1.5rem;
+        }
+
+        .finish-btn {
+            background: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(14, 165, 233, 0.2);
+            transition: all 0.3s;
+        }
+
+        .finish-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .action-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.8rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .action-header h3 {
+            margin: 0;
+            font-size: 1.6rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .back-btn,
+        .save-btn,
+        .print-btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+
+        .back-btn {
+            background: var(--gray);
+            color: white;
+        }
+
+        .save-btn {
+            background: var(--accent);
+            color: white;
+        }
+
+        .print-btn {
+            background: #8b5cf6;
+            color: white;
+        }
+
+        .add-param,
+        .import-btn {
+            background: #f59e0b;
+            color: white;
+            padding: 0.9rem;
+            border: none;
+            border-radius: 8px;
+            width: 100%;
+            margin: 1.8rem 0;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .import-btn {
+            background: #6366f1;
+        }
+
+        .import-btn:hover {
+            background: #4f46e5;
+        }
+
+        .back {
+            background: var(--gray);
+            color: white;
+            padding: 1rem 2.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            margin: 3rem auto 0;
+            display: block;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: background 0.3s;
+        }
+
+        .back:hover {
+            background: #4b5563;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            color: var(--text);
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: var(--gray);
+        }
+
+        @media (max-width: 900px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+
+            .action-buttons {
+                flex-wrap: wrap;
+                justify-content: flex-end;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Análisis Clínicos</h1>
+
+        <button class="new-btn" onclick="mostrarNuevaSolicitud()">+ Nueva Solicitud de Análisis</button>
+
+        <div class="layout">
+
+            <div class="pending-list">
+                <h3>Solicitudes Pendientes / En proceso</h3>
+                <div id="pendingList">
+                    <p style="text-align:center; color:#777;">Cargando solicitudes...</p>
+                </div>
+            </div>
+
+            <div class="new-solicitud-form" id="newSolicitudForm" style="display:none;">
+                <h3>Nueva Solicitud</h3>
+
+                <div class="form-group">
+                    <label for="nuevoPaciente">Paciente *</label>
+                    <input id="nuevoPaciente" list="pacientesList" placeholder="Buscar paciente...">
+                    <datalist id="pacientesList"></datalist>
+                    <input type="hidden" id="nuevoPacienteId">
+                    <small id="pacienteError"
+                        style="color:#ef4444; display:none; font-size:0.9rem; margin-top:0.5rem;">Selecciona un paciente
+                        válido</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="nuevoTipoEstudio">Estudio solicitado *</label>
+                    <select id="nuevoTipoEstudio" required>
+                        <option value="" disabled selected>Selecciona...</option>
+                        <option value="Química Sanguínea 35 Elementos">Química Sanguínea 35 Elementos</option>
+                        <option value="Perfil Lipídico">Perfil Lipídico</option>
+                        <option value="Ácido Úrico">Ácido Úrico</option>
+                        <option value="Citometría Hemática Completa">Citometría Hemática Completa</option>
+                        <option value="Tiempos de Coagulación">Tiempos de Coagulación</option>
+                        <option value="Perfil Tiroideo">Perfil Tiroideo</option>
+                        <option value="Otro">Otro</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="nuevoMedico">Médico solicitante</label>
+                    <input id="nuevoMedico" type="text" placeholder="Nombre del médico">
+                </div>
+
+                <div class="form-group">
+                    <label for="nuevasObservaciones">Observaciones / indicaciones</label>
+                    <textarea id="nuevasObservaciones" placeholder="Notas para el laboratorio..."></textarea>
+                </div>
+
+                <div class="buttons">
+                    <button class="back-btn" onclick="ocultarNuevaSolicitud()">Cancelar</button>
+                    <button class="save-btn" onclick="crearNuevaSolicitud()">Crear Solicitud</button>
+                </div>
+            </div>
+
+            <div class="form-container" id="formContainer" style="display:none;">
+                <div class="finish-section">
+                    <button class="finish-btn" onclick="finalizarSolicitud()">Finalizar y verificar</button>
+                </div>
+
+                <div class="action-header">
+                    <h3 id="solicitudTitle">Captura de Resultados</h3>
+                    <div class="action-buttons">
+                        <button class="back-btn" onclick="volverALista()">Volver a lista</button>
+                        <button class="save-btn" onclick="guardarResultados()">Guardar cambios</button>
+                        <button class="print-btn" onclick="generarReporte()">Generar Reporte DOCX</button>
+                    </div>
+                </div>
+
+                <input type="hidden" id="solicitudId">
+
+                <div class="form-group">
+                    <label for="pacienteNombre">Paciente</label>
+                    <input type="text" id="pacienteNombre" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label for="tipoEstudio">Estudio</label>
+                    <input type="text" id="tipoEstudio" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label for="observacionesGenerales">Observaciones generales</label>
+                    <textarea id="observacionesGenerales" readonly></textarea>
+                </div>
+
+                <button class="add-param" onclick="mostrarModalAgregarParametro()">+ Agregar parámetro</button>
+
+                <button class="import-btn" onclick="document.getElementById('importFile').click()">
+                    Importar resultados de máquina (CSV)
+                </button>
+                <input type="file" id="importFile" accept=".csv" style="display:none;"
+                    onchange="importarDesdeMaquina(this)">
+
+                <div class="results-grid" id="resultsGrid">
+                    <p style="text-align:center; color:#777;">No hay resultados capturados aún. Agrega parámetros o
+                        importa desde máquina.</p>
+                </div>
+            </div>
+
+        </div>
+
+        <button class="back" onclick="volver()">Volver al Dashboard</button>
+    </div>
+
+    <!-- Modal para agregar parámetro manual -->
+    <div id="paramModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Agregar Parámetro Manual</h3>
+                <button class="close-modal" onclick="cerrarModal('paramModal')">×</button>
+            </div>
+
+            <div class="form-group">
+                <label for="paramNombre">Parámetro *</label>
+                <input id="paramNombre" type="text" placeholder="Ej: Glucosa" required>
+            </div>
+
+            <div class="form-group">
+                <label for="paramResultado">Resultado *</label>
+                <input id="paramResultado" type="text" placeholder="Ej: 85.5" required>
+            </div>
+
+            <div class="form-group">
+                <label for="paramUnidades">Unidades</label>
+                <input id="paramUnidades" type="text" placeholder="Ej: mg/dL">
+            </div>
+
+            <div class="form-group">
+                <label for="paramReferencia">Valor de referencia</label>
+                <input id="paramReferencia" type="text" placeholder="Ej: 70-110">
+            </div>
+
+            <div class="form-group">
+                <label for="paramObservacion">Observación</label>
+                <textarea id="paramObservacion" placeholder="Notas adicionales..."></textarea>
+            </div>
+
+            <div class="buttons">
+                <button class="back-btn" onclick="cerrarModal('paramModal')">Cancelar</button>
+                <button class="save-btn" onclick="guardarParametroManual()">Guardar Parámetro</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let solicitudesPendientes = [];
+        let solicitudActual = null;
+        let pacientes = [];
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const rol = localStorage.getItem("rolUsuario");
+            if (rol !== "laboratorista" && rol !== "admin") {
+                alert("Solo el personal de Laboratorio o Administradores pueden acceder a este módulo.");
+                window.location.href = "dashboard.html";
+                return;
+            }
+        });
+
+        window.addEventListener('pywebviewready', async () => {
+            try {
+                pacientes = await window.pywebview.api.obtenerPacientes() || [];
+                solicitudesPendientes = await window.pywebview.api.obtenerSolicitudesPendientes() || [];
+                renderPacientesDatalist();
+                renderSolicitudesPendientes();
+            } catch (err) {
+                console.error("Error al cargar datos iniciales:", err);
+                document.getElementById("pendingList").innerHTML = "<p style='color:red; text-align:center;'>Error al cargar datos</p>";
+            }
+        }, { once: true });
+
+        function renderPacientesDatalist() {
+            const datalist = document.getElementById("pacientesList");
+            datalist.innerHTML = "";
+            pacientes.forEach(p => {
+                const option = document.createElement("option");
+                option.value = p[1];
+                option.dataset.id = p[0];
+                datalist.appendChild(option);
+            });
+        }
+
+        document.getElementById("nuevoPaciente").addEventListener("input", function () {
+            const input = this.value.trim();
+            const selectedOption = Array.from(document.getElementById("pacientesList").options).find(opt => opt.value === input);
+            const pacienteError = document.getElementById("pacienteError");
+
+            if (selectedOption) {
+                document.getElementById("nuevoPacienteId").value = selectedOption.dataset.id;
+                pacienteError.style.display = "none";
+            } else {
+                document.getElementById("nuevoPacienteId").value = "";
+                pacienteError.style.display = "block";
+            }
+        });
+
+        function renderSolicitudesPendientes() {
+            const lista = document.getElementById("pendingList");
+            lista.innerHTML = "";
+
+            if (solicitudesPendientes.length === 0) {
+                lista.innerHTML = "<p style='text-align:center; color:#777;'>No hay solicitudes pendientes en este momento.</p>";
+                return;
+            }
+
+            solicitudesPendientes.forEach(s => {
+                const item = document.createElement("div");
+                item.className = "pending-item";
+                item.dataset.id = s.id;
+
+                item.innerHTML = `
+                    <div class="pending-header">
+                        <div class="content">
+                            <strong>${s.paciente_nombre || 'Paciente desconocido'}</strong><br>
+                            <small>ID Muestra: ${s.id_muestra || '—'}</small><br>
+                            <small>Estudio: ${s.tipo_estudio}</small><br>
+                            <small>Fecha: ${s.fecha_recepcion}</small>
+                        </div>
+                        <button class="delete-btn" onclick="event.stopPropagation(); confirmarEliminar(${s.id})">
+                            Eliminar
+                        </button>
+                    </div>
+                `;
+
+                item.querySelector(".content").addEventListener("click", () => cargarSolicitud(s.id));
+                lista.appendChild(item);
+            });
+        }
+
+        async function cargarSolicitud(id) {
+            try {
+                const data = await window.pywebview.api.obtenerSolicitud(id);
+                if (!data) {
+                    alert("No se pudo cargar la solicitud");
+                    return;
+                }
+
+                solicitudActual = data;
+
+                document.getElementById("solicitudTitle").textContent = `Captura de Resultados - ${data.solicitud.tipo_estudio}`;
+                document.getElementById("solicitudId").value = id;
+                document.getElementById("pacienteNombre").value = data.solicitud.paciente_nombre || '—';
+                document.getElementById("tipoEstudio").value = data.solicitud.tipo_estudio || '—';
+                document.getElementById("observacionesGenerales").value = data.solicitud.observaciones_generales || 'Ninguna';
+
+                const grid = document.getElementById("resultsGrid");
+                grid.innerHTML = "";
+
+                if (data.resultados && data.resultados.length > 0) {
+                    data.resultados.forEach(res => {
+                        const card = document.createElement("div");
+                        card.className = "result-card";
+                        card.innerHTML = `
+                            <strong>${res.parametro}</strong>
+                            <p>Resultado: ${res.resultado || '—'} ${res.unidades || ''}</p>
+                            <p>Referencia: ${res.valor_referencia || '—'}</p>
+                            <p>Observación: ${res.observacion || 'Ninguna'}</p>
+                        `;
+                        grid.appendChild(card);
+                    });
+                } else {
+                    grid.innerHTML = "<p style='text-align:center; color:#777;'>No hay resultados capturados aún. Agrega parámetros o importa desde máquina.</p>";
+                }
+
+                document.getElementById("formContainer").style.display = "block";
+                document.getElementById("newSolicitudForm").style.display = "none";
+
+            } catch (err) {
+                console.error("Error al cargar solicitud:", err);
+                alert("Error al cargar la solicitud. Revisa la consola.");
+            }
+        }
+
+        function mostrarNuevaSolicitud() {
+            document.getElementById("newSolicitudForm").style.display = "block";
+            document.getElementById("formContainer").style.display = "none";
+            document.getElementById("nuevoPaciente").value = "";
+            document.getElementById("nuevoPacienteId").value = "";
+            document.getElementById("nuevoTipoEstudio").value = "";
+            document.getElementById("nuevoMedico").value = "";
+            document.getElementById("nuevasObservaciones").value = "";
+            document.getElementById("pacienteError").style.display = "none";
+        }
+
+        function ocultarNuevaSolicitud() {
+            document.getElementById("newSolicitudForm").style.display = "none";
+        }
+
+        async function crearNuevaSolicitud() {
+            const pacienteId = document.getElementById("nuevoPacienteId").value.trim();
+            const tipoEstudio = document.getElementById("nuevoTipoEstudio").value.trim();
+            const medico = document.getElementById("nuevoMedico").value.trim();
+            const observaciones = document.getElementById("nuevasObservaciones").value.trim();
+
+            if (!pacienteId) {
+                document.getElementById("pacienteError").style.display = "block";
+                return;
+            }
+            if (!tipoEstudio) {
+                alert("Selecciona un tipo de estudio");
+                return;
+            }
+
+            try {
+                const nuevaId = await window.pywebview.api.registrarSolicitudAnalisis(
+                    pacienteId, null, null, medico, tipoEstudio, observaciones
+                );
+
+                if (nuevaId) {
+                    alert("Solicitud creada con éxito (ID: " + nuevaId + ")");
+                    ocultarNuevaSolicitud();
+                    solicitudesPendientes = await window.pywebview.api.obtenerSolicitudesPendientes() || [];
+                    renderSolicitudesPendientes();
+                } else {
+                    alert("No se pudo crear la solicitud");
+                }
+            } catch (err) {
+                console.error(err);
+                alert("Error al crear la solicitud");
+            }
+        }
+
+        async function importarDesdeMaquina(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            const solicitudId = document.getElementById("solicitudId").value;
+            if (!solicitudId) {
+                alert("Primero selecciona una solicitud pendiente");
+                input.value = "";
+                return;
+            }
+
+            if (!confirm("¿Importar resultados del archivo CSV? Se agregarán a esta solicitud.")) {
+                input.value = "";
+                return;
+            }
+
+            try {
+                const reader = new FileReader();
+                reader.onload = async (e) => {
+                    const csvContent = e.target.result;
+
+                    const resultado = await window.pywebview.api.importarDesdeCSV(solicitudId, csvContent);
+
+                    if (resultado.success) {
+                        alert("¡Importación exitosa! Se agregaron " + resultado.count + " parámetros.");
+                        cargarSolicitud(solicitudId);
+                    } else {
+                        alert("Error al importar: " + (resultado.error || "Error desconocido"));
+                    }
+                };
+                reader.readAsText(file);
+            } catch (err) {
+                console.error("Error al leer archivo:", err);
+                alert("Error al procesar el archivo CSV");
+            }
+
+            input.value = "";
+        }
+
+        function mostrarModalAgregarParametro() {
+            const modal = document.getElementById("paramModal");
+            modal.style.display = "flex";
+            document.getElementById("paramNombre").value = "";
+            document.getElementById("paramResultado").value = "";
+            document.getElementById("paramUnidades").value = "";
+            document.getElementById("paramReferencia").value = "";
+            document.getElementById("paramObservacion").value = "";
+        }
+
+        async function guardarParametroManual() {
+            const solicitudId = document.getElementById("solicitudId").value;
+            if (!solicitudId) {
+                alert("Selecciona una solicitud primero");
+                return;
+            }
+
+            const parametro = document.getElementById("paramNombre").value.trim();
+            const resultado = document.getElementById("paramResultado").value.trim();
+            const unidades = document.getElementById("paramUnidades").value.trim();
+            const valor_referencia = document.getElementById("paramReferencia").value.trim();
+            const observacion = document.getElementById("paramObservacion").value.trim();
+
+            if (!parametro || !resultado) {
+                alert("El nombre del parámetro y el resultado son obligatorios");
+                return;
+            }
+
+            let resultadoNum;
+            try {
+                resultadoNum = parseFloat(resultado);
+            } catch (e) {
+                resultadoNum = resultado;
+            }
+
+            try {
+                const exito = await window.pywebview.api.agregarResultadoAnalisis(
+                    solicitudId,
+                    parametro,
+                    resultadoNum,
+                    unidades || '',
+                    valor_referencia || '',
+                    '',
+                    observacion || ''
+                );
+
+                if (exito) {
+                    alert("Parámetro agregado correctamente");
+                    cerrarModal("paramModal");
+                    cargarSolicitud(solicitudId);
+                } else {
+                    alert("No se pudo agregar el parámetro (revisa terminal)");
+                }
+            } catch (err) {
+                console.error("Error al agregar parámetro:", err);
+                alert("Error al agregar parámetro. Revisa consola.");
+            }
+        }
+
+        function cerrarModal(id) {
+            document.getElementById(id).style.display = "none";
+        }
+
+        function volverALista() {
+            document.getElementById("formContainer").style.display = "none";
+        }
+
+        function volver() {
+            window.location.href = "dashboard.html";
+        }
+
+        function guardarResultados() {
+            alert("Guardando cambios (por ahora solo muestra este mensaje - puedes expandirlo después)");
+        }
+
+        async function finalizarSolicitud() {
+            const solicitudId = document.getElementById("solicitudId").value;
+            if (!solicitudId) return alert("No hay solicitud seleccionada");
+
+            if (confirm("¿Finalizar y verificar esta solicitud?")) {
+                try {
+                    const exito = await window.pywebview.api.actualizarEstadoSolicitud(solicitudId, "finalizado");
+                    if (exito) {
+                        alert("Solicitud finalizada y verificada correctamente");
+                        window.location.href = "resultados.html";
+                    } else {
+                        alert("No se pudo finalizar la solicitud (revisa terminal)");
+                    }
+                } catch (err) {
+                    console.error("Error al finalizar:", err);
+                    alert("Error al finalizar. Revisa consola.");
+                }
+            }
+        }
+
+        async function confirmarEliminar(solicitudId) {
+            if (!confirm("¿Realmente deseas ELIMINAR esta solicitud?\n\nEsta acción NO se puede deshacer y eliminará también todos los resultados asociados.")) {
+                return;
+            }
+
+            try {
+                const exito = await window.pywebview.api.eliminarSolicitud(solicitudId);
+                if (exito) {
+                    alert("Solicitud eliminada correctamente");
+                    solicitudesPendientes = await window.pywebview.api.obtenerSolicitudesPendientes() || [];
+                    renderSolicitudesPendientes();
+
+                    if (solicitudActual && solicitudActual.solicitud.id === solicitudId) {
+                        volverALista();
+                    }
+                } else {
+                    alert("No se pudo eliminar la solicitud");
+                }
+            } catch (err) {
+                console.error("Error al eliminar solicitud:", err);
+                alert("Error al intentar eliminar la solicitud. Revisa la consola.");
+            }
+        }
+    </script>
+
+</body>
+
+</html>
