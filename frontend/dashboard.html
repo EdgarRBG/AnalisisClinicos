@@ -267,60 +267,31 @@
             <p id="rol-actual">Rol: Cargando...</p>
 
             <div class="menu">
-                <!-- Solo ADMIN -->
-                <button data-role="admin" onclick="window.location.href='pacientes.html'">
-                    Pacientes
-                </button>
-                <button data-role="admin" onclick="window.location.href='citas.html'">
-                    Solicitudes / Órdenes
-                </button>
-                <button data-role="admin" onclick="window.location.href='analisis.html'">
-                    Análisis Clínicos
-                </button>
-                <button data-role="admin" onclick="window.location.href='resultados.html'">
-                    Resultados Finalizados
-                </button>
-                <button data-role="admin" onclick="window.location.href='usuarios.html'">
-                    Gestión de Usuarios
-                </button>
+                <!-- Botones que se muestran según el rol -->
+                <button onclick="window.location.href='pacientes.html'">Pacientes</button>
+                <button onclick="window.location.href='citas.html'">Solicitudes / Órdenes</button>
 
-                <!-- Solo RECEPCION -->
-                <button data-role="recepcion" onclick="window.location.href='pacientes.html'">
-                    Pacientes
-                </button>
-                <button data-role="recepcion" onclick="window.location.href='citas.html'">
-                    Solicitudes / Órdenes
-                </button>
-                <button data-role="recepcion">
-                    Ventas / Cobros
-                </button>
-                <button data-role="recepcion">
-                    Reportes
-                </button>
+                <!-- Solo para admin y laboratorista -->
+                <button id="analisisBtn" onclick="window.location.href='analisis.html'">Análisis Clínicos</button>
+                <button id="resultadosBtn" onclick="window.location.href='resultados.html'">Resultados
+                    Finalizados</button>
 
-                <!-- Solo LABORATORISTA -->
-                <button data-role="laboratorista" onclick="window.location.href='analisis.html'">
-                    Análisis Clínicos
-                </button>
-                <button data-role="laboratorista" onclick="window.location.href='resultados.html'">
-                    Resultados Finalizados
-                </button>
-                <button data-role="laboratorista">
-                    Generar XML
-                </button>
+                <!-- Solo para admin -->
+                <button id="usuariosBtn" onclick="window.location.href='usuarios.html'">Gestión de Usuarios</button>
 
-                <!-- Solo CAPTURISTA -->
-                <button data-role="capturista">
-                    Captura de Datos
-                </button>
-                <button data-role="capturista">
-                    Consultas
-                </button>
+                <!-- Solo para recepcion -->
+                <button id="ventasBtn" style="display:none;">Ventas / Cobros</button>
+                <button id="reportesBtn" style="display:none;">Reportes</button>
+
+                <!-- Solo para laboratorista -->
+                <button id="xmlBtn" style="display:none;">Generar XML</button>
+
+                <!-- Solo para capturista -->
+                <button id="capturaBtn" style="display:none;">Captura de Datos</button>
+                <button id="consultasBtn" style="display:none;">Consultas</button>
 
                 <!-- Siempre visible -->
-                <button class="logout-btn" onclick="cerrarSesion()">
-                    Cerrar sesión
-                </button>
+                <button class="logout-btn" onclick="cerrarSesion()">Cerrar sesión</button>
             </div>
         </div>
 
@@ -369,24 +340,43 @@
             document.getElementById("rol-actual").innerText = rolText;
             document.getElementById("rol-actual-top").innerText = rolText;
 
+            // Ocultar todos los botones primero
             document.querySelectorAll(".menu button").forEach(btn => {
-                const rolPermitido = btn.getAttribute("data-role");
-
-                // Mostrar botones según rol
-                if (rolUsuario === "admin") {
-                    btn.style.display = "flex";  // Admin ve TODO
-                } else if (rolPermitido === rolUsuario) {
-                    btn.style.display = "flex";  // Muestra solo del rol actual
-                } else if (!rolPermitido) {
-                    btn.style.display = "flex";  // Siempre visible (logout)
-                } else {
-                    btn.style.display = "none";
-                }
+                btn.style.display = "none";
             });
 
+            // Mostrar solo los botones según rol
             if (rolUsuario === "admin") {
+                document.querySelectorAll(".menu button").forEach(btn => {
+                    btn.style.display = "flex";
+                });
                 document.getElementById("adminCard").style.display = "block";
+            } else if (rolUsuario === "recepcion") {
+                document.querySelectorAll(".menu button:not(#ventasBtn):not(#reportesBtn):not(.logout-btn)").forEach(btn => {
+                    btn.style.display = "none";
+                });
+                document.getElementById("ventasBtn").style.display = "flex";
+                document.getElementById("reportesBtn").style.display = "flex";
+                document.querySelector(".logout-btn").style.display = "flex";
+            } else if (rolUsuario === "laboratorista") {
+                document.querySelectorAll(".menu button:not(#analisisBtn):not(#resultadosBtn):not(#xmlBtn):not(.logout-btn)").forEach(btn => {
+                    btn.style.display = "none";
+                });
+                document.getElementById("analisisBtn").style.display = "flex";
+                document.getElementById("resultadosBtn").style.display = "flex";
+                document.getElementById("xmlBtn").style.display = "flex";
+                document.querySelector(".logout-btn").style.display = "flex";
+            } else if (rolUsuario === "capturista") {
+                document.querySelectorAll(".menu button:not(#capturaBtn):not(#consultasBtn):not(.logout-btn)").forEach(btn => {
+                    btn.style.display = "none";
+                });
+                document.getElementById("capturaBtn").style.display = "flex";
+                document.getElementById("consultasBtn").style.display = "flex";
+                document.querySelector(".logout-btn").style.display = "flex";
             }
+
+            // Siempre mostrar cerrar sesión
+            document.querySelector(".logout-btn").style.display = "flex";
         }
 
         const toggleBtn = document.getElementById("toggleBtn");

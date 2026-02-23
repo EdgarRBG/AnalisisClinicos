@@ -1,5 +1,5 @@
 import webview
-
+import screeninfo
 from backend.auth import Auth
 from backend.pacientes import Pacientes
 from backend.citas import Citas
@@ -7,7 +7,6 @@ from backend.analisis import Analisis
 from backend.usuarios import Usuarios           
 from backend.database import crear_tablas
 
-# Crea/verifica tablas al iniciar
 crear_tablas()
 
 auth = Auth()
@@ -16,13 +15,10 @@ citas = Citas()
 analisis = Analisis()
 usuarios = Usuarios()                           
 
-
 class API:
-  
-    def login(self, usuario, contraseña):
-        return auth.validar_login(usuario, contraseña)
+    def login(self, usuario, contrasena):
+        return auth.validar_login(usuario, contrasena)
 
-   
     def guardarPaciente(self, nombre, edad, telefono, sexo='', correo='', direccion='', observaciones=''):
         return pacientes.guardar(nombre, edad, telefono, sexo, correo, direccion, observaciones)
 
@@ -41,7 +37,6 @@ class API:
     def obtenerPacientePorId(self, paciente_id):
         return pacientes.obtener_por_id(paciente_id)
 
-    
     def registrarCita(self, paciente_id, fecha, hora, tipo, estado='pendiente', observaciones=''):
         return citas.registrar(paciente_id, fecha, hora, tipo, estado, observaciones)
 
@@ -57,7 +52,6 @@ class API:
     def eliminarCita(self, cita_id):
         return citas.eliminar(cita_id)
 
-   
     def registrarSolicitudAnalisis(self, paciente_id, cita_id=None, id_muestra=None, medico_solicitante="", tipo_estudio="", observaciones=""):
         return analisis.registrar_solicitud(paciente_id, cita_id, id_muestra, medico_solicitante, tipo_estudio, observaciones)
 
@@ -82,7 +76,6 @@ class API:
     def importarDesdeCSV(self, solicitud_id, csv_content):
         return analisis.importarDesdeCSV(solicitud_id, csv_content)
 
-    # ←——— FUNCIÓN NUEVA AGREGADA AQUÍ ↓↓↓
     def eliminarSolicitud(self, solicitud_id):
         return analisis.eliminar_solicitud(solicitud_id)
    
@@ -100,21 +93,26 @@ class API:
 
     def eliminarUsuario(self, user_id):
         return usuarios.eliminar_usuario(user_id)
-   
-    def eliminarParametro(self, solicitud_id, parametro):
-        return analisis.eliminar_parametro(solicitud_id, parametro)
-
 
 if __name__ == "__main__":
+    try:
+        monitor = screeninfo.get_monitors()[0]
+        ancho = monitor.width
+        alto = monitor.height
+        print(f"Pantalla detectada: {ancho} × {alto}")
+    except:
+        ancho, alto = 1400, 900
+        print("No se detectó monitor, usando tamaño por defecto")
+
     webview.create_window(
         title="Laboratorio de Análisis Clínicos",
         url="frontend/login.html",
         js_api=API(),
-        width=1400,
-        height=900,
-        min_size=(1200, 800),
-        maximized=True,
-        resizable=True
+        width=ancho,
+        height=alto,
+        maximized=True,        
+        resizable=True,
+        fullscreen=False         
     )
 
     webview.start(debug=True, http_server=True)

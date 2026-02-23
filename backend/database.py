@@ -1,14 +1,16 @@
 import sqlite3
 import os
+import sys
 
-# Ruta absoluta fija a tu carpeta del proyecto
-PROJECT_DIR = r"C:\Users\retsn\Desktop\UV\SERVICIO SOCIAL\SistemaDental"
-DB_PATH = os.path.join(PROJECT_DIR, "sistema_laboratorio.db")
+if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
+    BASE_DIR = os.path.dirname(sys.executable)
+else:
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-print("Usando BD en:", DB_PATH)
+DB_PATH = os.path.join(BASE_DIR, "sistema_laboratorio.db")
+
+print("Usando base de datos en:", DB_PATH)
 print("Directorio actual:", os.getcwd())
-print("¿Existe la carpeta?", os.path.exists(os.path.dirname(DB_PATH)))
-print("¿Tiene permisos de escritura?", os.access(os.path.dirname(DB_PATH), os.W_OK))
 
 def conectar():
     conn = sqlite3.connect(DB_PATH)
@@ -25,7 +27,6 @@ def crear_tablas():
         print("Conexión a BD abierta exitosamente.")
         cursor = conn.cursor()
 
-        # Tabla pacientes
         print("Creando tabla pacientes...")
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS pacientes (
@@ -42,7 +43,6 @@ def crear_tablas():
         """)
         print("Tabla pacientes OK")
 
-        # Tabla citas
         print("Creando tabla citas...")
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS citas (
@@ -58,7 +58,6 @@ def crear_tablas():
         """)
         print("Tabla citas OK")
 
-        # Tabla solicitudes_analisis (paciente_id NOT NULL, id_muestra NOT NULL)
         print("Creando tabla solicitudes_analisis...")
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS solicitudes_analisis (
@@ -80,7 +79,6 @@ def crear_tablas():
         """)
         print("Tabla solicitudes_analisis OK")
 
-        # Tabla resultados_parametros
         print("Creando tabla resultados_parametros...")
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS resultados_parametros (
@@ -97,20 +95,18 @@ def crear_tablas():
         """)
         print("Tabla resultados_parametros OK")
 
-        # Tabla usuarios
         print("Creando tabla usuarios...")
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS usuarios (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 usuario TEXT NOT NULL UNIQUE,
-                contraseña TEXT NOT NULL,
+                contrasena TEXT NOT NULL,
                 rol TEXT NOT NULL,
                 fecha_creacion DATETIME DEFAULT CURRENT_TIMESTAMP
             )
         """)
         print("Tabla usuarios OK")
 
-        # Índices para rendimiento
         print("Creando índices...")
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_paciente_nombre ON pacientes(nombre)")
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_solicitudes_paciente ON solicitudes_analisis(paciente_id)")
@@ -119,7 +115,7 @@ def crear_tablas():
         print("Índices OK")
 
         conn.commit()
-        print("✅ Commit exitoso. Base de datos creada/actualizada correctamente.")
+        print("Base de datos creada/actualizada correctamente.")
 
     except Exception as e:
         print("ERROR al crear tablas:", str(e))
@@ -128,7 +124,6 @@ def crear_tablas():
     finally:
         if conn:
             conn.close()
-        print("Conexión cerrada.")
 
     print("Fin de crear_tablas()")
 

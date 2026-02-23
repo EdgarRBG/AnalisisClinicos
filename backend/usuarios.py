@@ -1,6 +1,5 @@
 from backend.database import conectar
 
-
 class Usuarios:
     def crear_usuario(self, usuario, contrasena, rol):
         if not usuario or not contrasena or not rol:
@@ -11,7 +10,7 @@ class Usuarios:
         cursor = conn.cursor()
         try:
             cursor.execute("""
-                INSERT INTO usuarios (usuario, contraseña, rol)
+                INSERT INTO usuarios (usuario, contrasena, rol)
                 VALUES (?, ?, ?)
             """, (usuario, contrasena, rol))
             conn.commit()
@@ -58,7 +57,7 @@ class Usuarios:
         conn = conectar()
         cursor = conn.cursor()
         try:
-            cursor.execute("UPDATE usuarios SET contraseña = ? WHERE id = ?", (nueva_contrasena, user_id))
+            cursor.execute("UPDATE usuarios SET contrasena = ? WHERE id = ?", (nueva_contrasena, user_id))
             conn.commit()
             print(f"Contraseña actualizada para ID {user_id}")
             return cursor.rowcount > 0
