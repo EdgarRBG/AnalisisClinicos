@@ -1,4 +1,3 @@
-/* styles.css - Versión unificada y actualizada 2025/2026 */
 
 * {
     margin: 0;
@@ -7,9 +6,10 @@
 }
 
 :root {
-    --primary: #2563eb;
-    --primary-dark: #1d4ed8;
-    --primary-light: #3b82f6;
+    --primary: #2e7d32;
+   
+    --primary-dark: #1b5e20;
+    --primary-light: #4caf50;
     --success: #10b981;
     --warning: #f59e0b;
     --danger: #ef4444;
@@ -23,8 +23,9 @@
     --gray-900: #111827;
     --radius-md: 0.75rem;
     --radius-lg: 1rem;
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    --sidebar-width: 280px;
 }
 
 body {
@@ -33,258 +34,152 @@ body {
     color: var(--gray-900);
     line-height: 1.6;
     min-height: 100vh;
+    overflow-x: hidden;
 }
+
 
 .container {
-    padding: 2.5rem 1.5rem;
+    padding: 2rem 1rem;
     max-width: 1440px;
     margin: 0 auto;
+    width: 100%;
 }
 
+
 h1 {
-    font-size: 2.5rem;
+    font-size: clamp(1.8rem, 5vw, 2.5rem);
     font-weight: 700;
     color: var(--primary);
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
     text-align: center;
-    letter-spacing: -0.025em;
 }
 
 h3 {
-    font-size: 1.5rem;
+    font-size: clamp(1.2rem, 3vw, 1.5rem);
     font-weight: 600;
-    color: var(--gray-900);
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
 }
+
 
 .panel,
 .card,
 .patient-card,
-.pending-item,
 .user-card,
-.pending-list,
-.new-solicitud-form,
 .form-container {
     background: white;
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-md);
-    padding: 2rem;
+    padding: clamp(1rem, 3vw, 2rem);
     transition: all 0.25s ease;
     border: 1px solid var(--gray-200);
+    width: 100%;
 }
 
 .panel:hover,
-.card:hover,
-.patient-card:hover,
-.user-card:hover {
+.card:hover {
     transform: translateY(-4px);
     box-shadow: var(--shadow-lg);
 }
+
 
 input,
 select,
 textarea {
     width: 100%;
-    padding: 0.875rem 1rem;
+    padding: 0.75rem 1rem;
     border: 1px solid var(--gray-300);
     border-radius: var(--radius-md);
     font-size: 1rem;
-    transition: all 0.2s;
-    background: white;
-}
-
-input:focus,
-select:focus,
-textarea:focus {
-    outline: none;
-    border-color: var(--primary-light);
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
-}
-
-input[readonly],
-textarea[readonly] {
-    background: var(--gray-100);
-    color: var(--gray-700);
-    cursor: default;
+    transition: border-color 0.2s;
 }
 
 button {
     cursor: pointer;
     font-weight: 600;
-    transition: all 0.25s ease;
-    border: none;
+    padding: 0.75rem 1.5rem;
     border-radius: var(--radius-md);
+    border: none;
+    transition: 0.3s;
+    white-space: nowrap;
 }
 
 button.primary {
     background: var(--primary);
     color: white;
-    padding: 0.875rem 1.5rem;
 }
 
 button.primary:hover {
     background: var(--primary-dark);
-    transform: translateY(-1px);
+    transform: scale(1.02);
 }
 
-button.success {
-    background: var(--success);
-    color: white;
-}
 
-button.danger {
-    background: var(--danger);
-    color: white;
-}
-
-button.warning {
-    background: var(--warning);
-    color: white;
-}
-
-button.secondary,
-.back-btn {
-    background: var(--gray-200);
-    color: var(--gray-700);
-}
-
-button.secondary:hover,
-.back-btn:hover {
-    background: var(--gray-300);
-}
-
-/* Login */
-.background {
-    background: linear-gradient(135deg, #e0f2fe 0%, #dbeafe 100%);
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.login-card {
-    background: white;
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-lg);
-    width: 100%;
-    max-width: 480px;
-    padding: 3rem 2.5rem;
-    text-align: center;
-}
-
-.login-card h1 {
-    font-size: 2.25rem;
-    margin-bottom: 2rem;
-    color: var(--primary);
-}
-
-/* Tarjetas y elementos comunes */
-.patient-card,
-.pending-item,
-.result-item {
-    border-left: 4px solid var(--primary-light);
-}
-
-.patient-avatar {
-    width: 64px;
-    height: 64px;
-    background: var(--primary);
-    color: white;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-    font-weight: 600;
-}
-
-/* Sidebar */
-.sidebar {
-    background: linear-gradient(to bottom, var(--primary), var(--primary-dark));
-    color: white;
-}
-
-.menu button {
-    color: rgba(255, 255, 255, 0.9);
-    padding: 1rem 1.5rem;
-    border-left: 4px solid transparent;
-}
-
-.menu button:hover,
-.menu button.active {
-    background: rgba(255, 255, 255, 0.12);
-    border-left-color: var(--success);
-}
-
-/* Modal general */
-.modal {
-    background: white;
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-lg);
-    padding: 2.5rem;
-    max-width: 520px;
-    width: 90%;
-    border-top: 4px solid var(--primary);
-}
-
-/* Botón volver general */
-.back {
-    background: var(--gray-600);
-    color: white;
-    padding: 0.875rem 2rem;
-    border-radius: var(--radius-md);
-    font-weight: 600;
-}
-
-.back:hover {
-    background: var(--gray-700);
-}
-body,
-html {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
-}
-
-.container {
-    min-height: 100vh;
-    padding: 2rem 1rem;
-    max-width: 100%;
-    width: 100%;
-    box-sizing: border-box;
-}
-
-.layout {
+.grid-layout {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 1.5rem;
 }
 
-@media (min-width: 992px) {
-    .layout {
-        grid-template-columns: 380px 1fr;
+
+
+
+@media screen and (max-width: 1024px) {
+    :root {
+        --sidebar-width: 240px;
+    }
+
+    .container {
+        padding: 1.5rem 1rem;
     }
 }
 
-.card,
-.panel {
-    width: 100%;
-    max-width: 100%;
+
+@media screen and (max-width: 768px) {
+    .grid-layout {
+        grid-template-columns: 1fr;
+     
+    }
+
+    .navbar {
+        flex-direction: column;
+        height: auto !important;
+        padding: 1rem !important;
+    }
+
+    .nav-left {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .menu-horizontal {
+        width: 100%;
+        overflow-x: auto;
+        justify-content: flex-start;
+        padding: 10px 0;
+    }
+
+    
+    .content {
+        margin-top: 180px !important;
+        padding: 1rem !important;
+    }
+
+    body.admin-active .content {
+        margin-left: 0 !important;
+    }
 }
 
-@media (max-width: 768px) {
-    h1 {
-        font-size: 2rem;
-    }
 
-    .card,
-    .panel {
-        padding: 1.5rem;
-    }
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
 
-    button {
-        font-size: 1rem;
-        padding: 0.8rem;
-    }
+::-webkit-scrollbar-thumb {
+    background: var(--gray-300);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-light);
 }

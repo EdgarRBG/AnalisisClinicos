@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pacientes en Espera - Analitic Laboratorio Clínico</title>
+    <link rel="stylesheet" href="/css/styles.css">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f1f8e9 0%, #e8f5e9 100%);
+            min-height: 100vh;
+            color: #1b5e20;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 60px 0;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            margin: 0;
+            color: #2e7d32;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        .back {
+            padding: 12px 32px;
+            background: #388e3c;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .back:hover {
+            background: #2e7d32;
+        }
+
+        .container {
+            padding: 40px 60px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .patient-card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.07);
+            border-left: 5px solid #81c784;
+        }
+
+        button {
+            padding: 12px 20px;
+            margin: 5px 5px 5px 0;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .completar-btn {
+            background: #ffb300;
+            color: #333;
+        }
+
+        .procesar-btn {
+            background: #e53935;
+            color: white;
+        }
+
+        .modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 18px;
+            padding: 36px;
+            box-shadow: 0 20px 70px rgba(0, 0, 0, 0.25);
+            z-index: 2000;
+            max-width: 500px;
+            width: 90%;
+            border-left: 8px solid #81c784;
+        }
+
+        .modal h3 {
+            color: #2e7d32;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #1b5e20;
+        }
+
+        .modal input {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid #a5d6a7;
+            border-radius: 10px;
+            font-size: 1.02rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <h1>Pacientes en Espera (Walk-in)</h1>
+        <button class="back" onclick="volver()">Volver al Dashboard</button>
+    </div>
+
+    <div class="container">
+        <div id="listaEspera"></div>
+    </div>
+
+   
+    <div id="completarModal" class="modal" style="display:none;">
+        <h3>Completar Datos del Paciente</h3>
+        <input type="hidden" id="esperaId">
+
+        <div class="form-group">
+            <label for="nombre">Nombre completo *</label>
+            <input id="nombre" type="text" required>
+        </div>
+        <div class="form-group">
+            <label for="edad">Edad *</label>
+            <input id="edad" type="number" min="1" required>
+        </div>
+        <div class="form-group">
+            <label for="fechaNacimiento">Fecha de Nacimiento</label>
+            <input id="fechaNacimiento" type="date">
+        </div>
+        <div class="form-group">
+            <label for="telefono">Teléfono *</label>
+            <input id="telefono" type="text" maxlength="10" required>
+        </div>
+
+        <div class="buttons">
+            <button class="save" onclick="guardarCompletarDatos()">Guardar como Paciente Real</button>
+            <button class="cancel" onclick="cerrarModal('completarModal')">Cancelar</button>
+        </div>
+    </div>
+
+    <script>
+        async function cargarEspera() {
+            try {
+                const lista = await window.pywebview.api.obtenerPacientesEnEspera() || [];
+                const div = document.getElementById("listaEspera");
+                div.innerHTML = "";
+
+                if (lista.length === 0) {
+                    div.innerHTML = "<p style='text-align:center; padding:60px; color:#777; font-size:1.2rem;'>No hay pacientes en espera por el momento.</p>";
+                    return;
+                }
+
+                lista.forEach(p => {
+                    const card = document.createElement("div");
+                    card.className = "patient-card";
+                    card.innerHTML = `
+                        <h4>${p.nombre || 'Sin nombre'}</h4>
+                        <p><strong>Fecha/Hora:</strong> ${p.fecha_cita} ${p.hora_cita}</p>
+                        <p><strong>Estudio:</strong> ${p.tipo_estudio || 'Pendiente'}</p>
+                        ${p.telefono ? `<p><strong>Tel:</strong> ${p.telefono}</p>` : ''}
+                        <button class="completar-btn" onclick="abrirModalCompletar(${p.id})">Completar Datos</button>
+                        <button class="procesar-btn" onclick="marcarProcesado(${p.id})">Marcar como Procesado</button>
+                    `;
+                    div.appendChild(card);
+                });
+            } catch (err) {
+                console.error("Error al cargar espera:", err);
+            }
+        }
+
+        function abrirModalCompletar(id) {
+            document.getElementById("esperaId").value = id;
+          
+            document.getElementById("nombre").value = "";
+            document.getElementById("edad").value = "";
+            document.getElementById("fechaNacimiento").value = "";
+            document.getElementById("telefono").value = "";
+            document.getElementById("completarModal").style.display = "block";
+        }
+
+        async function guardarCompletarDatos() {
+            const esperaId = document.getElementById("esperaId").value;
+            const nombre = document.getElementById("nombre").value.trim();
+            const edadStr = document.getElementById("edad").value.trim();
+            const fechaNacimiento = document.getElementById("fechaNacimiento").value;
+            const telefono = document.getElementById("telefono").value.trim();
+
+            if (!nombre || !edadStr || !telefono) {
+                alert("Nombre, Edad y Teléfono son campos obligatorios");
+                return;
+            }
+
+            const edad = parseInt(edadStr);
+            if (isNaN(edad) || edad <= 0) {
+                alert("La edad debe ser un número positivo");
+                return;
+            }
+
+            if (telefono.length !== 10 || isNaN(telefono)) {
+                alert("El teléfono debe tener exactamente 10 dígitos numéricos");
+                return;
+            }
+
+            try {
+              
+                const exitoPaciente = await window.pywebview.api.guardarPaciente(
+                    nombre, edad, telefono, '', '', '', '', fechaNacimiento
+                );
+
+                if (exitoPaciente) {
+                  
+                    await window.pywebview.api.marcarProcesado(parseInt(esperaId));
+                    alert("¡Paciente guardado correctamente en el sistema!");
+                    cerrarModal('completarModal');
+                    cargarEspera();
+                } else {
+                    alert("Error al guardar el paciente en el sistema");
+                }
+            } catch (err) {
+                console.error(err);
+                alert("Error al completar los datos");
+            }
+        }
+
+        async function marcarProcesado(id) {
+            if (confirm("¿Marcar este paciente como procesado sin completar sus datos?")) {
+                const exito = await window.pywebview.api.marcarProcesado(id);
+                if (exito) {
+                    cargarEspera();
+                }
+            }
+        }
+
+        function cerrarModal(id) {
+            document.getElementById(id).style.display = "none";
+        }
+
+        function volver() {
+            window.location.href = "dashboard.html";
+        }
+
+        window.addEventListener('pywebviewready', cargarEspera);
+    </script>
+</body>
+
+</html>

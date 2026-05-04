@@ -3,15 +3,7 @@ import datetime
 
 
 class Citas:
-    """
-    Manejo de citas / órdenes de toma de muestra.
-    En un laboratorio, estas suelen ser las citas para extracción de sangre u otras muestras.
-    """
-
     def registrar(self, paciente_id, fecha, hora, tipo, estado='pendiente', observaciones=''):
-        """
-        Registra una nueva cita/orden para toma de muestra.
-        """
         if not paciente_id or not fecha or not hora or not tipo:
             return False
 
@@ -33,9 +25,6 @@ class Citas:
             conn.close()
 
     def obtener_todas(self):
-        """
-        Obtiene todas las citas con información del paciente.
-        """
         conn = conectar()
         cursor = conn.cursor()
         cursor.execute("""
@@ -70,9 +59,6 @@ class Citas:
         ]
 
     def obtener_por_id(self, cita_id):
-        """
-        Obtiene una cita específica por su ID.
-        """
         conn = conectar()
         cursor = conn.cursor()
         cursor.execute("""
@@ -106,9 +92,6 @@ class Citas:
         return None
 
     def obtener_por_paciente(self, paciente_id):
-        """
-        Obtiene todas las citas de un paciente específico.
-        """
         conn = conectar()
         cursor = conn.cursor()
         cursor.execute("""
@@ -122,23 +105,13 @@ class Citas:
         conn.close()
         return [dict(row) for row in filas]
 
-    def actualizar(self, cita_id, fecha=None, hora=None, tipo=None, estado=None, observaciones=None):
-        """
-        Actualiza una cita existente.
-        Solo actualiza los campos que se envíen (no nulos).
-        """
+    def actualizar(self, cita_id, tipo=None, estado=None, observaciones=None):
         conn = conectar()
         cursor = conn.cursor()
         try:
             updates = []
             params = []
 
-            if fecha is not None:
-                updates.append("fecha = ?")
-                params.append(fecha)
-            if hora is not None:
-                updates.append("hora = ?")
-                params.append(hora)
             if tipo is not None:
                 updates.append("tipo = ?")
                 params.append(tipo)
@@ -166,9 +139,6 @@ class Citas:
             conn.close()
 
     def eliminar(self, cita_id):
-        """
-        Elimina una cita por su ID.
-        """
         conn = conectar()
         cursor = conn.cursor()
         try:
@@ -181,3 +151,34 @@ class Citas:
             return False
         finally:
             conn.close()
+
+    def contar_citas_hoy(self):
+        hoy = datetime.date.today().isoformat()
+        conn = conectar()
+        cursor = conn.cursor()
+        cursor.execute("""
+            SELECT COUNT(*) FROM citas WHERE fecha = ?
+        """, (hoy,))
+        count = cursor.fetchone()[0]
+        conn.close()
+        return count
+
+    def obtener_citas_hoy(self):
+        hoy = datetime.date.today().isoformat()
+        conn = conectar()
+        cursor = conn.cursor()
+        cursor.execute("""
+            SELECT 
+                c.id,
+                p.nombre AS nombre_paciente,
+                c.hora,
+                c.tipo,
+                c.estado
+            FROM citas c
+            LEFT JOIN pacientes p ON c.paciente_id = p.id
+            WHERE c.fecha = ?
+            ORDER BY c.hora ASC
+        """, (hoy,))
+        filas = cursor.fetchall()
+        conn.close()
+        return [dict(row) for row in filas]

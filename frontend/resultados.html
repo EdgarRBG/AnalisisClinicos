@@ -3,66 +3,61 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Resultados Finalizados - Analitic Laboratorio</title>
+    <title>Resultados Finalizados - Analitic</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/styles.css">
 
     <style>
         :root {
-            --primary: #2563eb;
-            --primary-dark: #1d4ed8;
-            --primary-light: #3b82f6;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-            --gray-50: #f9fafb;
-            --gray-100: #f3f4f6;
-            --gray-200: #e5e7eb;
-            --gray-300: #d1d5db;
-            --gray-600: #4b5563;
-            --gray-700: #374151;
-            --gray-900: #111827;
-            --radius-md: 0.75rem;
-            --radius-lg: 1rem;
-            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --primary: #2e7d32;
+            --primary-dark: #1b5e20;
+            --primary-light: #4caf50;
+            --accent: #a5d6a7;
+            --text: #1a5c22;
+            --text-light: #424242;
+            --shadow: 0 10px 30px rgba(46, 125, 50, 0.12);
+            --hover-shadow: 0 20px 50px rgba(46, 125, 50, 0.22);
+            --border: #d1d5db;
         }
 
         body {
-            background: var(--gray-50);
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            color: var(--gray-900);
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f5f9f0 0%, #e8f5e9 100%);
             margin: 0;
+            color: var(--text);
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 1280px;
             margin: 0 auto;
-            padding: 2.5rem 1.5rem;
+            padding: 2rem 1.5rem;
         }
 
         h1 {
             text-align: center;
-            font-size: 2.5rem;
-            font-weight: 700;
+            font-size: 2.4rem;
+            margin-bottom: 2.2rem;
             color: var(--primary);
-            margin-bottom: 2.5rem;
-            letter-spacing: -0.025em;
+            font-weight: 700;
         }
 
         .layout {
             display: grid;
-            grid-template-columns: 420px 1fr;
+            grid-template-columns: 400px 1fr;
             gap: 2rem;
         }
 
-        .results-list {
+        .results-list,
+        .detail-container {
             background: white;
-            border-radius: var(--radius-lg);
-            padding: 1.8rem;
-            box-shadow: var(--shadow-md);
-            border: 1px solid var(--gray-200);
-            max-height: 85vh;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .results-list {
+            max-height: 82vh;
             overflow-y: auto;
             position: sticky;
             top: 2rem;
@@ -70,81 +65,67 @@
         }
 
         .results-list h3 {
-            margin-top: 0;
             color: var(--primary);
-            font-size: 1.4rem;
-            margin-bottom: 1.2rem;
+            margin-top: 0;
+            margin-bottom: 1.4rem;
+            font-weight: 600;
         }
 
         .result-item {
             padding: 1.3rem 1.5rem;
             margin-bottom: 1rem;
-            border-radius: var(--radius-md);
-            background: var(--gray-50);
+            border-radius: 12px;
+            background: #f8fafc;
             cursor: pointer;
-            transition: all 0.25s ease;
+            transition: all 0.25s;
             border-left: 4px solid transparent;
-            border: 1px solid var(--gray-200);
-            position: relative;
         }
 
         .result-item:hover,
         .result-item.selected {
-            background: white;
-            transform: translateY(-3px);
-            box-shadow: var(--shadow-lg);
-            border-left-color: var(--primary-light);
+            background: #e8f5e9;
+            transform: translateX(4px);
+            border-left-color: var(--primary);
         }
 
-        .result-item .result-item-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            gap: 1rem;
-        }
-
-        .result-item .content {
-            flex: 1;
+        .result-item .content strong {
+            color: var(--primary);
+            display: block;
+            margin-bottom: 4px;
         }
 
         .delete-btn {
-            background: var(--danger);
+            background: #ef4444;
             color: white;
             border: none;
-            border-radius: 6px;
-            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            padding: 0.55rem 1.1rem;
             font-size: 0.9rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s;
-            min-width: 90px;
-            text-align: center;
         }
 
         .delete-btn:hover {
-            background: #b91c1c;
-            transform: translateY(-1px);
+            background: #dc2626;
         }
 
         .detail-container {
-            background: white;
-            border-radius: var(--radius-lg);
-            padding: 2.2rem;
-            box-shadow: var(--shadow-md);
-            border: 1px solid var(--gray-200);
+            display: none;
         }
 
         .detail-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1.8rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e0e0e0;
         }
 
         .detail-header h3 {
             margin: 0;
-            font-size: 1.9rem;
             color: var(--primary);
+            font-size: 1.75rem;
             font-weight: 700;
         }
 
@@ -154,27 +135,22 @@
         }
 
         .back-btn,
-        .print-btn {
-            padding: 0.8rem 1.5rem;
-            border-radius: 8px;
+        .report-btn {
+            padding: 0.85rem 1.6rem;
+            border-radius: 10px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
             border: none;
         }
 
         .back-btn {
-            background: var(--gray-600);
+            background: #6b7280;
             color: white;
         }
 
-        .print-btn {
+        .report-btn {
             background: var(--primary);
             color: white;
-        }
-
-        .print-btn:hover {
-            background: var(--primary-dark);
         }
 
         .detail-group {
@@ -185,148 +161,100 @@
             display: block;
             font-weight: 600;
             margin-bottom: 0.5rem;
-            color: var(--gray-600);
-            font-size: 0.95rem;
+            color: var(--text);
         }
 
         .detail-group input,
         .detail-group textarea {
             width: 100%;
-            padding: 0.85rem 1rem;
-            border: 1px solid var(--gray-300);
-            border-radius: var(--radius-md);
-            background: var(--gray-50);
-            font-size: 1.05rem;
-            color: var(--gray-900);
+            padding: 0.95rem 1.1rem;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: #f8fafc;
         }
 
         .detail-group textarea {
-            min-height: 90px;
+            min-height: 110px;
             resize: vertical;
         }
 
         .info-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 1.5rem 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.8rem 2rem;
             margin-bottom: 2.5rem;
-            padding-bottom: 1.8rem;
-            border-bottom: 1px solid var(--gray-200);
-        }
-
-        .info-item.full-width {
-            grid-column: 1 / -1;
         }
 
         .results-section h4 {
-            font-size: 1.55rem;
             color: var(--primary);
-            margin: 2rem 0 1.4rem;
+            margin: 2.2rem 0 1.4rem;
             font-weight: 700;
         }
 
         .results-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1.3rem 1.4rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.4rem;
         }
 
         .result-card {
-            background: var(--gray-50);
-            border-radius: var(--radius-md);
-            padding: 1.35rem 1.5rem;
-            border-left: 5px solid var(--success);
-            border: 1px solid var(--gray-200);
-            transition: all 0.22s ease;
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 1.4rem 1.6rem;
+            border-left: 5px solid var(--primary-light);
+            transition: all 0.25s;
         }
 
         .result-card:hover {
             transform: translateY(-4px);
-            box-shadow: var(--shadow-lg);
-            background: white;
+            box-shadow: var(--hover-shadow);
         }
 
         .result-card strong {
-            font-size: 1.14rem;
-            font-weight: 600;
-            color: var(--gray-900);
+            font-size: 1.15rem;
+            color: var(--text);
             display: block;
-            margin-bottom: 0.8rem;
-        }
-
-        .result-card .valor {
-            font-size: 1.9rem;
-            font-weight: 700;
-            color: var(--gray-900);
-            margin: 0.3rem 0;
-        }
-
-        .result-card .unidad {
-            font-size: 1rem;
-            color: var(--gray-600);
-            font-weight: 500;
             margin-bottom: 0.6rem;
         }
 
-        .result-card .referencia,
-        .result-card .observacion {
-            font-size: 0.92rem;
-            color: var(--gray-600);
-        }
-
-        .result-card .observacion {
-            margin-top: 0.7rem;
-            line-height: 1.4;
-        }
-
-        .result-card .observacion::before {
-            content: "📥 ";
-            opacity: 0.7;
-        }
-
-        @media (max-width: 1100px) {
-            .results-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (max-width: 768px) {
-            .layout {
-                grid-template-columns: 1fr;
-            }
-
-            .results-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .detail-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 1rem;
-            }
-
-            .action-buttons {
-                width: 100%;
-                flex-wrap: wrap;
-                justify-content: flex-end;
-            }
+        .result-card .valor {
+            font-size: 1.85rem;
+            font-weight: 700;
+            color: var(--primary-dark);
         }
 
         .back {
-            background: var(--gray-600);
+            background: #6b7280;
             color: white;
-            padding: 0.9rem 2.5rem;
+            padding: 1rem 2.5rem;
             border: none;
-            border-radius: var(--radius-md);
+            border-radius: 12px;
             cursor: pointer;
             font-size: 1.05rem;
-            margin: 3rem auto 0;
+            margin: 2.5rem auto 0;
             display: block;
             font-weight: 600;
         }
 
-        .back:hover {
-            background: var(--gray-700);
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            max-width: 520px;
+            box-shadow: var(--shadow);
         }
     </style>
 </head>
@@ -338,46 +266,44 @@
 
         <div class="layout">
 
+          
             <div class="results-list">
                 <h3>Solicitudes Finalizadas</h3>
                 <div id="resultsList">
-                    <p style="text-align:center; color:var(--gray-600);">Cargando resultados...</p>
+                    <p style="text-align:center; color:#777;">Cargando resultados...</p>
                 </div>
             </div>
 
-            <div class="detail-container" id="detailContainer" style="display:none;">
+          
+            <div class="detail-container" id="detailContainer">
                 <div class="detail-header">
                     <h3 id="detailTitle">Detalle del Resultado</h3>
                     <div class="action-buttons">
                         <button class="back-btn" onclick="volverAListaResultados()">Volver a lista</button>
-                        <button class="print-btn" onclick="imprimirResultado()">Imprimir resultado</button>
+                        <button class="report-btn" onclick="generarReporte()">Generar Reporte</button>
                     </div>
                 </div>
 
                 <input type="hidden" id="detailSolicitudId">
 
                 <div class="info-grid">
-                    <div class="detail-group info-item">
+                    <div class="detail-group">
                         <label>Paciente</label>
                         <input type="text" id="detailPaciente" readonly>
                     </div>
-
-                    <div class="detail-group info-item">
+                    <div class="detail-group">
                         <label>Estudio</label>
                         <input type="text" id="detailTipo" readonly>
                     </div>
-
-                    <div class="detail-group info-item">
+                    <div class="detail-group">
                         <label>Fecha de recepción</label>
                         <input type="text" id="detailFechaRecepcion" readonly>
                     </div>
-
-                    <div class="detail-group info-item">
+                    <div class="detail-group">
                         <label>Fecha de reporte</label>
                         <input type="text" id="detailFechaReporte" readonly>
                     </div>
-
-                    <div class="detail-group info-item full-width">
+                    <div class="detail-group" style="grid-column: 1 / -1;">
                         <label>Observaciones generales</label>
                         <textarea id="detailObservaciones" readonly></textarea>
                     </div>
@@ -402,7 +328,7 @@
             } catch (err) {
                 console.error("Error al cargar resultados:", err);
                 document.getElementById("resultsList").innerHTML =
-                    "<p style='color:var(--danger); text-align:center;'>Error al cargar resultados</p>";
+                    "<p style='color:#ef4444; text-align:center;'>Error al cargar resultados</p>";
             }
         }, { once: true });
 
@@ -411,7 +337,7 @@
             lista.innerHTML = "";
 
             if (finalizadas.length === 0) {
-                lista.innerHTML = "<p style='text-align:center; color:var(--gray-600);'>No hay resultados finalizados aún.</p>";
+                lista.innerHTML = "<p style='text-align:center; color:#777;'>No hay resultados finalizados aún.</p>";
                 return;
             }
 
@@ -424,9 +350,9 @@
                     <div class="result-item-header">
                         <div class="content">
                             <strong>${r.paciente_nombre || 'Paciente desconocido'}</strong>
-                            <small>ID Muestra: ${r.id_muestra || '—'}</small>
-                            <small>Estudio: ${r.tipo_estudio}</small>
-                            <small>Fecha reporte: ${r.fecha_reporte || '—'}</small>
+                            <small>ID Muestra: ${r.id_muestra || '—'}</small><br>
+                            <small>Estudio: ${r.tipo_estudio}</small><br>
+                            <small>Fecha: ${r.fecha_reporte || '—'}</small>
                         </div>
                         <button class="delete-btn" onclick="event.stopPropagation(); confirmarEliminarSolicitudFinalizada(${r.id})">
                             Eliminar
@@ -439,34 +365,10 @@
             });
         }
 
-        async function confirmarEliminarSolicitudFinalizada(solicitudId) {
-            if (!confirm("¿Realmente deseas ELIMINAR esta solicitud finalizada?\n\nSe borrarán todos los resultados asociados y esta acción NO se puede deshacer.")) {
-                return;
-            }
-
-            try {
-                const exito = await window.pywebview.api.eliminarSolicitud(solicitudId);
-                if (exito) {
-                    alert("Solicitud finalizada eliminada correctamente");
-                    const finalizadas = await window.pywebview.api.obtenerSolicitudesFinalizadas() || [];
-                    renderResultadosFinalizados(finalizadas);
-                    document.getElementById("detailContainer").style.display = "none";
-                } else {
-                    alert("No se pudo eliminar la solicitud");
-                }
-            } catch (err) {
-                console.error("Error al eliminar solicitud finalizada:", err);
-                alert("Error al intentar eliminar. Revisa la consola.");
-            }
-        }
-
         async function cargarDetalleResultado(id) {
             try {
                 const data = await window.pywebview.api.obtenerSolicitud(id);
-                if (!data) {
-                    alert("No se pudo cargar el detalle del resultado");
-                    return;
-                }
+                if (!data) return alert("No se pudo cargar el detalle");
 
                 document.getElementById("detailSolicitudId").value = id;
                 document.getElementById("detailTitle").textContent = `Detalle - ${data.solicitud.tipo_estudio}`;
@@ -493,23 +395,55 @@
                         grid.appendChild(card);
                     });
                 } else {
-                    grid.innerHTML = '<p style="grid-column: 1 / -1; text-align:center; color:var(--gray-600); padding: 3rem 0;">No hay parámetros registrados.</p>';
+                    grid.innerHTML = '<p style="text-align:center; color:#777; padding: 3rem 0;">No hay parámetros registrados.</p>';
                 }
 
                 document.getElementById("detailContainer").style.display = "block";
 
             } catch (err) {
-                console.error("Error al cargar detalle:", err);
-                alert("Error al cargar el detalle del resultado");
+                console.error(err);
+                alert("Error al cargar detalle");
+            }
+        }
+
+        async function confirmarEliminarSolicitudFinalizada(solicitudId) {
+            if (!confirm("¿Realmente deseas ELIMINAR esta solicitud finalizada?")) return;
+
+            try {
+                const exito = await window.pywebview.api.eliminarSolicitud(solicitudId);
+                if (exito) {
+                    alert("Solicitud eliminada correctamente");
+                    const finalizadas = await window.pywebview.api.obtenerSolicitudesFinalizadas() || [];
+                    renderResultadosFinalizados(finalizadas);
+                    document.getElementById("detailContainer").style.display = "none";
+                } else {
+                    alert("No se pudo eliminar la solicitud");
+                }
+            } catch (err) {
+                console.error(err);
+                alert("Error al eliminar");
+            }
+        }
+
+        async function generarReporte() {
+            const solicitudId = document.getElementById("detailSolicitudId").value;
+            if (!solicitudId) return alert("No hay solicitud seleccionada");
+
+            try {
+                const ruta = await window.pywebview.api.generarReporteFinalizado(solicitudId);
+                if (ruta) {
+                    alert("Reporte generado correctamente en:\n" + ruta);
+                } else {
+                    alert("No se pudo generar el reporte");
+                }
+            } catch (err) {
+                console.error(err);
+                alert("Error al generar el reporte");
             }
         }
 
         function volverAListaResultados() {
             document.getElementById("detailContainer").style.display = "none";
-        }
-
-        function imprimirResultado() {
-            window.print();
         }
 
         function volver() {

@@ -4,8 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Dashboard - Analitic Laboratorio Clínico</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 
@@ -15,316 +17,484 @@
             --primary-dark: #1b5e20;
             --primary-light: #4caf50;
             --accent: #a5d6a7;
-            --sidebar-bg: rgba(46, 125, 50, 0.82);
-            --card-bg: rgba(255, 255, 255, 0.97);
-            --text: #1a5c22;
-            --shadow: 0 12px 32px rgba(0, 0, 0, 0.09);
-            --hover-shadow: 0 24px 60px rgba(46, 125, 50, 0.18);
-            --blur: blur(16px);
+            --bg: #f5f9f0;
+            --card-bg: rgba(255, 255, 255, 0.98);
+            --shadow-soft: 0 10px 40px rgba(0, 0, 0, 0.06);
+            --shadow-strong: 0 20px 60px rgba(46, 125, 50, 0.2);
+            --sidebar-width: 280px;
         }
 
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
 
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #f5f9f0 0%, #e8f5e9 100%);
+            background: linear-gradient(135deg, #f5f9f0, #e8f5e9);
+            color: #2c3e50;
             min-height: 100vh;
-            color: var(--text);
-        }
-
-        .container {
-            display: flex;
-            min-height: 100vh;
-        }
-
-        .sidebar {
-            width: 280px;
-            background: var(--sidebar-bg);
-            color: white;
-            position: fixed;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            z-index: 1000;
-            transition: transform 0.45s cubic-bezier(0.25, 0.8, 0.25, 1);
-            backdrop-filter: var(--blur);
-            box-shadow: 8px 0 40px rgba(0, 0, 0, 0.14);
-        }
-
-        .sidebar.collapsed {
-            transform: translateX(-280px);
-        }
-
-        .sidebar-header {
-            padding: 28px 24px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-        }
-
-        .sidebar-header h2 {
-            margin: 0;
-            font-size: 2.1rem;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            flex: 1;
-            min-width: 0;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .hamburger {
-            position: fixed;
-            top: 28px;
-            left: 220px;
-            z-index: 1101;
-            background: none;
-            border: none;
-            color: white;
-            font-size: 2.2rem;
-            cursor: pointer;
-            padding: 8px;
-            border-radius: 50%;
-            transition: all 0.4s ease;
-        }
-
-        .hamburger.collapsed {
-            left: 12px;
-            background: rgba(46, 125, 50, 0.9);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-        }
-
-        .hamburger:hover {
-            transform: rotate(90deg);
-            background: rgba(255, 255, 255, 0.15);
-        }
-
-        .menu {
-            padding: 16px 0;
             display: flex;
             flex-direction: column;
         }
 
-        .menu button {
-            display: flex;
-            align-items: center;
+   
+        .navbar {
+            position: fixed;
+            top: 0;
             width: 100%;
-            padding: 15px 20px 15px 32px;
-            border: none;
-            background: transparent;
-            color: rgba(255, 255, 255, 0.94);
-            font-size: 1.05rem;
-            font-weight: 500;
-            text-align: left;
-            cursor: pointer;
-            transition: all 0.28s ease;
-            border-left: 5px solid transparent;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .menu button:hover {
-            background: rgba(255, 255, 255, 0.15);
-            border-left-color: var(--accent);
-            padding-left: 36px;
-        }
-
-        .menu button.active {
-            background: rgba(255, 255, 255, 0.24);
-            border-left-color: #c8e6c9;
-            font-weight: 600;
-        }
-
-        .logout-btn {
-            margin-top: auto;
-            color: #ff8a80;
-        }
-
-        .logout-btn:hover {
-            background: rgba(255, 138, 128, 0.18);
-            border-left-color: #ef5350;
-        }
-
-        .content {
-            flex: 1;
-            margin-left: 280px;
-            padding: 40px 60px;
-            transition: margin-left 0.45s cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
-
-        .content.collapsed {
-            margin-left: 80px;
-        }
-
-        .top-bar {
+            height: 100px;
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-bottom: 48px;
+            justify-content: space-between;
+            padding: 0 40px;
+            z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+            animation: slideDown 0.6s ease;
         }
 
-        .top-bar h1 {
-            margin: 0;
-            font-size: 2.8rem;
-            font-weight: 700;
-            color: var(--text);
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
 
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 20px 8px 10px;
+            border-radius: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        .logo-container:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.02);
+        }
+
+        .logo-img {
+            height: 55px;
+            width: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            color: white;
+        }
+
+        .logo-name {
+            font-size: 1.4rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            line-height: 1;
+        }
+
+        .logo-tag {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            opacity: 0.9;
+        }
+
+       
+        .menu-horizontal {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .menu-horizontal button {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 10px 18px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            white-space: nowrap;
+        }
+
+        .menu-horizontal button:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+      
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: linear-gradient(to bottom, var(--primary-dark), #0a2e0c);
+            color: white;
+            padding: 20px;
+            display: none;
+           
+            flex-direction: column;
+            z-index: 1100;
+            box-shadow: 10px 0 30px rgba(0, 0, 0, 0.2);
+            overflow-y: auto;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: var(--primary-light);
+            border-radius: 10px;
+        }
+
+        .sidebar-header {
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .sidebar-section-title {
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--accent);
+            margin: 25px 0 10px 10px;
+            opacity: 0.8;
+        }
+
+        .sidebar button {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 12px 15px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            text-align: left;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+        }
+
+        .sidebar button:hover {
+            background: var(--primary-light);
+            transform: translateX(5px);
+        }
+
+        .sidebar .logout-btn {
+            background: rgba(231, 76, 60, 0.2);
+            border-color: rgba(231, 76, 60, 0.3);
+            margin-top: 10px;
+        }
+
+        .sidebar .logout-btn:hover {
+            background: #e74c3c;
+        }
+
+       
         .user-info {
             display: flex;
             align-items: center;
-            gap: 14px;
-            background: rgba(255, 255, 255, 0.90);
-            padding: 12px 20px;
-            border-radius: 50px;
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.07);
-            font-weight: 500;
-            font-size: 1.1rem;
+            gap: 12px;
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 15px;
+            border-radius: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .user-info .avatar {
-            width: 44px;
-            height: 44px;
+        .avatar {
+            width: 42px;
+            height: 42px;
             border-radius: 50%;
             background: var(--primary-light);
-            color: white;
             display: flex;
             align-items: center;
             justify-content: center;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .avatar .material-symbols-outlined {
+            font-size: 26px;
+            color: white;
+        }
+
+        .user-details {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.1;
+        }
+
+        #rol-actual-top {
             font-weight: 700;
-            font-size: 1.3rem;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+        }
+
+        .user-status {
+            font-size: 0.7rem;
+            opacity: 0.8;
+        }
+
+      
+        .content {
+            margin-top: 130px;
+            padding: 40px;
+            max-width: 1500px;
+            margin-left: auto;
+            margin-right: auto;
+            transition: margin-left 0.3s ease;
+            width: 100%;
+        }
+
+       
+        body.admin-active .content {
+            margin-left: var(--sidebar-width);
+            max-width: calc(100% - var(--sidebar-width));
+        }
+
+        body.admin-active .navbar {
+            left: var(--sidebar-width);
+            width: calc(100% - var(--sidebar-width));
+        }
+
+        .top-bar {
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .top-bar h1 {
+            font-size: 2.8rem;
+            color: var(--primary-dark);
+            font-weight: 900;
+            letter-spacing: -1.5px;
         }
 
         .cards {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
-            gap: 32px;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
         }
 
         .card {
             background: var(--card-bg);
-            border-radius: 24px;
-            padding: 32px;
-            box-shadow: var(--shadow);
+            border-radius: 25px;
+            padding: 35px;
+            box-shadow: var(--shadow-soft);
             transition: all 0.4s ease;
-            border-left: 6px solid var(--primary-light);
-            backdrop-filter: blur(10px);
+            animation: fadeUp 0.8s ease;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .card:hover {
-            transform: translateY(-12px);
-            box-shadow: var(--hover-shadow);
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-strong);
         }
 
         .card h3 {
-            margin: 0 0 16px;
             color: var(--primary);
-            font-size: 1.55rem;
-            font-weight: 600;
+            margin-bottom: 20px;
+            font-size: 1.4rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .card h3 .material-symbols-outlined {
+            font-size: 30px;
+            color: var(--primary-light);
+        }
+
+        .list-item {
+            padding: 15px 20px;
+            background: rgba(165, 214, 167, 0.1);
+            margin-bottom: 12px;
+            border-left: 5px solid var(--primary-light);
+            border-radius: 12px;
+            transition: 0.3s;
+            font-size: 1rem;
+        }
+
+        .list-item:hover {
+            transform: translateX(8px);
+            background: rgba(165, 214, 167, 0.2);
+        }
+
+        .empty-message {
+            text-align: center;
+            color: #94a3b8;
+            padding: 30px;
+            font-style: italic;
         }
 
         .admin-card {
-            background: linear-gradient(135deg, rgba(255, 245, 157, 0.90), rgba(255, 224, 130, 0.90));
-            border-left: 6px solid #ffb74d;
+            background: linear-gradient(135deg, #fffde7, #fff9c4);
         }
 
         .admin-card button {
-            margin-top: 24px;
+            margin-top: 20px;
+            width: 100%;
             background: var(--primary);
             color: white;
+            padding: 15px;
             border: none;
-            padding: 16px 32px;
-            border-radius: 14px;
-            font-weight: 600;
+            border-radius: 12px;
             cursor: pointer;
+            font-weight: 700;
             transition: 0.3s;
         }
 
         .admin-card button:hover {
             background: var(--primary-dark);
+            transform: scale(1.02);
         }
     </style>
 </head>
 
 <body>
 
-    <button class="hamburger" id="toggleBtn">☰</button>
+   
+    <div id="adminSidebar" class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-container">
+                <img src="Assets/Logo.png" alt="Logo" class="logo-img">
+                <div class="logo-text">
+                    <span class="logo-name">Analitic</span>
+                    <span class="logo-tag">Admin Panel</span>
+                </div>
+            </div>
+            <button class="logout-btn" onclick="cerrarSesion()">
+                <span class="material-symbols-outlined">logout</span> Cerrar sesión
+            </button>
+        </div>
 
-    <div class="container">
+        <div class="sidebar-section-title">Recepción</div>
+        <button onclick="window.location.href='pacientes.html'"><span class="material-symbols-outlined">person</span>
+            Pacientes</button>
+        <button onclick="window.location.href='citas.html'"><span
+                class="material-symbols-outlined">calendar_today</span> Solicitudes</button>
+        <button onclick="window.location.href='espera.html'"><span
+                class="material-symbols-outlined">hourglass_empty</span> Espera</button>
 
-        <div class="sidebar" id="sidebar">
-            <div class="sidebar-header">
-                <h2>Analitic</h2>
+        <div class="sidebar-section-title">Laboratorista</div>
+        <button onclick="window.location.href='analisis.html'"><span class="material-symbols-outlined">biotech</span>
+            Análisis</button>
+        <button onclick="window.location.href='resultados.html'"><span
+                class="material-symbols-outlined">assignment_turned_in</span> Resultados</button>
+
+        <div class="sidebar-section-title">Capturista</div>
+        <button id="reportesBtnAdmin"><span class="material-symbols-outlined">description</span> Reportes</button>
+        <button id="capturaBtnAdmin"><span class="material-symbols-outlined">edit_note</span> Captura</button>
+        <button id="consultasBtnAdmin"><span class="material-symbols-outlined">search</span> Consultas</button>
+
+        <div class="sidebar-section-title">Admin</div>
+        <button onclick="window.location.href='usuarios.html'"><span
+                class="material-symbols-outlined">manage_accounts</span> Usuarios</button>
+    </div>
+
+ 
+    <div class="navbar" id="mainNavbar">
+        <div class="nav-left">
+           
+            <div class="logo-container" id="navbarLogo">
+                <img src="Assets/Logo.png" alt="Analitic Logo" class="logo-img">
+                <div class="logo-text">
+                    <span class="logo-name">Analitic</span>
+                    <span class="logo-tag">Laboratorio</span>
+                </div>
             </div>
 
-            <p id="rol-actual">Rol: Cargando...</p>
-
-            <div class="menu">
-                <!-- Botones que se muestran según el rol -->
-                <button onclick="window.location.href='pacientes.html'">Pacientes</button>
-                <button onclick="window.location.href='citas.html'">Solicitudes / Órdenes</button>
-
-                <!-- Solo para admin y laboratorista -->
-                <button id="analisisBtn" onclick="window.location.href='analisis.html'">Análisis Clínicos</button>
-                <button id="resultadosBtn" onclick="window.location.href='resultados.html'">Resultados
-                    Finalizados</button>
-
-                <!-- Solo para admin -->
-                <button id="usuariosBtn" onclick="window.location.href='usuarios.html'">Gestión de Usuarios</button>
-
-                <!-- Solo para recepcion -->
-                <button id="ventasBtn" style="display:none;">Ventas / Cobros</button>
-                <button id="reportesBtn" style="display:none;">Reportes</button>
-
-                <!-- Solo para laboratorista -->
-                <button id="xmlBtn" style="display:none;">Generar XML</button>
-
-                <!-- Solo para capturista -->
-                <button id="capturaBtn" style="display:none;">Captura de Datos</button>
-                <button id="consultasBtn" style="display:none;">Consultas</button>
-
-                <!-- Siempre visible -->
+          
+            <div class="menu-horizontal" id="horizontalMenu">
+                <button id="pacientesBtn" onclick="window.location.href='pacientes.html'">Pacientes</button>
+                <button id="citasBtn" onclick="window.location.href='citas.html'">Solicitudes</button>
+                <button id="esperaBtn" onclick="window.location.href='espera.html'">Espera</button>
+                <button id="analisisBtn" onclick="window.location.href='analisis.html'">Análisis</button>
+                <button id="resultadosBtn" onclick="window.location.href='resultados.html'">Resultados</button>
+                <button id="usuariosBtn" onclick="window.location.href='usuarios.html'">Usuarios</button>
+                <button id="reportesBtn">Reportes</button>
+                <button id="capturaBtn">Captura</button>
+                <button id="consultasBtn">Consultas</button>
                 <button class="logout-btn" onclick="cerrarSesion()">Cerrar sesión</button>
             </div>
         </div>
 
-        <div class="content" id="content">
-            <div class="top-bar">
-                <h1>Laboratorio de Análisis Clínicos</h1>
-                <div class="user-info">
-                    <div class="avatar">EB</div>
-                    <span id="rol-actual-top">Rol: Cargando...</span>
-                </div>
+        <div class="user-info">
+            <div class="avatar">
+                <span class="material-symbols-outlined">person</span>
+            </div>
+            <div class="user-details">
+                <span id="rol-actual-top">Cargando...</span>
+                <span class="user-status">En línea</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="top-bar">
+            <h1>Laboratorio de Análisis Clínicos</h1>
+        </div>
+
+        <div class="cards">
+            <div class="card" id="resumenCard">
+                <h3><span class="material-symbols-outlined">today</span> Resumen del día</h3>
+                <p id="resumenTexto">Cargando...</p>
             </div>
 
-            <div class="cards">
-                <div class="card">
-                    <h3>Resumen del día</h3>
-                    <p>Solicitudes recibidas y estudios procesados hoy.</p>
-                </div>
+            <div class="card" id="actividadCard">
+                <h3><span class="material-symbols-outlined">history</span> Actividad reciente</h3>
+                <div id="actividadLista"></div>
+            </div>
 
-                <div class="card">
-                    <h3>Actividad reciente</h3>
-                    <p>Últimos estudios finalizados y resultados entregados.</p>
-                </div>
+            <div class="card" id="notificacionesCard">
+                <h3><span class="material-symbols-outlined">notifications</span> Notificaciones</h3>
+                <div id="notificacionesLista"></div>
+            </div>
 
-                <div class="card">
-                    <h3>Notificaciones</h3>
-                    <p>No hay alertas pendientes.</p>
-                </div>
-
-                <div class="card admin-card" id="adminCard" style="display: none;">
-                    <h3>Gestión de Usuarios</h3>
-                    <p>Agregar, editar o eliminar usuarios del sistema.</p>
-                    <button onclick="window.location.href='usuarios.html'">Ir a Gestión de Usuarios</button>
-                </div>
+            <div class="card admin-card" id="adminCard" style="display:none;">
+                <h3><span class="material-symbols-outlined">admin_panel_settings</span> Gestión de Usuarios</h3>
+                <p>Agregar, editar o eliminar usuarios del sistema.</p>
+                <button onclick="window.location.href='usuarios.html'">Ir a Gestión de Usuarios</button>
             </div>
         </div>
     </div>
@@ -336,66 +506,87 @@
             alert("Por favor inicia sesión primero.");
             window.location.href = "login.html";
         } else {
-            const rolText = "Rol: " + rolUsuario.charAt(0).toUpperCase() + rolUsuario.slice(1);
-            document.getElementById("rol-actual").innerText = rolText;
+            const rolText = rolUsuario.charAt(0).toUpperCase() + rolUsuario.slice(1);
             document.getElementById("rol-actual-top").innerText = rolText;
 
-            // Ocultar todos los botones primero
-            document.querySelectorAll(".menu button").forEach(btn => {
-                btn.style.display = "none";
-            });
+         
+            document.getElementById("adminSidebar").style.display = "none";
+            document.getElementById("horizontalMenu").style.display = "none";
+            document.querySelectorAll("#horizontalMenu button:not(.logout-btn)").forEach(btn => btn.style.display = "none");
 
-            // Mostrar solo los botones según rol
             if (rolUsuario === "admin") {
-                document.querySelectorAll(".menu button").forEach(btn => {
-                    btn.style.display = "flex";
-                });
+               
+                document.body.classList.add("admin-active");
+                document.getElementById("adminSidebar").style.display = "flex";
+                document.getElementById("navbarLogo").style.display = "none"; 
                 document.getElementById("adminCard").style.display = "block";
-            } else if (rolUsuario === "recepcion") {
-                document.querySelectorAll(".menu button:not(#ventasBtn):not(#reportesBtn):not(.logout-btn)").forEach(btn => {
-                    btn.style.display = "none";
-                });
-                document.getElementById("ventasBtn").style.display = "flex";
-                document.getElementById("reportesBtn").style.display = "flex";
-                document.querySelector(".logout-btn").style.display = "flex";
-            } else if (rolUsuario === "laboratorista") {
-                document.querySelectorAll(".menu button:not(#analisisBtn):not(#resultadosBtn):not(#xmlBtn):not(.logout-btn)").forEach(btn => {
-                    btn.style.display = "none";
-                });
-                document.getElementById("analisisBtn").style.display = "flex";
-                document.getElementById("resultadosBtn").style.display = "flex";
-                document.getElementById("xmlBtn").style.display = "flex";
-                document.querySelector(".logout-btn").style.display = "flex";
-            } else if (rolUsuario === "capturista") {
-                document.querySelectorAll(".menu button:not(#capturaBtn):not(#consultasBtn):not(.logout-btn)").forEach(btn => {
-                    btn.style.display = "none";
-                });
-                document.getElementById("capturaBtn").style.display = "flex";
-                document.getElementById("consultasBtn").style.display = "flex";
-                document.querySelector(".logout-btn").style.display = "flex";
-            }
+            } else {
+             
+                document.getElementById("horizontalMenu").style.display = "flex";
 
-            // Siempre mostrar cerrar sesión
-            document.querySelector(".logout-btn").style.display = "flex";
+                if (rolUsuario === "recepcion") {
+                    mostrar("pacientesBtn", "citasBtn", "esperaBtn");
+                } else if (rolUsuario === "laboratorista") {
+                    // Eliminados XML y Ventas
+                    mostrar("analisisBtn", "resultadosBtn");
+                } else if (rolUsuario === "capturista") {
+                    mostrar("reportesBtn", "capturaBtn", "consultasBtn");
+                }
+            }
         }
 
-        const toggleBtn = document.getElementById("toggleBtn");
-        const sidebar = document.getElementById("sidebar");
-        const content = document.getElementById("content");
-
-        toggleBtn.onclick = function () {
-            const isCollapsed = sidebar.classList.toggle("collapsed");
-            content.classList.toggle("collapsed");
-            toggleBtn.classList.toggle("collapsed", isCollapsed);
-        };
+        function mostrar(...ids) {
+            ids.forEach(id => {
+                const btn = document.getElementById(id);
+                if (btn) btn.style.display = "inline-block";
+            });
+        }
 
         function cerrarSesion() {
             localStorage.removeItem("rolUsuario");
             localStorage.removeItem("usuarioLogueado");
             window.location.href = "login.html";
         }
-    </script>
 
+        window.addEventListener('load', () => {
+            if (window.pywebview && window.pywebview.api) {
+                cargarResumen();
+                cargarActividad();
+                cargarNotificaciones();
+            } else {
+                document.getElementById("resumenTexto").innerText = "Bienvenido. El sistema está listo para operar.";
+                document.getElementById("actividadLista").innerHTML = '<p class="empty-message">Inicia el sistema desde Python para ver datos reales.</p>';
+            }
+        });
+
+        function cargarResumen() {
+            window.pywebview.api.contarCitasHoy().then(count => {
+                document.getElementById("resumenTexto").innerText = `Hoy se han recibido ${count} solicitudes de análisis.`;
+            });
+        }
+
+        function cargarActividad() {
+            window.pywebview.api.obtenerFinalizadasHoy().then(lista => {
+                const cont = document.getElementById("actividadLista");
+                if (!lista || lista.length === 0) {
+                    cont.innerHTML = '<p class="empty-message">No hay actividad reciente finalizada hoy.</p>';
+                } else {
+                    cont.innerHTML = lista.map(item => `<div class="list-item">Estudio finalizado: ${item.paciente} - ${item.tipo}</div>`).join('');
+                }
+            });
+        }
+
+        function cargarNotificaciones() {
+            window.pywebview.api.contarPendientes().then(count => {
+                const cont = document.getElementById("notificacionesLista");
+                if (count > 0) {
+                    cont.innerHTML = `<div class="list-item" style="border-left-color: #f39c12;">Tienes ${count} estudios pendientes por procesar.</div>`;
+                } else {
+                    cont.innerHTML = '<p class="empty-message">No hay notificaciones pendientes.</p>';
+                }
+            });
+        }
+    </script>
 </body>
 
 </html>

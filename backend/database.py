@@ -1,6 +1,9 @@
 import sqlite3
 import os
 import sys
+from backend.auth import Auth
+
+auth = Auth()
 
 if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
     BASE_DIR = os.path.dirname(sys.executable)
@@ -10,7 +13,6 @@ else:
 DB_PATH = os.path.join(BASE_DIR, "sistema_laboratorio.db")
 
 print("Usando base de datos en:", DB_PATH)
-print("Directorio actual:", os.getcwd())
 
 def conectar():
     conn = sqlite3.connect(DB_PATH)
@@ -24,10 +26,8 @@ def crear_tablas():
     conn = None
     try:
         conn = conectar()
-        print("Conexión a BD abierta exitosamente.")
         cursor = conn.cursor()
 
-        print("Creando tabla pacientes...")
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS pacientes (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -38,12 +38,11 @@ def crear_tablas():
                 correo TEXT,
                 direccion TEXT,
                 observaciones TEXT,
+                fecha_nacimiento TEXT,
                 fecha_registro TEXT DEFAULT (datetime('now'))
             )
         """)
-        print("Tabla pacientes OK")
 
-        print("Creando tabla citas...")
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS citas (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -56,9 +55,7 @@ def crear_tablas():
                 FOREIGN KEY (paciente_id) REFERENCES pacientes(id) ON DELETE CASCADE
             )
         """)
-        print("Tabla citas OK")
 
-        print("Creando tabla solicitudes_analisis...")
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS solicitudes_analisis (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -77,9 +74,7 @@ def crear_tablas():
                 FOREIGN KEY (cita_id) REFERENCES citas(id) ON DELETE SET NULL
             )
         """)
-        print("Tabla solicitudes_analisis OK")
 
-        print("Creando tabla resultados_parametros...")
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS resultados_parametros (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -93,9 +88,7 @@ def crear_tablas():
                 FOREIGN KEY (solicitud_id) REFERENCES solicitudes_analisis(id) ON DELETE CASCADE
             )
         """)
-        print("Tabla resultados_parametros OK")
 
-        print("Creando tabla usuarios...")
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS usuarios (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -105,28 +98,51 @@ def crear_tablas():
                 fecha_creacion DATETIME DEFAULT CURRENT_TIMESTAMP
             )
         """)
-        print("Tabla usuarios OK")
 
-        print("Creando índices...")
-        cursor.execute("CREATE INDEX IF NOT EXISTS idx_paciente_nombre ON pacientes(nombre)")
-        cursor.execute("CREATE INDEX IF NOT EXISTS idx_solicitudes_paciente ON solicitudes_analisis(paciente_id)")
-        cursor.execute("CREATE INDEX IF NOT EXISTS idx_solicitudes_estado ON solicitudes_analisis(estado)")
-        cursor.execute("CREATE INDEX IF NOT EXISTS idx_resultados_solicitud ON resultados_parametros(solicitud_id)")
-        print("Índices OK")
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS espera (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                nombre TEXT,
+                fecha_nacimiento TEXT,
+                edad INTEGER,
+                telefono TEXT,
+                fecha_registro TEXT DEFAULT (datetime('now')),
+                fecha_cita TEXT,
+                hora_cita TEXT,
+                tipo_estudio TEXT,
+                observaciones TEXT,
+                estado TEXT DEFAULT 'en_espera',
+                procesado INTEGER DEFAULT 0
+            )
+        """)
 
         conn.commit()
-        print("Base de datos creada/actualizada correctamente.")
+        print("Tablas creadas correctamente.")
+
+       
+        cursor.execute("SELECT * FROM usuarios WHERE usuario = ?", ("admin",))
+        admin = cursor.fetchone()
+
+        if not admin:
+            print("Creando usuario admin...")
+
+            contrasena_hash = auth.hashear_contrasena("admin123")
+
+            cursor.execute("""
+                INSERT INTO usuarios (usuario, contrasena, rol)
+                VALUES (?, ?, ?)
+            """, ("admin", contrasena_hash, "admin"))
+
+            conn.commit()
+            print("✅ Usuario admin creado correctamente")
+        else:
+            print("ℹ️ El usuario admin ya existe")
 
     except Exception as e:
         print("ERROR al crear tablas:", str(e))
-        if conn:
-            conn.rollback()
     finally:
         if conn:
             conn.close()
-
-    print("Fin de crear_tablas()")
-
 
 if __name__ == "__main__":
     crear_tablas()
