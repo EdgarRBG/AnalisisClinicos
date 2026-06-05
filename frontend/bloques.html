@@ -1072,6 +1072,7 @@
                     await window.pywebview.api.eliminarCita(parseInt(citaId));
                 }
  
+                solicitudFinalizada = true;
                 alert("¡Cita finalizada con éxito!");
                 window.location.href = "/resultados";
  
@@ -1081,7 +1082,24 @@
             }
         }
  
-        function volver() { window.location.href = "/analisis"; }
+        let solicitudFinalizada = false;
+
+        // Limpiar solicitud si el usuario cierra/navega sin finalizar
+        window.addEventListener("beforeunload", function() {
+            if (solicitudId && !solicitudFinalizada) {
+                navigator.sendBeacon("/api/eliminarSolicitud", JSON.stringify({ args: [solicitudId] }));
+            }
+        });
+
+        async function volver() {
+            // Si la solicitud no fue finalizada, eliminarla para no dejarla pendiente
+            if (solicitudId) {
+                try {
+                    await window.pywebview.api.eliminarSolicitud(solicitudId);
+                } catch(e) { console.warn("No se pudo eliminar solicitud:", e); }
+            }
+            window.location.href = "/analisis";
+        }
     </script>
 </body>
 </html>
