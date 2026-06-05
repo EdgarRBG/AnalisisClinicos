@@ -2,7 +2,6 @@ from backend.database import conectar
  
 
 PARAMETROS_INICIALES = [
-    # ── Química Sanguínea 35 Elementos ──────────────────────────────
     ("Glucosa",                      "mg/dL",   "70.00",  "106.00", "Química Sanguínea 35 Elementos", "70.00", "106.00", "70.00", "106.00", ""),
     ("Urea",                         "mg/dL",   "15.00",  "45.00",  "Química Sanguínea 35 Elementos", "15.00", "45.00",  "15.00", "45.00",  ""),
     ("Nitrógeno Ureico",             "mg/dL",   "7.00",   "23.00",  "Química Sanguínea 35 Elementos", "7.00",  "23.00",  "7.00",  "23.00",  ""),
@@ -42,13 +41,11 @@ PARAMETROS_INICIALES = [
     ("Inmunoglobulina M (IgM)",      "mg/dL",   "33.00",  "293.00", "Química Sanguínea 35 Elementos", "33.00", "293.00", "33.00", "293.00", ""),
     ("Proteína C Reactiva",          "mg/dL",   "0.00",   "0.50",   "Química Sanguínea 35 Elementos", "0.00",  "0.50",   "0.00",  "0.50",   ""),
  
-    # ── Perfil Lipídico ─────────────────────────────────────────────
     ("Colesterol Total",             "mg/dL",   "",       "200.00", "Perfil Lipídico",  "",      "200.00", "",      "200.00", "< 200.00"),
     ("Triglicéridos",                "mg/dL",   "",       "150.00", "Perfil Lipídico",  "",      "150.00", "",      "150.00", "< 150.00"),
     ("Colesterol HDL",               "mg/dL",   "40.00",  "85.00",  "Perfil Lipídico",  "40.00", "",       "50.00", "",       "> 40 masc / > 50 fem"),
     ("Colesterol LDL",               "mg/dL",   "",       "130.00", "Perfil Lipídico",  "",      "130.00", "",      "130.00", "< 130.00"),
  
-    # ── Citometría Hemática Completa ────────────────────────────────
     ("Hemoglobina",                  "g/dL",    "12.0",   "17.5",   "Citometría Hemática Completa", "13.5", "17.5", "12.0", "15.5", ""),
     ("Hematocrito",                  "%",       "36",     "53",     "Citometría Hemática Completa", "41",   "53",   "36",   "46",   ""),
     ("Leucocitos",                   "10^3/µL", "4.5",    "11.0",   "Citometría Hemática Completa", "4.5",  "11.0", "4.5",  "11.0", ""),

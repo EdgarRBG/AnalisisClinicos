@@ -175,7 +175,7 @@
             background: #f0fdf4;
         }
 
-        /* ── MODAL CSV ── */
+        
         .modal-overlay {
             position: fixed; inset: 0;
             background: rgba(0,0,0,0.5);
@@ -563,7 +563,7 @@
         </div>
     </div>
  
-    <!-- Modal selección de muestra CSV -->
+    
     <div class="modal-overlay" id="modalMuestras">
         <div class="modal-csv">
             <h3>
@@ -577,7 +577,7 @@
     </div>
 
     <script>
-        // ── Diccionario de abreviaturas de laboratorio ──
+        
         const ABREVIATURAS = {
             'GLU':    ['glucosa','glucose','glicemia'],
             'COLES':  ['colesterol','colesterol total','cholesterol'],
@@ -715,7 +715,7 @@
         }
 
         async function importarCSV() {
-            // Crear input de archivo dinámico
+            
             const input = document.createElement("input");
             input.type = "file";
             input.accept = ".csv";
@@ -1027,7 +1027,7 @@
             if (!solicitudId) return alert("No hay solicitud activa.");
             if (estudiosAgregados.length === 0) return alert("Agrega al menos un estudio.");
  
-            // Leer el input del doctor del DOM por si no se disparó oninput
+            
             const inputDoctor = document.getElementById('doctorInput');
             if (inputDoctor && inputDoctor.value) {
                 nombreDoctorTemporal = inputDoctor.value;
@@ -1084,7 +1084,7 @@
  
         let solicitudFinalizada = false;
 
-        // Limpiar solicitud si el usuario cierra/navega sin finalizar
+        
         window.addEventListener("beforeunload", function() {
             if (solicitudId && !solicitudFinalizada) {
                 navigator.sendBeacon("/api/eliminarSolicitud", JSON.stringify({ args: [solicitudId] }));
@@ -1092,7 +1092,7 @@
         });
 
         async function volver() {
-            // Si la solicitud no fue finalizada, eliminarla para no dejarla pendiente
+            
             if (solicitudId) {
                 try {
                     await window.pywebview.api.eliminarSolicitud(solicitudId);

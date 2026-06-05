@@ -320,7 +320,6 @@ class Pacientes:
                 "error": str(e)
             }
 
-    # ==================== MÉTODOS PARA DASHBOARD ====================
     def contar_registrados_hoy(self):
         """Retorna cuántos pacientes se registraron hoy"""
         conn = conectar()

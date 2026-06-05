@@ -1,6 +1,4 @@
-/**
- * api.js — Shim que reemplaza window.pywebview.api por llamadas fetch al servidor Flask.
- */
+
 
 (function () {
     "use strict";
@@ -9,16 +7,16 @@
     const paginasPublicas = ["/", "/login"];
     const enPaginaPublica = paginasPublicas.includes(window.location.pathname);
 
-    /* ── Sesión expirada: redirige al login con parámetro ─── */
+    
     function manejarExpiracion() {
         sessionStorage.clear();
         localStorage.removeItem("rolUsuario");
         localStorage.removeItem("usuarioLogueado");
-        // Redirigir limpiamente sin overlay que bloquee
+        
         window.location.href = "/?expired=1";
     }
 
-    /* ── Llamada genérica a la API ───────────────────────── */
+    
     async function llamarAPI(metodo, args) {
         try {
             const resp = await fetch(`/api/${metodo}`, {
@@ -40,7 +38,7 @@
         }
     }
 
-    /* ── Proxy ───────────────────────────────────────────── */
+    
     const apiProxy = new Proxy({}, {
         get(_, metodo) {
             return (...args) => llamarAPI(metodo, args);
@@ -49,7 +47,7 @@
 
     window.pywebview = { api: apiProxy };
 
-    /* ── Disparar pywebviewready al cargar el DOM ─────────── */
+    
     function dispararReady() {
         window.dispatchEvent(new CustomEvent("pywebviewready"));
     }
@@ -59,7 +57,7 @@
         setTimeout(dispararReady, 0);
     }
 
-    /* ── En páginas protegidas: verificar sesión al cargar ── */
+    
     if (!enPaginaPublica) {
         fetch("/api/check_auth", { credentials: "include" })
             .then(r => { if (r.status === 401) manejarExpiracion(); })

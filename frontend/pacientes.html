@@ -715,45 +715,4 @@
                 const nombre = match ? match[1] : "Respaldo_Pacientes.xlsx";
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement("a");
-                a.href = url; a.download = nombre; a.click();
-                URL.revokeObjectURL(url);
-            } catch(e) { alert("Error: " + e); }
-            finally { document.getElementById("loadingOverlay").style.display = "none"; }
-        }
-
-        function restaurarPacientes() {
-            // Crear input de archivo dinámico
-            const input = document.createElement("input");
-            input.type = "file";
-            input.accept = ".xlsx,.xls";
-            input.onchange = async function() {
-                const archivo = input.files[0];
-                if (!archivo) return;
-                document.getElementById("loadingOverlay").style.display = "flex";
-                try {
-                    const form = new FormData();
-                    form.append("archivo", archivo);
-                    const resp = await fetch("/api/restaurar_pacientes", {
-                        method: "POST",
-                        credentials: "include",
-                        body: form
-                    });
-                    const res = await resp.json();
-                    if (res.ok) {
-                        alert("✅ Restauración exitosa: " + (res.mensaje || "Pacientes importados"));
-                        location.reload();
-                    } else {
-                        alert("❌ Error: " + res.error);
-                    }
-                } catch(e) { alert("Error: " + e); }
-                finally { document.getElementById("loadingOverlay").style.display = "none"; }
-            };
-            input.click();
-        }
-
-        function volver() { window.location.assign("/dashboard"); }
-        window.addEventListener('pywebviewready', cargarPacientes, { once: true });
-    </script>
-</body>
-
-</html>
+                a.href = url; a.download = nombre; a.cl

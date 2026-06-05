@@ -250,18 +250,11 @@
                 });
         }
 
-        // Mostrar aviso si la sesión expiró
+        
         const params = new URLSearchParams(window.location.search);
         if (params.get("expired") === "1") {
             const err = document.getElementById("error");
             if (err) err.innerText = "⏰ Tu sesión expiró. Inicia sesión nuevamente.";
         }
 
-        document.addEventListener("keypress", (e) => {
-            if (e.key === "Enter") login();
-        });
-    </script>
-
-</body>
-
-</html>
+        document.addEventListener("keypress", 

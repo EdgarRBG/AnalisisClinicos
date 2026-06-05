@@ -35,7 +35,7 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* ── SIDEBAR ── */
+        
         .sidebar {
             position: fixed;
             top: 0; left: 0;
@@ -95,7 +95,7 @@
         .sb-logout:hover { background: rgba(255,255,255,0.13); color: #fff; }
         .sb-logout .material-symbols-outlined { font-size: 19px; }
 
-        /* ── NAVBAR ── */
+        
         .navbar {
             position: fixed;
             top: 0; left: 0; right: 0;
@@ -148,7 +148,7 @@
         .user-name  { font-size: 0.84rem; font-weight: 700; color: var(--text); }
         .user-badge { font-size: 0.67rem; color: var(--text-soft); }
 
-        /* ── CONTENT ── */
+        
         .content {
             padding-top: calc(var(--nav-h) + 28px);
             padding-left: 28px; padding-right: 28px;
@@ -157,7 +157,7 @@
         }
         body.admin-active .content { margin-left: var(--sidebar-w); }
 
-        /* ── PAGE HEADER ── */
+        
         .page-top {
             display: flex; align-items: center;
             justify-content: space-between;
@@ -177,7 +177,7 @@
         }
         .date-chip .material-symbols-outlined { font-size: 17px; color: var(--green-soft); }
 
-        /* ── STATS ── */
+        
         .stats {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -212,7 +212,7 @@
         .stat-val.orange { color: var(--orange); }
         .stat-lbl { font-size: 0.8rem; color: var(--text-soft); font-weight: 500; margin-top: 4px; }
 
-        /* ── GRID ── */
+        
         .grid {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
@@ -257,7 +257,7 @@
         .panel-body::-webkit-scrollbar { width: 3px; }
         .panel-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
 
-        /* ── ITEMS ── */
+        
         .row {
             display: flex; align-items: center; gap: 13px;
             padding: 12px 11px;
@@ -287,7 +287,7 @@
         .pill.blue   { background: #eff4ff; color: var(--blue); }
         .pill.orange { background: #fff5ef; color: var(--orange); }
 
-        /* ── NOTIF ── */
+        
         .notif {
             display: flex; gap: 10px;
             padding: 11px 10px;
@@ -302,7 +302,7 @@
         .notif-title  { font-size: 0.8rem; font-weight: 700; color: var(--text); }
         .notif-desc   { font-size: 0.72rem; color: var(--text-soft); margin-top: 2px; }
 
-        /* ── EMPTY ── */
+        
         .empty {
             display: flex; flex-direction: column; align-items: center;
             gap: 7px; padding: 32px 16px;
@@ -310,7 +310,7 @@
         }
         .empty .material-symbols-outlined { font-size: 28px; color: var(--border); }
 
-        /* ── RECEPCIÓN NAVBAR ── */
+        
         .recep-nav {
             display: none;
             position: fixed;
@@ -365,7 +365,7 @@
         .recep-uname { font-size: 0.82rem; font-weight: 700; color: white; }
         .recep-ustatus { font-size: 0.63rem; color: rgba(255,255,255,0.55); }
 
-        /* ── ADMIN CARD ── */
+        
         .admin-card {
             margin-top: 12px;
             background: var(--surface);
@@ -385,7 +385,7 @@
         }
         .admin-go:hover { background: var(--green); }
 
-        /* ── RESPONSIVE ── */
+        
         @media (max-width: 1024px) {
             .grid { grid-template-columns: 1fr 1fr; }
             .panel.span2 { grid-column: span 1; }
@@ -401,7 +401,7 @@
 </head>
 <body>
 
-<!-- NAVBAR RECEPCIÓN -->
+
 <nav class="recep-nav" id="recepNav">
     <div class="recep-nav-left">
         <div class="recep-logo">
@@ -434,7 +434,7 @@
     </div>
 </nav>
 
-<!-- SIDEBAR -->
+
 <div class="sidebar" id="adminSidebar">
     <div class="sb-brand">
         <img src="/static/Assets/Logo.png" alt="Logo">
@@ -459,7 +459,7 @@
 
 </div>
 
-<!-- NAVBAR -->
+
 <nav class="navbar" id="mainNavbar">
     <div class="nav-left">
         <div class="nav-logo" id="navbarLogo">
@@ -489,7 +489,7 @@
     </div>
 </nav>
 
-<!-- CONTENT -->
+
 <div class="content">
 
     <div class="page-top">
@@ -503,7 +503,7 @@
         </div>
     </div>
 
-    <!-- Stats -->
+    
     <div class="stats">
         <div class="stat">
             <div class="stat-ico blue"><span class="material-symbols-outlined">person_add</span></div>
@@ -528,7 +528,7 @@
         </div>
     </div>
 
-    <!-- Panels -->
+    
     <div class="grid">
 
         <div class="panel span2 color-blue">
@@ -572,7 +572,7 @@
 
     </div>
 
-    <!-- Admin -->
+    
     <div class="admin-card" id="adminCard">
         <div class="admin-card-left">
             <h3>Gestión de Usuarios</h3>
@@ -584,10 +584,10 @@
 </div>
 
 <script>
-    // Obtener rol desde JWT (fuente de verdad) o localStorage como fallback
+    
     let rol = localStorage.getItem("rolUsuario") || "";
 
-    // Sincronizar rol desde el servidor en cada carga
+    
     fetch("/api/check_auth", { credentials: "include" })
         .then(r => r.ok ? r.json() : null)
         .then(data => {

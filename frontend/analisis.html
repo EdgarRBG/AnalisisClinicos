@@ -458,7 +458,7 @@
                         <div class="form-group">
                             <select id="estudio" required>
                                 <option value="" disabled selected>Seleccione estudio...</option>
-                                <!-- Cargado dinámicamente desde BD -->
+                                
                             </select>
                             <label>ESTUDIO SOLICITADO</label>
                         </div>
@@ -623,7 +623,7 @@
        
             const selectEstudio = document.getElementById('estudio');
             const estudioValor  = p.estudio || "";
-            // Buscar coincidencia flexible (sin importar mayúsculas/acentos)
+            
             let opcion = [...selectEstudio.options].find(o =>
                 o.value.toLowerCase().trim() === estudioValor.toLowerCase().trim()
             );

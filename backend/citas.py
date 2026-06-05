@@ -177,7 +177,6 @@ class Citas:
         conn.close()
         return filas
 
-    # ==================== MÉTODO PARA DASHBOARD ====================
     def obtener_citas_hoy_con_nombre(self):
         """Retorna las citas de hoy con nombre del paciente (para el dashboard)"""
         hoy = datetime.date.today().isoformat()

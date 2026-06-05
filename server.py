@@ -23,17 +23,11 @@ from backend.bloques import Bloques
 from backend.database import crear_tablas
 from backend.parametros import Parametros
 
-# ──────────────────────────────────────────────────────────────
-# Configuración
-# ──────────────────────────────────────────────────────────────
 app = Flask(__name__, static_folder="frontend", static_url_path="/static")
 
 SECRET_KEY = os.getenv("SECRET_KEY", "analitic-secret-2024-xK9q")
 TOKEN_MINUTOS = int(os.getenv("TOKEN_MINUTOS", 5))
 
-# ──────────────────────────────────────────────────────────────
-# Inicializar base de datos y módulos
-# ──────────────────────────────────────────────────────────────
 crear_tablas()
 
 _auth       = Auth()
@@ -47,9 +41,6 @@ _parametros = Parametros()
 _parametros.sembrar_datos_iniciales()
 
 
-# ──────────────────────────────────────────────────────────────
-# Helpers JWT
-# ──────────────────────────────────────────────────────────────
 def crear_token(usuario: str, rol: str) -> str:
     payload = {
         "usuario": usuario,
@@ -87,10 +78,8 @@ def requiere_token(f):
         except pyjwt.InvalidTokenError:
             return jsonify({"error": "Token inválido", "expired": True}), 401
 
-        # Ejecutar la función
         result = f(*args, **kwargs)
 
-        # Refrescar cookie (ventana deslizante)
         nuevo_token = crear_token(request.usuario_actual, request.rol_actual)
         if isinstance(result, tuple):
             resp, status = result
@@ -103,9 +92,6 @@ def requiere_token(f):
     return decorated
 
 
-# ──────────────────────────────────────────────────────────────
-# Convertir fechas para JSON
-# ──────────────────────────────────────────────────────────────
 def _json_dates(data):
     if isinstance(data, list):
         return [_json_dates(i) for i in data]
@@ -117,9 +103,6 @@ def _json_dates(data):
     return data
 
 
-# ──────────────────────────────────────────────────────────────
-# Páginas HTML (rutas del navegador)
-# ──────────────────────────────────────────────────────────────
 PAGINAS = {
     "/":            "login.html",
     "/login":       "login.html",
@@ -135,7 +118,6 @@ PAGINAS = {
 }
 
 for ruta, archivo in PAGINAS.items():
-    # Endpoint único basado en la ruta, no en el archivo
     endpoint = "page_" + ruta.strip("/").replace("/", "_") or "page_root"
     def _make_view(nombre_archivo):
         def view():
@@ -144,9 +126,6 @@ for ruta, archivo in PAGINAS.items():
     app.add_url_rule(ruta, endpoint=endpoint, view_func=_make_view(archivo))
 
 
-# ──────────────────────────────────────────────────────────────
-# API: Login / Logout / Check
-# ──────────────────────────────────────────────────────────────
 @app.route("/api/login", methods=["POST"])
 def api_login():
     body = request.json or {}
@@ -184,12 +163,7 @@ def api_check_auth():
         return jsonify({"ok": False}), 401
 
 
-# ──────────────────────────────────────────────────────────────
-# API: Dispatcher genérico para todos los métodos
-# ──────────────────────────────────────────────────────────────
-# Mapa de nombre → función del backend
 METODOS = {
-    # Dashboard
     "contarPacientesHoy":         lambda args: _pacientes.contar_registrados_hoy(),
     "obtenerPacientesRecientes":  lambda args: _json_dates(_pacientes.obtener_recientes(args[0] if args else 10)),
     "obtenerPacientesDeHoy":      lambda args: _json_dates(_pacientes.obtener_recientes(50)),
@@ -198,7 +172,6 @@ METODOS = {
     "contarPendientes":           lambda args: _analisis.contar_pendientes(),
     "contarCitasHoy":             lambda args: _citas.contar_citas_hoy(),
 
-    # Pacientes
     "guardarPaciente":            lambda args: _pacientes.guardar(*args),
     "obtenerTodosLosPacientes":   lambda args: _json_dates(_pacientes.obtener_todos()),
     "obtenerPacientes":           lambda args: _pacientes.obtener_para_select(),
@@ -208,12 +181,10 @@ METODOS = {
     "respaldar_pacientes":        lambda args: {"ok": False, "error": "Usa el botón de exportar en la web"},
     "seleccionar_y_restaurar_pacientes": lambda args: {"ok": False, "error": "Usa el formulario de importar"},
 
-    # Citas
     "registrarCita":              lambda args: _citas.registrar(*args),
     "obtenerCitas":               lambda args: _json_dates(_citas.obtener_todas()),
     "eliminarCita":               lambda args: _citas.eliminar(args[0]),
 
-    # Análisis
     "registrarSolicitudAnalisis": lambda args: _analisis.registrar_solicitud(*args),
     "obtenerSolicitudesPendientes": lambda args: _json_dates(_analisis.obtener_pendientes()),
     "obtenerSolicitud":           lambda args: _json_dates(_analisis.obtener_solicitud(args[0])),
@@ -223,16 +194,13 @@ METODOS = {
     "obtenerSolicitudesFinalizadas": lambda args: _json_dates(_analisis.obtener_finalizadas()),
     "eliminarSolicitud":          lambda args: _analisis.eliminar_solicitud(args[0]),
 
-    # Bloques / Estudios
     "obtenerEstudiosDisponibles": lambda args: _bloques.obtener_estudios_disponibles(),
     "guardarBloquesSolicitud":    lambda args: _bloques.guardar_bloques_solicitud(*args),
 
-    # Espera
     "registrarEnEspera":          lambda args: _espera.registrar(*args),
     "obtenerPacientesEnEspera":   lambda args: _json_dates(_espera.obtener_todos()),
     "marcarProcesado":            lambda args: _espera.marcar_procesado(args[0]),
 
-    # Usuarios
     "crearUsuario":               lambda args: _usuarios.crear_usuario(*args),
     "obtenerUsuarios":            lambda args: _usuarios.obtener_todos(),
     "actualizarRolUsuario":       lambda args: _usuarios.actualizar_rol(*args),
@@ -240,14 +208,12 @@ METODOS = {
     "eliminarUsuario":            lambda args: _usuarios.eliminar_usuario(args[0]),
     "verificarContrasenaAdmin":   lambda args: _usuarios.verificar_contrasena_admin(args[0]),
 
-    # Parámetros
     "obtenerParametros":          lambda args: _json_dates(_parametros.obtener_todos()),
     "agregarParametro":           lambda args: _parametros.agregar(*args),
     "editarParametro":            lambda args: _parametros.editar(*args),
     "eliminarParametro":          lambda args: _parametros.eliminar(args[0]),
     "obtenerParametrosPorTipo":   lambda args: _parametros.obtener_por_tipo(args[0]),
 
-    # CSV (web: se maneja con upload separado)
     "seleccionarYLeerCSV":        lambda args: {"ok": False, "error": "Usa el formulario de carga de archivo"},
 }
 
@@ -270,9 +236,6 @@ def api_dispatch(metodo):
         return jsonify({"error": str(e)}), 500
 
 
-# ──────────────────────────────────────────────────────────────
-# Respaldar pacientes → descarga Excel en el navegador
-# ──────────────────────────────────────────────────────────────
 @app.route("/api/descargar_respaldo", methods=["GET"])
 @requiere_token
 def descargar_respaldo():
@@ -285,7 +248,6 @@ def descargar_respaldo():
 
     df = pd.DataFrame(pacientes)
 
-    # Convertir fechas a string
     for col in df.columns:
         df[col] = df[col].apply(
             lambda v: v.strftime("%Y-%m-%d %H:%M:%S")
@@ -309,9 +271,6 @@ def descargar_respaldo():
     )
 
 
-# ──────────────────────────────────────────────────────────────
-# Restaurar pacientes desde Excel subido
-# ──────────────────────────────────────────────────────────────
 @app.route("/api/restaurar_pacientes", methods=["POST"])
 @requiere_token
 def restaurar_pacientes():
@@ -320,7 +279,6 @@ def restaurar_pacientes():
     if not archivo:
         return jsonify({"ok": False, "error": "No se recibió archivo"})
 
-    # Guardar temporalmente para procesarlo
     with tempfile.NamedTemporaryFile(suffix=".xlsx", delete=False) as tmp:
         archivo.save(tmp.name)
         ruta_tmp = tmp.name
@@ -333,9 +291,6 @@ def restaurar_pacientes():
     return jsonify(resultado)
 
 
-# ──────────────────────────────────────────────────────────────
-# Upload CSV (reemplazo web de seleccionarYLeerCSV)
-# ──────────────────────────────────────────────────────────────
 @app.route("/api/upload_csv", methods=["POST"])
 @requiere_token
 def upload_csv():
@@ -364,7 +319,6 @@ def upload_csv():
     return jsonify({"ok": True, "muestras": lista} if lista else {"ok": False, "error": "Sin datos"})
 
 
-# ──────────────────────────────────────────────────────────────
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 5000))
     app.run(host="0.0.0.0", port=port, debug=os.getenv("FLASK_ENV") != "production")
