@@ -185,14 +185,19 @@
             margin-bottom: 20px;
         }
         .stat {
-            background: var(--surface);
-            border: 1px solid var(--border);
             border-radius: 14px;
             padding: 22px 26px;
             display: flex; align-items: center; gap: 18px;
-            transition: border-color 0.2s;
+            transition: transform 0.15s, box-shadow 0.15s;
+            border: none;
         }
-        .stat:hover { border-color: #c8d8c8; }
+        .stat:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.10); }
+        .stat.blue   { background: linear-gradient(135deg, #1565c0, #1e88e5); }
+        .stat.green  { background: linear-gradient(135deg, #1b5e20, #2e7d32); }
+        .stat.orange { background: linear-gradient(135deg, #e65100, #f57c00); }
+        .stat .stat-val, .stat .stat-lbl { color: #fff; }
+        .stat .stat-ico { background: rgba(255,255,255,0.2) !important; }
+        .stat .stat-ico .material-symbols-outlined { color: #fff !important; }
 
         .stat-ico {
             width: 50px; height: 50px; border-radius: 13px;
@@ -221,14 +226,18 @@
         }
 
         .panel {
-            background: var(--surface);
-            border: 1px solid var(--border);
             border-radius: 14px;
             display: flex; flex-direction: column;
             overflow: hidden;
-            transition: border-color 0.2s;
+            transition: transform 0.15s, box-shadow 0.15s;
+            border: none;
         }
-        .panel:hover { border-color: #c8d8c8; }
+        .panel:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.10); }
+        .panel.color-blue   { background: linear-gradient(160deg, #e3f0ff 0%, #fff 60%); border-left: 4px solid #1565c0; }
+        .panel.color-green  { background: linear-gradient(160deg, #e8f5e9 0%, #fff 60%); border-left: 4px solid #2e7d32; }
+        .panel.color-orange { background: linear-gradient(160deg, #fff3e0 0%, #fff 60%); border-left: 4px solid #e65100; }
+        .panel.color-teal   { background: linear-gradient(160deg, #e0f7fa 0%, #fff 60%); border-left: 4px solid #00838f; }
+        .panel.color-purple { background: linear-gradient(160deg, #f3e5f5 0%, #fff 60%); border-left: 4px solid #7b1fa2; }
         .panel.span2 { grid-column: span 2; }
         .panel.tall  { grid-row: span 2; }
 
@@ -453,7 +462,6 @@
     <div class="sb-section">Admin</div>
     <button class="sb-btn" onclick="ir('/usuarios')"><span class="material-symbols-outlined">manage_accounts</span>Usuarios</button>
 
-    <button class="sb-logout" onclick="cerrarSesion()"><span class="material-symbols-outlined">logout</span>Cerrar sesión</button>
 </div>
 
 <!-- NAVBAR -->
@@ -502,21 +510,21 @@
 
     <!-- Stats -->
     <div class="stats">
-        <div class="stat">
+        <div class="stat blue">
             <div class="stat-ico blue"><span class="material-symbols-outlined">person_add</span></div>
             <div>
                 <div class="stat-val blue" id="statPacientes">—</div>
                 <div class="stat-lbl">Pacientes registrados hoy</div>
             </div>
         </div>
-        <div class="stat">
+        <div class="stat green">
             <div class="stat-ico green"><span class="material-symbols-outlined">check_circle</span></div>
             <div>
                 <div class="stat-val green" id="statFinalizados">—</div>
                 <div class="stat-lbl">Análisis finalizados hoy</div>
             </div>
         </div>
-        <div class="stat">
+        <div class="stat orange">
             <div class="stat-ico orange"><span class="material-symbols-outlined">pending</span></div>
             <div>
                 <div class="stat-val orange" id="statPendientes">—</div>
@@ -528,7 +536,7 @@
     <!-- Panels -->
     <div class="grid">
 
-        <div class="panel span2">
+        <div class="panel span2 color-blue">
             <div class="panel-head">
                 <div class="panel-label"><span class="material-symbols-outlined">biotech</span>Análisis finalizados hoy</div>
                 <span class="count-pill" id="badgeFin">0</span>
@@ -538,7 +546,7 @@
             </div>
         </div>
 
-        <div class="panel tall">
+        <div class="panel tall color-purple">
             <div class="panel-head">
                 <div class="panel-label"><span class="material-symbols-outlined">notifications</span>Notificaciones</div>
             </div>
@@ -547,7 +555,7 @@
             </div>
         </div>
 
-        <div class="panel">
+        <div class="panel color-orange">
             <div class="panel-head">
                 <div class="panel-label"><span class="material-symbols-outlined">calendar_today</span>Citas de hoy</div>
                 <span class="count-pill" id="badgeCitas">0</span>
@@ -557,7 +565,7 @@
             </div>
         </div>
 
-        <div class="panel">
+        <div class="panel color-green">
             <div class="panel-head">
                 <div class="panel-label"><span class="material-symbols-outlined">group_add</span>Pacientes de hoy</div>
                 <span class="count-pill" id="badgePac">0</span>
@@ -581,8 +589,7 @@
 </div>
 
 <script>
-    const rol = localStorage.getItem("rolUsuario");
-    if (!rol) { alert("Inicia sesión primero."); location.href = "/"; }
+    const rol = localStorage.getItem("rolUsuario") || "";
 
     document.getElementById("fechaHoy").textContent =
         new Date().toLocaleDateString('es-MX', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
@@ -610,7 +617,8 @@
     const cerrarSesion = () => {
         localStorage.removeItem("rolUsuario");
         localStorage.removeItem("usuarioLogueado");
-        location.href = "/";
+        fetch("/api/logout", { method: "POST", credentials: "include" })
+            .finally(() => { location.href = "/"; });
     };
     const esc = s => String(s ?? '').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 
@@ -710,8 +718,4 @@
         if (window.pywebview?.api) { refresh(); setInterval(refresh, 7000); }
         else setTimeout(wait, 200);
     }
-    window.addEventListener('load', wait);
-    window.addEventListener('pywebviewready', wait);
-</script>
-</body>
-</html>
+    window.addEventListe
