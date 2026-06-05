@@ -135,13 +135,13 @@ PAGINAS = {
 }
 
 for ruta, archivo in PAGINAS.items():
-    # Closure para capturar archivo correctamente
+    # Endpoint único basado en la ruta, no en el archivo
+    endpoint = "page_" + ruta.strip("/").replace("/", "_") or "page_root"
     def _make_view(nombre_archivo):
         def view():
             return send_from_directory("frontend", nombre_archivo)
-        view.__name__ = "page_" + nombre_archivo.replace(".", "_")
         return view
-    app.add_url_rule(ruta, view_func=_make_view(archivo))
+    app.add_url_rule(ruta, endpoint=endpoint, view_func=_make_view(archivo))
 
 
 # ──────────────────────────────────────────────────────────────
