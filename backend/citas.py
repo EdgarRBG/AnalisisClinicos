@@ -3,20 +3,21 @@ import datetime
 
 
 class Citas:
+
     def registrar(self, paciente_id, fecha, hora, tipo, estado='pendiente', observaciones=''):
         if not paciente_id or not fecha or not hora or not tipo:
             return False
 
         conn = conectar()
-        cursor = conn.cursor()
+        cursor = conn.cursor(dictionary=True)
         try:
             cursor.execute("""
                 INSERT INTO citas (
                     paciente_id, fecha, hora, tipo, estado, observaciones
-                ) VALUES (?, ?, ?, ?, ?, ?)
+                ) VALUES (%s, %s, %s, %s, %s, %s)
             """, (paciente_id, fecha, hora, tipo, estado, observaciones))
             conn.commit()
-            return cursor.lastrowid  
+            return cursor.lastrowid
         except Exception as e:
             print("Error al registrar cita/orden:", e)
             conn.rollback()
@@ -26,7 +27,7 @@ class Citas:
 
     def obtener_todas(self):
         conn = conectar()
-        cursor = conn.cursor()
+        cursor = conn.cursor(dictionary=True)
         cursor.execute("""
             SELECT 
                 c.id,
@@ -60,7 +61,7 @@ class Citas:
 
     def obtener_por_id(self, cita_id):
         conn = conectar()
-        cursor = conn.cursor()
+        cursor = conn.cursor(dictionary=True)
         cursor.execute("""
             SELECT 
                 c.id,
@@ -73,7 +74,7 @@ class Citas:
                 p.nombre AS nombre_paciente
             FROM citas c
             LEFT JOIN pacientes p ON c.paciente_id = p.id
-            WHERE c.id = ?
+            WHERE c.id = %s
         """, (cita_id,))
         row = cursor.fetchone()
         conn.close()
@@ -93,40 +94,40 @@ class Citas:
 
     def obtener_por_paciente(self, paciente_id):
         conn = conectar()
-        cursor = conn.cursor()
+        cursor = conn.cursor(dictionary=True)
         cursor.execute("""
             SELECT 
                 c.id, c.fecha, c.hora, c.tipo, c.estado, c.observaciones
             FROM citas c
-            WHERE c.paciente_id = ?
+            WHERE c.paciente_id = %s
             ORDER BY c.fecha DESC, c.hora ASC
         """, (paciente_id,))
         filas = cursor.fetchall()
         conn.close()
-        return [dict(row) for row in filas]
+        return filas
 
     def actualizar(self, cita_id, tipo=None, estado=None, observaciones=None):
         conn = conectar()
-        cursor = conn.cursor()
+        cursor = conn.cursor(dictionary=True)
         try:
             updates = []
             params = []
 
             if tipo is not None:
-                updates.append("tipo = ?")
+                updates.append("tipo = %s")
                 params.append(tipo)
             if estado is not None:
-                updates.append("estado = ?")
+                updates.append("estado = %s")
                 params.append(estado)
             if observaciones is not None:
-                updates.append("observaciones = ?")
+                updates.append("observaciones = %s")
                 params.append(observaciones)
 
             if not updates:
                 return False
 
             params.append(cita_id)
-            query = f"UPDATE citas SET {', '.join(updates)} WHERE id = ?"
+            query = f"UPDATE citas SET {', '.join(updates)} WHERE id = %s"
 
             cursor.execute(query, params)
             conn.commit()
@@ -140,9 +141,9 @@ class Citas:
 
     def eliminar(self, cita_id):
         conn = conectar()
-        cursor = conn.cursor()
+        cursor = conn.cursor(dictionary=True)
         try:
-            cursor.execute("DELETE FROM citas WHERE id = ?", (cita_id,))
+            cursor.execute("DELETE FROM citas WHERE id = %s", (cita_id,))
             conn.commit()
             return cursor.rowcount > 0
         except Exception as e:
@@ -152,33 +153,55 @@ class Citas:
         finally:
             conn.close()
 
-    def contar_citas_hoy(self):
-        hoy = datetime.date.today().isoformat()
-        conn = conectar()
-        cursor = conn.cursor()
-        cursor.execute("""
-            SELECT COUNT(*) FROM citas WHERE fecha = ?
-        """, (hoy,))
-        count = cursor.fetchone()[0]
-        conn.close()
-        return count
-
     def obtener_citas_hoy(self):
         hoy = datetime.date.today().isoformat()
+
         conn = conectar()
-        cursor = conn.cursor()
+        cursor = conn.cursor(dictionary=True)
+
         cursor.execute("""
             SELECT 
                 c.id,
+                c.paciente_id,
                 p.nombre AS nombre_paciente,
                 c.hora,
                 c.tipo,
                 c.estado
             FROM citas c
             LEFT JOIN pacientes p ON c.paciente_id = p.id
-            WHERE c.fecha = ?
+            WHERE c.fecha = %s
             ORDER BY c.hora ASC
         """, (hoy,))
+
         filas = cursor.fetchall()
         conn.close()
-        return [dict(row) for row in filas]
+        return filas
+
+    # ==================== MÉTODO PARA DASHBOARD ====================
+    def obtener_citas_hoy_con_nombre(self):
+        """Retorna las citas de hoy con nombre del paciente (para el dashboard)"""
+        hoy = datetime.date.today().isoformat()
+
+        conn = conectar()
+        cursor = conn.cursor(dictionary=True)
+        try:
+            cursor.execute("""
+                SELECT
+                    c.id,
+                    c.paciente_id,
+                    c.fecha,
+                    c.hora,
+                    c.tipo,
+                    c.estado,
+                    p.nombre AS nombre_paciente
+                FROM citas c
+                LEFT JOIN pacientes p ON c.paciente_id = p.id
+                WHERE c.fecha = %s
+                ORDER BY c.hora ASC
+            """, (hoy,))
+            return cursor.fetchall()
+        except Exception as e:
+            print("Error obteniendo citas hoy con nombre:", e)
+            return []
+        finally:
+            conn.close()

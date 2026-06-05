@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pacientes - Analitic Laboratorio Clínico</title>
 
-   
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
     <link rel="stylesheet"
@@ -26,7 +25,6 @@
             --shadow-hover: 0 20px 60px rgba(46, 125, 50, 0.15);
         }
 
-       
         * {
             margin: 0;
             padding: 0;
@@ -40,7 +38,6 @@
             min-height: 100vh;
         }
 
-       
         .header {
             background: linear-gradient(to right, var(--primary), var(--primary-dark));
             padding: 20px 60px;
@@ -84,27 +81,27 @@
             transform: translateY(-2px);
         }
 
+    
         .btn-backup {
-            background: #2196f3;
-            border-color: #1e88e5;
+            background: #2196f3 !important;
+            border-color: #1e88e5 !important;
         }
 
         .btn-backup:hover {
-            background: #1e88e5;
+            background: #1e88e5 !important;
             box-shadow: 0 8px 20px rgba(33, 150, 243, 0.3);
         }
 
         .btn-restore {
-            background: #ff9800;
-            border-color: #f57c00;
+            background: #ff9800 !important;
+            border-color: #f57c00 !important;
         }
 
         .btn-restore:hover {
-            background: #f57c00;
+            background: #f57c00 !important;
             box-shadow: 0 8px 20px rgba(255, 152, 0, 0.3);
         }
 
-     
         .container {
             padding: 40px 60px;
             max-width: 1600px;
@@ -118,7 +115,6 @@
             align-items: start;
         }
 
-      
         .panel-registro {
             background: var(--white);
             border-radius: 30px;
@@ -127,6 +123,10 @@
             border: 1px solid rgba(255, 255, 255, 0.8);
             position: sticky;
             top: 120px;
+      
+            max-height: calc(100vh - 160px);
+            display: flex;
+            flex-direction: column;
         }
 
         .panel-registro h3 {
@@ -137,6 +137,23 @@
             display: flex;
             align-items: center;
             gap: 10px;
+        }
+
+      
+        .form-container-scroll {
+            overflow-y: auto;
+            flex: 1;
+            padding-right: 5px;
+            margin-bottom: 10px;
+        }
+
+   
+        .form-container-scroll::-webkit-scrollbar {
+            width: 5px;
+        }
+        .form-container-scroll::-webkit-scrollbar-thumb {
+            background: #e2e8f0;
+            border-radius: 10px;
         }
 
         .form-group {
@@ -200,7 +217,6 @@
             box-shadow: 0 15px 30px rgba(46, 125, 50, 0.3);
         }
 
-      
         .panel-lista {
             display: flex;
             flex-direction: column;
@@ -218,11 +234,6 @@
             border: 1px solid rgba(255, 255, 255, 0.8);
         }
 
-        .search-bar .material-symbols-outlined {
-            color: var(--primary-light);
-            font-size: 28px;
-        }
-
         .search-bar input {
             border: none;
             background: transparent;
@@ -234,10 +245,9 @@
             box-shadow: none;
         }
 
-      
         .patients-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
             gap: 25px;
         }
 
@@ -250,20 +260,8 @@
             border: 1px solid rgba(255, 255, 255, 0.8);
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 15px;
             animation: fadeIn 0.6s ease;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
         }
 
         .patient-card:hover {
@@ -288,7 +286,6 @@
             color: white;
             font-size: 1.8rem;
             font-weight: 800;
-            box-shadow: 0 8px 20px rgba(46, 125, 50, 0.25);
         }
 
         .patient-meta h4 {
@@ -299,7 +296,7 @@
         }
 
         .patient-meta span {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: var(--text-muted);
             font-weight: 600;
             display: flex;
@@ -310,7 +307,7 @@
         .patient-details {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 15px;
+            gap: 12px;
             background: #f8fafc;
             padding: 20px;
             border-radius: 20px;
@@ -323,16 +320,25 @@
         }
 
         .detail-item small {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             font-weight: 700;
             color: var(--text-muted);
             text-transform: uppercase;
         }
 
         .detail-item p {
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             font-weight: 600;
             color: var(--text-main);
+        }
+
+        .obs-box {
+            background: #fffde7;
+            padding: 15px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            border-left: 5px solid #fbc02d;
+            color: #5d4037;
         }
 
         .patient-actions {
@@ -358,56 +364,49 @@
 
         .btn-edit {
             background: #fff8e1;
-            color: #f59e0b;
+            color: #f57c00;
         }
 
         .btn-edit:hover {
-            background: #fef3c7;
-            transform: translateY(-2px);
+            background: #ffecb3;
         }
 
         .btn-delete {
-            background: #fef2f2;
-            color: #ef4444;
+            background: #ffebee;
+            color: #d32f2f;
         }
 
         .btn-delete:hover {
-            background: #fee2e2;
-            transform: translateY(-2px);
+            background: #ffcdd2;
         }
 
-       
         .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(15, 23, 42, 0.5);
-            backdrop-filter: blur(8px);
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
             display: none;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
             z-index: 1000;
-            animation: fadeIn 0.3s ease;
+            backdrop-filter: blur(5px);
         }
 
         .modal {
-            background: var(--white);
-            border-radius: 35px;
+            background: white;
+            border-radius: 30px;
             width: 90%;
-            max-width: 550px;
+            max-width: 600px;
             padding: 40px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-            position: relative;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
         }
 
         .modal-header h3 {
             color: var(--primary-dark);
-            font-size: 1.6rem;
-            font-weight: 800;
+            font-size: 1.5rem;
             margin-bottom: 25px;
-            text-align: center;
         }
 
         .modal-footer {
@@ -418,13 +417,12 @@
 
         .btn-modal {
             flex: 1;
-            padding: 16px;
-            border-radius: 18px;
+            padding: 14px;
+            border: none;
+            border-radius: 15px;
             font-weight: 700;
-            font-size: 1rem;
             cursor: pointer;
             transition: 0.3s;
-            border: none;
         }
 
         .btn-cancel {
@@ -432,46 +430,24 @@
             color: #64748b;
         }
 
-        .btn-cancel:hover {
-            background: #e2e8f0;
-        }
-
         .btn-confirm {
             background: var(--primary);
             color: white;
-            box-shadow: 0 10px 20px rgba(46, 125, 50, 0.2);
         }
 
-        .btn-confirm:hover {
-            background: var(--primary-dark);
-            transform: translateY(-2px);
-        }
-
-        .delete-warning {
-            background: #fff1f2;
-            color: #be123c;
-            padding: 20px;
-            border-radius: 20px;
-            margin-bottom: 25px;
-            text-align: center;
-            font-weight: 600;
-            border: 1px solid #fecdd3;
-        }
-
-       
         #loadingOverlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(5px);
+            background: rgba(255, 255, 255, 0.8);
             display: none;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            z-index: 9999;
+            z-index: 2000;
+            backdrop-filter: blur(10px);
         }
 
         .spinner {
@@ -481,34 +457,35 @@
             border-top: 5px solid var(--primary);
             border-radius: 50%;
             animation: spin 1s linear infinite;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
 
         @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
 
-            100% {
-                transform: rotate(360deg);
-            }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
+    <script src="/static/js/api.js"></script>
 </head>
 
 <body>
-  
+
     <div id="loadingOverlay">
         <div class="spinner"></div>
-        <p id="loadingText" style="font-weight: 700; color: var(--primary-dark);">Procesando, por favor espera...</p>
+        <p style="font-weight: 700; color: var(--primary-dark);">Procesando información...</p>
     </div>
 
-   
     <div class="header">
-        <h1>Gestión de Pacientes</h1>
+        <h1><span class="material-symbols-outlined"
+                style="vertical-align: middle; font-size: 2rem;">biotech</span> Analitic</h1>
         <div class="header-actions">
             <button class="btn-header btn-backup" onclick="respaldarPacientes()">
-                <span class="material-symbols-outlined">cloud_download</span> Respaldo
+                <span class="material-symbols-outlined">cloud_upload</span> Respaldar
             </button>
             <button class="btn-header btn-restore" onclick="restaurarPacientes()">
                 <span class="material-symbols-outlined">settings_backup_restore</span> Restaurar
@@ -521,123 +498,67 @@
 
     <div class="container">
         <div class="layout">
-
-           
             <div class="panel-registro">
                 <h3><span class="material-symbols-outlined">person_add</span> Nuevo Registro</h3>
-
-                <div class="form-group">
-                    <label>NOMBRE COMPLETO</label>
-                    <input id="nombre" type="text" placeholder="Ej: Juan Pérez García">
-                </div>
-
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                    <div class="form-group">
-                        <label>EDAD</label>
-                        <input id="edad" type="number" placeholder="0">
+                
+               
+                <div class="form-container-scroll">
+                    <div class="form-group"><label>NOMBRE COMPLETO</label><input id="nombre" type="text"
+                            placeholder="Ej: Juan Pérez" oninput="soloLetras(this)"></div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div class="form-group"><label>EDAD</label><input id="edad" type="text" maxlength="3"
+                                oninput="soloNumeros(this)"></div>
+                        <div class="form-group"><label>SEXO</label><select id="sexo">
+                                <option value="Masculino">Masculino</option>
+                                <option value="Femenino">Femenino</option>
+                            </select></div>
                     </div>
-                    <div class="form-group">
-                        <label>SEXO</label>
-                        <select id="sexo">
-                            <option value="">Seleccionar</option>
-                            <option value="Masculino">Masculino</option>
-                            <option value="Femenino">Femenino</option>
-                            <option value="Otro">Otro</option>
-                        </select>
-                    </div>
+                    <div class="form-group"><label>FECHA DE NACIMIENTO</label><input id="fechaNacimiento" type="date"></div>
+                    <div class="form-group"><label>TELÉFONO</label><input id="telefono" type="text" maxlength="10"
+                            oninput="soloNumeros(this)"></div>
+                    <div class="form-group"><label>CORREO ELECTRÓNICO</label><input id="correo" type="email"></div>
+                    <div class="form-group"><label>DIRECCIÓN</label><input id="direccion" type="text"></div>
+                    <div class="form-group"><label>OBSERVACIONES</label><textarea id="observaciones"></textarea></div>
                 </div>
 
-                <div class="form-group">
-                    <label>FECHA DE NACIMIENTO</label>
-                    <input id="fechaNacimiento" type="date">
-                </div>
-
-                <div class="form-group">
-                    <label>TELÉFONO</label>
-                    <input id="telefono" type="text" placeholder="10 dígitos" maxlength="10">
-                </div>
-
-                <div class="form-group">
-                    <label>CORREO ELECTRÓNICO</label>
-                    <input id="correo" type="email" placeholder="ejemplo@correo.com">
-                </div>
-
-                <div class="form-group">
-                    <label>DIRECCIÓN</label>
-                    <input id="direccion" type="text" placeholder="Calle, número, colonia">
-                </div>
-
-                <div class="form-group">
-                    <label>OBSERVACIONES</label>
-                    <textarea id="observaciones" placeholder="Notas médicas, alergias, etc."></textarea>
-                </div>
-
-                <button class="btn-save" onclick="guardarPaciente()">
-                    Guardar Paciente
-                </button>
+                <button class="btn-save" onclick="guardarPaciente()">Guardar Paciente</button>
             </div>
 
-          
             <div class="panel-lista">
                 <div class="search-bar">
                     <span class="material-symbols-outlined">search</span>
                     <input type="text" placeholder="Buscar por nombre o teléfono..."
                         onkeyup="buscarPaciente(this.value)">
                 </div>
-
-                <div class="patients-grid" id="listaPacientes">
-                
-                </div>
+                <div class="patients-grid" id="listaPacientes"></div>
             </div>
-
         </div>
     </div>
 
-   
+  
     <div id="editModal" class="modal-overlay">
         <div class="modal">
             <div class="modal-header">
                 <h3>Editar Paciente</h3>
             </div>
             <div id="modalContent">
-                <div class="form-group">
-                    <label>NOMBRE COMPLETO</label>
-                    <input id="editNombre" type="text">
-                </div>
+                <div class="form-group"><label>NOMBRE COMPLETO</label><input id="editNombre" type="text"
+                        oninput="soloLetras(this)"></div>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                    <div class="form-group">
-                        <label>EDAD</label>
-                        <input id="editEdad" type="number">
-                    </div>
-                    <div class="form-group">
-                        <label>SEXO</label>
-                        <select id="editSexo">
+                    <div class="form-group"><label>EDAD</label><input id="editEdad" type="text" maxlength="3"
+                            oninput="soloNumeros(this)"></div>
+                    <div class="form-group"><label>SEXO</label><select id="editSexo">
                             <option value="Masculino">Masculino</option>
                             <option value="Femenino">Femenino</option>
-                            <option value="Otro">Otro</option>
-                        </select>
-                    </div>
+                        </select></div>
                 </div>
-                <div class="form-group">
-                    <label>FECHA DE NACIMIENTO</label>
-                    <input id="editFechaNacimiento" type="date">
+                <div class="form-group"><label>FECHA DE NACIMIENTO</label><input id="editFechaNacimiento" type="date">
                 </div>
-                <div class="form-group">
-                    <label>TELÉFONO</label>
-                    <input id="editTelefono" type="text" maxlength="10">
-                </div>
-                <div class="form-group">
-                    <label>CORREO ELECTRÓNICO</label>
-                    <input id="editCorreo" type="email">
-                </div>
-                <div class="form-group">
-                    <label>DIRECCIÓN</label>
-                    <input id="editDireccion" type="text">
-                </div>
-                <div class="form-group">
-                    <label>OBSERVACIONES</label>
-                    <textarea id="editObservaciones"></textarea>
-                </div>
+                <div class="form-group"><label>TELÉFONO</label><input id="editTelefono" type="text" maxlength="10"
+                        oninput="soloNumeros(this)"></div>
+                <div class="form-group"><label>CORREO ELECTRÓNICO</label><input id="editCorreo" type="email"></div>
+                <div class="form-group"><label>DIRECCIÓN</label><input id="editDireccion" type="text"></div>
+                <div class="form-group"><label>OBSERVACIONES</label><textarea id="editObservaciones"></textarea></div>
             </div>
             <div class="modal-footer">
                 <button class="btn-modal btn-cancel" onclick="cerrarEditModal()">Cancelar</button>
@@ -646,25 +567,22 @@
         </div>
     </div>
 
-   
+    
     <div id="deleteModal" class="modal-overlay">
-        <div class="modal">
+        <div class="modal" style="max-width:450px; padding:30px;">
             <div class="modal-header">
                 <h3>Eliminar Paciente</h3>
             </div>
-            <div class="delete-warning">
-                ¿Estás seguro de eliminar a <span id="deleteName" style="font-weight: 800;"></span>?
-                <br><small>Esta acción no se puede deshacer.</small>
+            <div
+                style="background:#fff1f2; color:#be123c; padding:20px; border-radius:20px; margin:20px 0; text-align:center;">
+                ¿Seguro de eliminar a <b id="deleteName"></b>?<br><small>Esta acción es irreversible.</small>
             </div>
-            <div class="form-group">
-                <label>CONTRASEÑA DE ADMIN</label>
-                <input id="adminPassword" type="password" placeholder="Requerido para eliminar">
-                <p id="deleteError" style="color: #ef4444; font-size: 0.8rem; margin-top: 5px; display: none;"></p>
-            </div>
-            <div class="modal-footer">
+            <div class="form-group"><label>CONTRASEÑA ADMIN</label><input id="adminPassword" type="password"></div>
+            <p id="deleteError" style="color:red; font-size:0.8rem; display:none;"></p>
+            <div class="modal-footer" style="background:none; border:none; padding:0;">
                 <button class="btn-modal btn-cancel" onclick="cerrarDeleteModal()">Cancelar</button>
-                <button class="btn-modal btn-confirm" style="background: #ef4444;"
-                    onclick="confirmarEliminarConPassword()">Confirmar Eliminación</button>
+                <button class="btn-modal btn-confirm" style="background:#ef4444;"
+                    onclick="confirmarEliminarConPassword()">Eliminar</button>
             </div>
         </div>
     </div>
@@ -674,34 +592,43 @@
         let pacienteEditId = null;
         let pacienteDeleteId = null;
 
+        function soloLetras(input) { input.value = input.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ ]/g, ''); }
+        function soloNumeros(input) { input.value = input.value.replace(/[^0-9]/g, ''); }
+
+        function limpiarDato(dato) {
+            if (dato === null || dato === undefined) return "";
+            let str = String(dato).trim();
+            const basura = ["nan", "NaN", "Nan", "null", "undefined", "none", "None"];
+            if (basura.includes(str)) return "";
+            return str;
+        }
+
         async function cargarPacientes() {
             try {
                 const data = await window.pywebview.api.obtenerTodosLosPacientes();
                 allPacientes = data;
                 renderPacientes(data);
-            } catch (err) {
-                console.error("Error al cargar pacientes:", err);
-            }
+            } catch (err) { console.error(err); }
         }
 
         function renderPacientes(pacientes) {
             const container = document.getElementById("listaPacientes");
             container.innerHTML = "";
-
             if (!pacientes || pacientes.length === 0) {
-                container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 50px; color: #94a3b8;">No se encontraron pacientes registrados.</div>';
+                container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 50px; color: #94a3b8;">No hay pacientes registrados.</div>';
                 return;
             }
-
             pacientes.forEach(p => {
                 const inicial = (p.nombre || "?").charAt(0).toUpperCase();
-                const nombreEsc = (p.nombre || '').replace(/'/g, "\\'");
-                const telEsc = (p.telefono || '').replace(/'/g, "\\'");
-                const sexoEsc = (p.sexo || '').replace(/'/g, "\\'");
-                const correoEsc = (p.correo || '').replace(/'/g, "\\'");
-                const dirEsc = (p.direccion || '').replace(/'/g, "\\'");
-                const obsEsc = (p.observaciones || '').replace(/'/g, "\\'");
-                const fechaNacEsc = (p.fecha_nacimiento || '').replace(/'/g, "\\'");
+                const nombre = limpiarDato(p.nombre) || "Sin nombre";
+                const edad = limpiarDato(p.edad);
+                const sexo = limpiarDato(p.sexo);
+                const tel = limpiarDato(p.telefono);
+                const nac = limpiarDato(p.fecha_nacimiento);
+                const correo = limpiarDato(p.correo);
+                const dir = limpiarDato(p.direccion);
+                const obs = limpiarDato(p.observaciones);
+                const reg = limpiarDato(p.fecha_registro);
 
                 const card = document.createElement("div");
                 card.className = "patient-card";
@@ -709,212 +636,88 @@
                     <div class="patient-top">
                         <div class="patient-avatar">${inicial}</div>
                         <div class="patient-meta">
-                            <h4>${p.nombre || 'Sin nombre'}</h4>
-                            <span><span class="material-symbols-outlined" style="font-size:16px">fingerprint</span> ID: #${p.id}</span>
+                            <h4>${nombre}</h4>
+                            <span>ID: #${p.id} ${reg ? '• Registro: ' + reg : ''}</span>
                         </div>
                     </div>
                     <div class="patient-details">
-                        <div class="detail-item">
-                            <small>Edad / Sexo</small>
-                            <p>${p.edad || '?'} años • ${p.sexo || 'N/S'}</p>
-                        </div>
-                        <div class="detail-item">
-                            <small>Teléfono</small>
-                            <p>${p.telefono || 'No reg.'}</p>
-                        </div>
-                        <div class="detail-item" style="grid-column: span 2;">
-                            <small>Correo</small>
-                            <p>${p.correo || 'Sin correo'}</p>
-                        </div>
+                        <div class="detail-item"><small>Edad / Sexo</small><p>${edad}${edad ? ' años' : ''}${sexo && edad ? ' • ' : ''}${sexo}</p></div>
+                        <div class="detail-item"><small>Teléfono</small><p>${tel}</p></div>
+                        <div class="detail-item"><small>Nacimiento</small><p>${nac}</p></div>
+                        <div class="detail-item"><small>Correo</small><p>${correo}</p></div>
+                        <div class="detail-item" style="grid-column: span 2;"><small>Dirección</small><p>${dir}</p></div>
                     </div>
+                    ${obs ? `<div class="obs-box"><b>Notas:</b> ${obs}</div>` : ''}
                     <div class="patient-actions">
-                        <button class="btn-action btn-edit" onclick="mostrarModalEdicion(${p.id}, '${nombreEsc}', ${p.edad || 0}, '${fechaNacEsc}', '${telEsc}', '${sexoEsc}', '${correoEsc}', '${dirEsc}', '${obsEsc}')">
-                            <span class="material-symbols-outlined">edit</span> Editar
-                        </button>
-                        <button class="btn-action btn-delete" onclick="mostrarModalEliminar(${p.id}, '${nombreEsc}')">
-                            <span class="material-symbols-outlined">delete</span> Eliminar
-                        </button>
+                        <button class="btn-action btn-edit" onclick="mostrarModalEdicion(${p.id}, '${nombre.replace(/'/g, "\\\\'")}', '${edad}', '${nac}', '${tel}', '${sexo}', '${correo}', '${dir}', '${obs}')">Editar</button>
+                        <button class="btn-action btn-delete" onclick="mostrarModalEliminar(${p.id}, '${nombre.replace(/'/g, "\\\\'")}')">Eliminar</button>
                     </div>
                 `;
                 container.appendChild(card);
             });
         }
 
-        function buscarPaciente(texto) {
-            const term = texto.toLowerCase().trim();
-            const filtrados = allPacientes.filter(p =>
-                (p.nombre || '').toLowerCase().includes(term) ||
-                (p.telefono || '').includes(term)
-            );
-            renderPacientes(filtrados);
+        function buscarPaciente(t) {
+            const term = t.toLowerCase().trim();
+            renderPacientes(allPacientes.filter(p => (p.nombre || '').toLowerCase().includes(term) || (p.telefono || '').includes(term)));
         }
 
         async function guardarPaciente() {
-            const nombre = document.getElementById("nombre").value.trim();
-            const edadStr = document.getElementById("edad").value.trim();
-            const telefono = document.getElementById("telefono").value.trim();
-
-            if (!nombre || !edadStr || !telefono) {
-                alert("Por favor, llena los campos obligatorios (Nombre, Edad y Teléfono)");
-                return;
-            }
-
-            const edad = parseInt(edadStr, 10);
-            const sexo = document.getElementById("sexo").value;
-            const correo = document.getElementById("correo").value.trim();
-            const direccion = document.getElementById("direccion").value.trim();
-            const observaciones = document.getElementById("observaciones").value.trim();
-            const fechaNacimiento = document.getElementById("fechaNacimiento").value;
-
-            try {
-                const exito = await window.pywebview.api.guardarPaciente(
-                    nombre, edad, telefono, sexo, correo, direccion, observaciones, fechaNacimiento
-                );
-                if (exito.ok) {
-                    limpiarFormulario();
-                    cargarPacientes();
-                } else {
-                    alert("Error: " + (exito.error || "No se pudo guardar"));
-                }
-            } catch (err) {
-                console.error(err);
-                alert("Error de conexión con el servidor");
-            }
+            const n = document.getElementById("nombre").value.trim();
+            const e = document.getElementById("edad").value.trim();
+            const t = document.getElementById("telefono").value.trim();
+            if (!n || !e || !t) { alert("Llena los campos obligatorios"); return; }
+            const res = await window.pywebview.api.guardarPaciente(n, parseInt(e), t, document.getElementById("sexo").value, document.getElementById("correo").value, document.getElementById("direccion").value, document.getElementById("observaciones").value, document.getElementById("fechaNacimiento").value);
+            if (res.ok) { location.reload(); }
         }
 
-        async function respaldarPacientes() {
-            const overlay = document.getElementById("loadingOverlay");
-            document.getElementById("loadingText").innerText = "Realizando respaldo, por favor espera...";
-            overlay.style.display = "flex";
-
-            try {
-                const resultado = await window.pywebview.api.respaldar_pacientes();
-                overlay.style.display = "none";
-
-                if (resultado.ok) {
-                    alert(`¡Respaldo exitoso!\n\nSe ha creado el archivo:\n${resultado.archivo}\n\nEn la carpeta: Respaldos`);
-                } else {
-                    alert("Error al realizar el respaldo: " + resultado.error);
-                }
-            } catch (err) {
-                overlay.style.display = "none";
-                console.error(err);
-                alert("Error al comunicarse con el servidor para el respaldo.");
-            }
-        }
-
-        async function restaurarPacientes() {
-            const overlay = document.getElementById("loadingOverlay");
-            document.getElementById("loadingText").innerText = "Restaurando datos, por favor espera...";
-
-            try {
-                const res = await window.pywebview.api.seleccionar_y_restaurar_pacientes();
-                if (res.ok) {
-                    alert(res.mensaje);
-                    cargarPacientes();
-                } else if (res.error !== "No se seleccionó ningún archivo") {
-                    alert("Error: " + res.error);
-                }
-            } catch (err) {
-                console.error(err);
-                alert("Error al restaurar respaldo.");
-            }
-        }
-
-        function mostrarModalEdicion(id, nombre, edad, fechaNacimiento, telefono, sexo, correo, direccion, observaciones) {
+        function mostrarModalEdicion(id, n, e, fn, t, s, c, d, o) {
             pacienteEditId = id;
-            document.getElementById("editNombre").value = nombre;
-            document.getElementById("editEdad").value = edad;
-            document.getElementById("editFechaNacimiento").value = fechaNacimiento || "";
-            document.getElementById("editTelefono").value = telefono;
-            document.getElementById("editSexo").value = sexo;
-            document.getElementById("editCorreo").value = correo;
-            document.getElementById("editDireccion").value = direccion;
-            document.getElementById("editObservaciones").value = observaciones;
+            document.getElementById("editNombre").value = n;
+            document.getElementById("editEdad").value = e;
+            document.getElementById("editFechaNacimiento").value = fn;
+            document.getElementById("editTelefono").value = t;
+            document.getElementById("editSexo").value = s;
+            document.getElementById("editCorreo").value = c;
+            document.getElementById("editDireccion").value = d;
+            document.getElementById("editObservaciones").value = o;
             document.getElementById("editModal").style.display = "flex";
         }
 
-        function cerrarEditModal() {
-            document.getElementById("editModal").style.display = "none";
-            pacienteEditId = null;
-        }
+        function cerrarEditModal() { document.getElementById("editModal").style.display = "none"; }
 
         async function guardarEdicion() {
-            const nombre = document.getElementById("editNombre").value.trim();
-            const edad = parseInt(document.getElementById("editEdad").value, 10);
-            const telefono = document.getElementById("editTelefono").value.trim();
-            const sexo = document.getElementById("editSexo").value;
-            const correo = document.getElementById("editCorreo").value.trim();
-            const direccion = document.getElementById("editDireccion").value.trim();
-            const observaciones = document.getElementById("editObservaciones").value.trim();
-            const fechaNacimiento = document.getElementById("editFechaNacimiento").value;
-
-            try {
-                const exito = await window.pywebview.api.editarPaciente(
-                    pacienteEditId, nombre, edad, telefono, sexo, correo, direccion, observaciones, fechaNacimiento
-                );
-                if (exito) {
-                    cerrarEditModal();
-                    cargarPacientes();
-                } else {
-                    alert("Error al actualizar");
-                }
-            } catch (err) {
-                console.error(err);
-            }
+            const res = await window.pywebview.api.editarPaciente(pacienteEditId, document.getElementById("editNombre").value, parseInt(document.getElementById("editEdad").value), document.getElementById("editTelefono").value, document.getElementById("editSexo").value, document.getElementById("editCorreo").value, document.getElementById("editDireccion").value, document.getElementById("editObservaciones").value, document.getElementById("editFechaNacimiento").value);
+            if (res) { location.reload(); }
         }
 
-        function mostrarModalEliminar(id, nombre) {
+        function mostrarModalEliminar(id, n) {
             pacienteDeleteId = id;
-            document.getElementById("deleteName").textContent = nombre;
-            document.getElementById("adminPassword").value = "";
-            document.getElementById("deleteError").style.display = "none";
+            document.getElementById("deleteName").innerText = n;
             document.getElementById("deleteModal").style.display = "flex";
         }
 
-        function cerrarDeleteModal() {
-            document.getElementById("deleteModal").style.display = "none";
-            pacienteDeleteId = null;
+        function cerrarDeleteModal() { document.getElementById("deleteModal").style.display = "none"; }
+
+        async function confirmarEliminarConPassword() {
+            const res = await window.pywebview.api.eliminarPaciente(pacienteDeleteId, document.getElementById("adminPassword").value);
+            if (res.ok) { location.reload(); } else { alert(res.error); }
         }
 
-      async function confirmarEliminarConPassword() {
-            const password = document.getElementById("adminPassword").value.trim();
-
-            if (!password) {
-                document.getElementById("deleteError").innerText = "Debes ingresar la contraseña";
-                document.getElementById("deleteError").style.display = "block";
-                return;
-            }
-
-            try {
-                const resultado = await window.pywebview.api.eliminarPaciente(pacienteDeleteId, password);
-
-                if (resultado.ok) {
-                    cerrarDeleteModal();
-                    cargarPacientes();
-                } else {
-                    document.getElementById("deleteError").innerText = resultado.error || "Error al eliminar";
-                    document.getElementById("deleteError").style.display = "block";
-                }
-
-            } catch (err) {
-                console.error(err);
-                document.getElementById("deleteError").innerText = "Error de conexión";
-                document.getElementById("deleteError").style.display = "block";
-            }
+        async function respaldarPacientes() {
+            document.getElementById("loadingOverlay").style.display = "flex";
+            const res = await window.pywebview.api.respaldar_pacientes();
+            document.getElementById("loadingOverlay").style.display = "none";
+            alert(res.ok ? "Respaldo exitoso" : "Error: " + res.error);
         }
 
-        function limpiarFormulario() {
-            document.querySelectorAll(".panel-registro input, .panel-registro textarea, .panel-registro select").forEach(el => el.value = "");
+        async function restaurarPacientes() {
+            const res = await window.pywebview.api.seleccionar_y_restaurar_pacientes();
+            if (res.ok) { alert(res.mensaje); location.reload(); }
         }
 
-        function volver() {
-            window.location.assign("dashboard.html");
-        }
-
-        window.addEventListener('pywebviewready', () => {
-            cargarPacientes();
-        }, { once: true });
+        function volver() { window.location.assign("/dashboard"); }
+        window.addEventListener('pywebviewready', cargarPacientes, { once: true });
     </script>
 </body>
 

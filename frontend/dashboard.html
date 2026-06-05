@@ -1,592 +1,717 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Dashboard - Analitic Laboratorio Clínico</title>
-
+    <title>Dashboard — Analitic</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
     <style>
         :root {
-            --primary: #2e7d32;
-            --primary-dark: #1b5e20;
-            --primary-light: #4caf50;
-            --accent: #a5d6a7;
-            --bg: #f5f9f0;
-            --card-bg: rgba(255, 255, 255, 0.98);
-            --shadow-soft: 0 10px 40px rgba(0, 0, 0, 0.06);
-            --shadow-strong: 0 20px 60px rgba(46, 125, 50, 0.2);
-            --sidebar-width: 280px;
+            --primary:     #1b5e20;
+            --green:       #2e7d32;
+            --green-soft:  #4caf50;
+            --blue:        #1565c0;
+            --orange:      #e65100;
+            --bg:          #f8f9f8;
+            --surface:     #ffffff;
+            --text:        #0f1410;
+            --text-mid:    #3d4b40;
+            --text-soft:   #7a8c7d;
+            --border:      #eaeeea;
+            --sidebar-w:   268px;
+            --nav-h:       68px;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #f5f9f0, #e8f5e9);
-            color: #2c3e50;
+            background: var(--bg);
+            color: var(--text);
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
+            font-size: 15px;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
         }
 
-   
-        .navbar {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            height: 100px;
-            background: linear-gradient(to right, var(--primary), var(--primary-dark));
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 40px;
-            z-index: 1000;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
-            animation: slideDown 0.6s ease;
-        }
-
-        @keyframes slideDown {
-            from {
-                transform: translateY(-100%);
-                opacity: 0;
-            }
-
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
-        .nav-left {
-            display: flex;
-            align-items: center;
-            gap: 30px;
-        }
-
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 8px 20px 8px 10px;
-            border-radius: 18px;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            transition: all 0.3s ease;
-        }
-
-        .logo-container:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: scale(1.02);
-        }
-
-        .logo-img {
-            height: 55px;
-            width: auto;
-            object-fit: contain;
-            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
-        }
-
-        .logo-text {
-            display: flex;
-            flex-direction: column;
-            color: white;
-        }
-
-        .logo-name {
-            font-size: 1.4rem;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-            line-height: 1;
-        }
-
-        .logo-tag {
-            font-size: 0.7rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            opacity: 0.9;
-        }
-
-       
-        .menu-horizontal {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-        }
-
-        .menu-horizontal button {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: white;
-            padding: 10px 18px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.95rem;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            white-space: nowrap;
-        }
-
-        .menu-horizontal button:hover {
-            background: rgba(255, 255, 255, 0.25);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-
-      
+        /* ── SIDEBAR ── */
         .sidebar {
             position: fixed;
-            left: 0;
-            top: 0;
-            width: var(--sidebar-width);
+            top: 0; left: 0;
+            width: var(--sidebar-w);
             height: 100vh;
-            background: linear-gradient(to bottom, var(--primary-dark), #0a2e0c);
-            color: white;
-            padding: 20px;
+            background: var(--primary);
             display: none;
-           
             flex-direction: column;
-            z-index: 1100;
-            box-shadow: 10px 0 30px rgba(0, 0, 0, 0.2);
+            z-index: 300;
             overflow-y: auto;
         }
 
-        .sidebar::-webkit-scrollbar {
-            width: 6px;
+        .sb-brand {
+            padding: 24px 22px 18px;
+            display: flex; align-items: center; gap: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+        .sb-brand img { height: 38px; border-radius: 9px; }
+        .sb-brand .name { font-size: 1.05rem; font-weight: 800; color: #fff; }
+        .sb-brand .tag  { font-size: 0.65rem; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 1px; margin-top: 2px; }
+
+        .sb-section {
+            padding: 20px 22px 8px;
+            font-size: 0.62rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 1.6px;
+            color: rgba(255,255,255,0.35);
         }
 
-        .sidebar::-webkit-scrollbar-thumb {
-            background: var(--primary-light);
-            border-radius: 10px;
-        }
-
-        .sidebar-header {
-            padding-bottom: 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            margin-bottom: 20px;
-        }
-
-        .sidebar-section-title {
-            font-size: 0.75rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: var(--accent);
-            margin: 25px 0 10px 10px;
-            opacity: 0.8;
-        }
-
-        .sidebar button {
-            width: 100%;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: white;
-            padding: 12px 15px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-weight: 600;
-            text-align: left;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            transition: all 0.3s;
-        }
-
-        .sidebar button:hover {
-            background: var(--primary-light);
-            transform: translateX(5px);
-        }
-
-        .sidebar .logout-btn {
-            background: rgba(231, 76, 60, 0.2);
-            border-color: rgba(231, 76, 60, 0.3);
-            margin-top: 10px;
-        }
-
-        .sidebar .logout-btn:hover {
-            background: #e74c3c;
-        }
-
-       
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            color: white;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 8px 15px;
-            border-radius: 18px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .avatar {
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            background: var(--primary-light);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 2px solid rgba(255, 255, 255, 0.4);
-        }
-
-        .avatar .material-symbols-outlined {
-            font-size: 26px;
-            color: white;
-        }
-
-        .user-details {
-            display: flex;
-            flex-direction: column;
-            line-height: 1.1;
-        }
-
-        #rol-actual-top {
-            font-weight: 700;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-        }
-
-        .user-status {
-            font-size: 0.7rem;
-            opacity: 0.8;
-        }
-
-      
-        .content {
-            margin-top: 130px;
-            padding: 40px;
-            max-width: 1500px;
-            margin-left: auto;
-            margin-right: auto;
-            transition: margin-left 0.3s ease;
-            width: 100%;
-        }
-
-       
-        body.admin-active .content {
-            margin-left: var(--sidebar-width);
-            max-width: calc(100% - var(--sidebar-width));
-        }
-
-        body.admin-active .navbar {
-            left: var(--sidebar-width);
-            width: calc(100% - var(--sidebar-width));
-        }
-
-        .top-bar {
-            margin-bottom: 40px;
-            text-align: center;
-        }
-
-        .top-bar h1 {
-            font-size: 2.8rem;
-            color: var(--primary-dark);
-            font-weight: 900;
-            letter-spacing: -1.5px;
-        }
-
-        .cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 30px;
-        }
-
-        .card {
-            background: var(--card-bg);
-            border-radius: 25px;
-            padding: 35px;
-            box-shadow: var(--shadow-soft);
-            transition: all 0.4s ease;
-            animation: fadeUp 0.8s ease;
-            border: 1px solid rgba(255, 255, 255, 0.6);
-        }
-
-        @keyframes fadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .card:hover {
-            transform: translateY(-8px);
-            box-shadow: var(--shadow-strong);
-        }
-
-        .card h3 {
-            color: var(--primary);
-            margin-bottom: 20px;
-            font-size: 1.4rem;
-            font-weight: 800;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .card h3 .material-symbols-outlined {
-            font-size: 30px;
-            color: var(--primary-light);
-        }
-
-        .list-item {
-            padding: 15px 20px;
-            background: rgba(165, 214, 167, 0.1);
-            margin-bottom: 12px;
-            border-left: 5px solid var(--primary-light);
-            border-radius: 12px;
-            transition: 0.3s;
-            font-size: 1rem;
-        }
-
-        .list-item:hover {
-            transform: translateX(8px);
-            background: rgba(165, 214, 167, 0.2);
-        }
-
-        .empty-message {
-            text-align: center;
-            color: #94a3b8;
-            padding: 30px;
-            font-style: italic;
-        }
-
-        .admin-card {
-            background: linear-gradient(135deg, #fffde7, #fff9c4);
-        }
-
-        .admin-card button {
-            margin-top: 20px;
-            width: 100%;
-            background: var(--primary);
-            color: white;
-            padding: 15px;
+        .sb-btn {
+            display: flex; align-items: center; gap: 11px;
+            margin: 2px 10px;
+            padding: 11px 13px;
+            border-radius: 9px;
+            background: transparent;
             border: none;
-            border-radius: 12px;
+            color: rgba(255,255,255,0.65);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.88rem; font-weight: 600;
             cursor: pointer;
-            font-weight: 700;
-            transition: 0.3s;
+            text-align: left; width: calc(100% - 20px);
+            transition: background 0.15s, color 0.15s;
+        }
+        .sb-btn .material-symbols-outlined { font-size: 19px; }
+        .sb-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
+
+        .sb-logout {
+            margin: auto 10px 18px;
+            display: flex; align-items: center; gap: 9px;
+            padding: 11px 13px; border-radius: 9px;
+            background: rgba(255,255,255,0.07);
+            border: none; color: rgba(255,255,255,0.5);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.86rem; font-weight: 600;
+            cursor: pointer; width: calc(100% - 20px);
+            transition: 0.15s;
+        }
+        .sb-logout:hover { background: rgba(255,255,255,0.13); color: #fff; }
+        .sb-logout .material-symbols-outlined { font-size: 19px; }
+
+        /* ── NAVBAR ── */
+        .navbar {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            height: var(--nav-h);
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            display: flex; align-items: center;
+            justify-content: space-between;
+            padding: 0 28px;
+            z-index: 200;
+            transition: left 0.25s;
+        }
+        body.admin-active .navbar { left: var(--sidebar-w); }
+
+        .nav-left { display: flex; align-items: center; gap: 20px; }
+        .nav-logo  { display: flex; align-items: center; gap: 11px; }
+        .nav-logo img  { height: 38px; border-radius: 9px; }
+        .nav-logo .name{ font-size: 1rem; font-weight: 800; color: var(--primary); }
+        .nav-logo .tag { font-size: 0.65rem; color: var(--text-soft); text-transform: uppercase; letter-spacing: 0.8px; }
+
+        .nav-menu { display: flex; align-items: center; gap: 3px; }
+        .nav-btn {
+            border: none;
+            background: transparent;
+            color: var(--text-mid);
+            padding: 8px 14px; border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.86rem; font-weight: 600;
+            cursor: pointer; transition: 0.15s;
+            white-space: nowrap;
+        }
+        .nav-btn:hover { background: var(--border); color: var(--text); }
+        .nav-btn.danger { color: #c62828; }
+        .nav-btn.danger:hover { background: #fdecea; }
+
+        .user-pill {
+            display: flex; align-items: center; gap: 9px;
+            padding: 6px 14px 6px 7px;
+            border: 1px solid var(--border);
+            border-radius: 99px;
+            background: var(--bg);
+        }
+        .user-av {
+            width: 32px; height: 32px; border-radius: 50%;
+            background: var(--primary);
+            display: flex; align-items: center; justify-content: center;
+            color: white;
+        }
+        .user-av .material-symbols-outlined { font-size: 17px; }
+        .user-name  { font-size: 0.84rem; font-weight: 700; color: var(--text); }
+        .user-badge { font-size: 0.67rem; color: var(--text-soft); }
+
+        /* ── CONTENT ── */
+        .content {
+            padding-top: calc(var(--nav-h) + 28px);
+            padding-left: 28px; padding-right: 28px;
+            padding-bottom: 48px;
+            transition: margin-left 0.25s;
+        }
+        body.admin-active .content { margin-left: var(--sidebar-w); }
+
+        /* ── PAGE HEADER ── */
+        .page-top {
+            display: flex; align-items: center;
+            justify-content: space-between;
+            margin-bottom: 26px;
+        }
+        .page-top h1 {
+            font-size: 1.75rem; font-weight: 800;
+            color: var(--text); letter-spacing: -1px;
+        }
+        .page-top p { font-size: 0.85rem; color: var(--text-soft); margin-top: 3px; }
+        .date-chip {
+            font-size: 0.8rem; font-weight: 600; color: var(--text-soft);
+            border: 1px solid var(--border);
+            background: var(--surface);
+            padding: 8px 15px; border-radius: 9px;
+            display: flex; align-items: center; gap: 7px;
+        }
+        .date-chip .material-symbols-outlined { font-size: 17px; color: var(--green-soft); }
+
+        /* ── STATS ── */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .stat {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 22px 26px;
+            display: flex; align-items: center; gap: 18px;
+            transition: border-color 0.2s;
+        }
+        .stat:hover { border-color: #c8d8c8; }
+
+        .stat-ico {
+            width: 50px; height: 50px; border-radius: 13px;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .stat-ico .material-symbols-outlined { font-size: 26px; }
+        .stat-ico.blue   { background: #eff4ff; }
+        .stat-ico.blue   .material-symbols-outlined { color: var(--blue); }
+        .stat-ico.green  { background: #f0faf0; }
+        .stat-ico.green  .material-symbols-outlined { color: var(--green); }
+        .stat-ico.orange { background: #fff5ef; }
+        .stat-ico.orange .material-symbols-outlined { color: var(--orange); }
+
+        .stat-val { font-size: 2.2rem; font-weight: 800; line-height: 1; letter-spacing: -1.5px; }
+        .stat-val.blue   { color: var(--blue); }
+        .stat-val.green  { color: var(--green); }
+        .stat-val.orange { color: var(--orange); }
+        .stat-lbl { font-size: 0.8rem; color: var(--text-soft); font-weight: 500; margin-top: 4px; }
+
+        /* ── GRID ── */
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: auto auto;
+            gap: 12px;
         }
 
-        .admin-card button:hover {
-            background: var(--primary-dark);
-            transform: scale(1.02);
+        .panel {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            display: flex; flex-direction: column;
+            overflow: hidden;
+            transition: border-color 0.2s;
+        }
+        .panel:hover { border-color: #c8d8c8; }
+        .panel.span2 { grid-column: span 2; }
+        .panel.tall  { grid-row: span 2; }
+
+        .panel-head {
+            padding: 18px 20px 14px;
+            border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .panel-label {
+            font-size: 0.88rem; font-weight: 700; color: var(--text);
+            display: flex; align-items: center; gap: 8px;
+        }
+        .panel-label .material-symbols-outlined { font-size: 18px; color: var(--text-soft); }
+        .count-pill {
+            font-size: 0.7rem; font-weight: 700;
+            padding: 3px 10px; border-radius: 99px;
+            background: var(--bg); border: 1px solid var(--border);
+            color: var(--text-soft);
+        }
+
+        .panel-body { flex: 1; overflow-y: auto; padding: 12px 14px; }
+        .panel-body::-webkit-scrollbar { width: 3px; }
+        .panel-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+        /* ── ITEMS ── */
+        .row {
+            display: flex; align-items: center; gap: 13px;
+            padding: 12px 11px;
+            border-radius: 10px;
+            margin-bottom: 5px;
+            transition: background 0.15s;
+            cursor: default;
+        }
+        .row:hover { background: var(--bg); }
+
+        .dot {
+            width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+        }
+        .dot.green  { background: var(--green-soft); }
+        .dot.blue   { background: #5c9cf5; }
+        .dot.orange { background: #fb8c00; }
+
+        .row-body { flex: 1; min-width: 0; }
+        .row-name { font-size: 0.88rem; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .row-sub  { font-size: 0.76rem; color: var(--text-soft); margin-top: 2px; }
+
+        .pill {
+            font-size: 0.69rem; font-weight: 700;
+            padding: 3px 10px; border-radius: 99px; flex-shrink: 0;
+        }
+        .pill.green  { background: #f0faf0; color: var(--green); }
+        .pill.blue   { background: #eff4ff; color: var(--blue); }
+        .pill.orange { background: #fff5ef; color: var(--orange); }
+
+        /* ── NOTIF ── */
+        .notif {
+            display: flex; gap: 10px;
+            padding: 11px 10px;
+            border-radius: 9px;
+            margin-bottom: 6px;
+            border-left: 3px solid;
+            background: var(--bg);
+        }
+        .notif.warn   { border-color: #fb8c00; }
+        .notif.info   { border-color: #5c9cf5; }
+        .notif-em     { font-size: 1rem; flex-shrink: 0; line-height: 1.4; }
+        .notif-title  { font-size: 0.8rem; font-weight: 700; color: var(--text); }
+        .notif-desc   { font-size: 0.72rem; color: var(--text-soft); margin-top: 2px; }
+
+        /* ── EMPTY ── */
+        .empty {
+            display: flex; flex-direction: column; align-items: center;
+            gap: 7px; padding: 32px 16px;
+            color: var(--text-soft); font-size: 0.78rem;
+        }
+        .empty .material-symbols-outlined { font-size: 28px; color: var(--border); }
+
+        /* ── RECEPCIÓN NAVBAR ── */
+        .recep-nav {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            height: var(--nav-h);
+            background: #1565c0;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 28px;
+            z-index: 200;
+        }
+        .recep-nav-left { display: flex; align-items: center; gap: 8px; }
+        .recep-logo { display: flex; align-items: center; gap: 10px; }
+        .recep-logo img { height: 36px; border-radius: 8px; }
+        .recep-logo .name { font-size: 1rem; font-weight: 800; color: white; }
+        .recep-logo .tag  { font-size: 0.62rem; color: rgba(255,255,255,0.55); text-transform: uppercase; letter-spacing: 0.8px; }
+
+        .recep-sep { width: 1px; height: 24px; background: rgba(255,255,255,0.2); margin: 0 10px; }
+
+        .recep-btn {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.15);
+            color: rgba(255,255,255,0.85);
+            padding: 8px 16px; border-radius: 9px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.84rem; font-weight: 600;
+            cursor: pointer; display: flex; align-items: center; gap: 7px;
+            transition: all 0.15s; white-space: nowrap;
+        }
+        .recep-btn .material-symbols-outlined { font-size: 18px; }
+        .recep-btn:hover { background: rgba(255,255,255,0.2); color: white; }
+        .recep-btn.danger {
+            background: rgba(239,68,68,0.15);
+            border-color: rgba(239,68,68,0.25);
+            color: #fca5a5;
+        }
+        .recep-btn.danger:hover { background: rgba(239,68,68,0.28); color: white; }
+
+        .recep-user {
+            display: flex; align-items: center; gap: 9px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.15);
+            padding: 6px 14px 6px 8px; border-radius: 99px;
+        }
+        .recep-av {
+            width: 30px; height: 30px; border-radius: 50%;
+            background: rgba(255,255,255,0.25);
+            display: flex; align-items: center; justify-content: center;
+            color: white;
+        }
+        .recep-av .material-symbols-outlined { font-size: 16px; }
+        .recep-uname { font-size: 0.82rem; font-weight: 700; color: white; }
+        .recep-ustatus { font-size: 0.63rem; color: rgba(255,255,255,0.55); }
+
+        /* ── ADMIN CARD ── */
+        .admin-card {
+            margin-top: 12px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 22px 26px;
+            display: none;
+            align-items: center; justify-content: space-between; gap: 16px;
+        }
+        .admin-card-left h3 { font-size: 0.92rem; font-weight: 700; color: var(--text); margin-bottom: 3px; }
+        .admin-card-left p  { font-size: 0.8rem; color: var(--text-soft); }
+        .admin-go {
+            background: var(--primary); color: white;
+            border: none; padding: 10px 20px; border-radius: 9px;
+            font-family: 'Inter', sans-serif; font-size: 0.82rem; font-weight: 700;
+            cursor: pointer; white-space: nowrap; transition: 0.15s; flex-shrink: 0;
+        }
+        .admin-go:hover { background: var(--green); }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 1024px) {
+            .grid { grid-template-columns: 1fr 1fr; }
+            .panel.span2 { grid-column: span 1; }
+            .nav-menu { display: none !important; }
+        }
+        @media (max-width: 680px) {
+            .stats { grid-template-columns: 1fr; }
+            .grid  { grid-template-columns: 1fr; }
+            .content { padding-left: 16px; padding-right: 16px; }
         }
     </style>
+    <script src="/static/js/api.js"></script>
 </head>
-
 <body>
 
-   
-    <div id="adminSidebar" class="sidebar">
-        <div class="sidebar-header">
-            <div class="logo-container">
-                <img src="Assets/Logo.png" alt="Logo" class="logo-img">
-                <div class="logo-text">
-                    <span class="logo-name">Analitic</span>
-                    <span class="logo-tag">Admin Panel</span>
+<!-- NAVBAR RECEPCIÓN -->
+<nav class="recep-nav" id="recepNav">
+    <div class="recep-nav-left">
+        <div class="recep-logo">
+            <img src="/static/Assets/Logo.png" alt="Logo">
+            <div>
+                <div class="name">Analitic</div>
+                <div class="tag">Recepción</div>
+            </div>
+        </div>
+        <div class="recep-sep"></div>
+        <button class="recep-btn" onclick="ir('/pacientes')">
+            <span class="material-symbols-outlined">person</span> Pacientes
+        </button>
+        <button class="recep-btn" onclick="ir('/citas')">
+            <span class="material-symbols-outlined">calendar_today</span> Solicitudes
+        </button>
+        <button class="recep-btn" onclick="ir('/espera')">
+            <span class="material-symbols-outlined">hourglass_empty</span> Espera
+        </button>
+        <button class="recep-btn danger" onclick="cerrarSesion()">
+            <span class="material-symbols-outlined">logout</span> Salir
+        </button>
+    </div>
+    <div class="recep-user">
+        <div class="recep-av"><span class="material-symbols-outlined">person</span></div>
+        <div>
+            <div class="recep-uname">Recepción</div>
+            <div class="recep-ustatus">En línea</div>
+        </div>
+    </div>
+</nav>
+
+<!-- SIDEBAR -->
+<div class="sidebar" id="adminSidebar">
+    <div class="sb-brand">
+        <img src="/static/Assets/Logo.png" alt="Logo">
+        <div>
+            <div class="name">Analitic</div>
+            <div class="tag">Admin Panel</div>
+        </div>
+    </div>
+
+    <div class="sb-section">Recepción</div>
+    <button class="sb-btn" onclick="ir('/pacientes')"><span class="material-symbols-outlined">person</span>Pacientes</button>
+    <button class="sb-btn" onclick="ir('/citas')"><span class="material-symbols-outlined">calendar_today</span>Solicitudes</button>
+    <button class="sb-btn" onclick="ir('/espera')"><span class="material-symbols-outlined">hourglass_empty</span>Espera</button>
+
+    <div class="sb-section">Laboratorista</div>
+    <button class="sb-btn" onclick="ir('/analisis')"><span class="material-symbols-outlined">biotech</span>Análisis</button>
+    <button class="sb-btn" onclick="ir('/resultados')"><span class="material-symbols-outlined">assignment_turned_in</span>Resultados</button>
+    <button class="sb-btn" onclick="ir('/parametros')"><span class="material-symbols-outlined">tune</span>Parámetros</button>
+
+    <div class="sb-section">Admin</div>
+    <button class="sb-btn" onclick="ir('/usuarios')"><span class="material-symbols-outlined">manage_accounts</span>Usuarios</button>
+
+    <button class="sb-logout" onclick="cerrarSesion()"><span class="material-symbols-outlined">logout</span>Cerrar sesión</button>
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="mainNavbar">
+    <div class="nav-left">
+        <div class="nav-logo" id="navbarLogo">
+            <img src="/static/Assets/Logo.png" alt="Logo">
+            <div>
+                <div class="name">Analitic</div>
+                <div class="tag">Laboratorio Clínico</div>
+            </div>
+        </div>
+        <div class="nav-menu" id="horizontalMenu">
+            <button class="nav-btn" id="pacientesBtn"  onclick="ir('/pacientes')"  style="display:none">Pacientes</button>
+            <button class="nav-btn" id="citasBtn"      onclick="ir('/citas')"      style="display:none">Solicitudes</button>
+            <button class="nav-btn" id="esperaBtn"     onclick="ir('/espera')"     style="display:none">Espera</button>
+            <button class="nav-btn" id="analisisBtn"   onclick="ir('/analisis')"   style="display:none">Análisis</button>
+            <button class="nav-btn" id="resultadosBtn" onclick="ir('/resultados')" style="display:none">Resultados</button>
+            <button class="nav-btn" id="ParametrosBtn" onclick="ir('/parametros')" style="display:none">Parámetros</button>
+            <button class="nav-btn" id="usuariosBtn"   onclick="ir('/usuarios')"   style="display:none">Usuarios</button>
+            <button class="nav-btn danger" onclick="cerrarSesion()">Cerrar sesión</button>
+        </div>
+    </div>
+    <div class="user-pill">
+        <div class="user-av"><span class="material-symbols-outlined">person</span></div>
+        <div>
+            <div class="user-name"  id="rol-actual-top">—</div>
+            <div class="user-badge">En línea</div>
+        </div>
+    </div>
+</nav>
+
+<!-- CONTENT -->
+<div class="content">
+
+    <div class="page-top">
+        <div>
+            <h1>Dashboard</h1>
+            <p>Resumen del día en el laboratorio</p>
+        </div>
+        <div class="date-chip">
+            <span class="material-symbols-outlined">today</span>
+            <span id="fechaHoy">—</span>
+        </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats">
+        <div class="stat">
+            <div class="stat-ico blue"><span class="material-symbols-outlined">person_add</span></div>
+            <div>
+                <div class="stat-val blue" id="statPacientes">—</div>
+                <div class="stat-lbl">Pacientes registrados hoy</div>
+            </div>
+        </div>
+        <div class="stat">
+            <div class="stat-ico green"><span class="material-symbols-outlined">check_circle</span></div>
+            <div>
+                <div class="stat-val green" id="statFinalizados">—</div>
+                <div class="stat-lbl">Análisis finalizados hoy</div>
+            </div>
+        </div>
+        <div class="stat">
+            <div class="stat-ico orange"><span class="material-symbols-outlined">pending</span></div>
+            <div>
+                <div class="stat-val orange" id="statPendientes">—</div>
+                <div class="stat-lbl">Análisis pendientes</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Panels -->
+    <div class="grid">
+
+        <div class="panel span2">
+            <div class="panel-head">
+                <div class="panel-label"><span class="material-symbols-outlined">biotech</span>Análisis finalizados hoy</div>
+                <span class="count-pill" id="badgeFin">0</span>
+            </div>
+            <div class="panel-body" id="listaFin">
+                <div class="empty"><span class="material-symbols-outlined">science</span>Sin análisis finalizados hoy</div>
+            </div>
+        </div>
+
+        <div class="panel tall">
+            <div class="panel-head">
+                <div class="panel-label"><span class="material-symbols-outlined">notifications</span>Notificaciones</div>
+            </div>
+            <div class="panel-body" id="listaNotif">
+                <div class="empty"><span class="material-symbols-outlined">notifications_off</span>Sin notificaciones</div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-head">
+                <div class="panel-label"><span class="material-symbols-outlined">calendar_today</span>Citas de hoy</div>
+                <span class="count-pill" id="badgeCitas">0</span>
+            </div>
+            <div class="panel-body" id="listaCitas">
+                <div class="empty"><span class="material-symbols-outlined">event_busy</span>Sin citas hoy</div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-head">
+                <div class="panel-label"><span class="material-symbols-outlined">group_add</span>Pacientes de hoy</div>
+                <span class="count-pill" id="badgePac">0</span>
+            </div>
+            <div class="panel-body" id="listaPac">
+                <div class="empty"><span class="material-symbols-outlined">person_search</span>Sin registros hoy</div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Admin -->
+    <div class="admin-card" id="adminCard">
+        <div class="admin-card-left">
+            <h3>Gestión de Usuarios</h3>
+            <p>Administra accesos, roles y contraseñas del sistema</p>
+        </div>
+        <button class="admin-go" onclick="ir('/usuarios')">Ir a Usuarios →</button>
+    </div>
+
+</div>
+
+<script>
+    const rol = localStorage.getItem("rolUsuario");
+    if (!rol) { alert("Inicia sesión primero."); location.href = "/"; }
+
+    document.getElementById("fechaHoy").textContent =
+        new Date().toLocaleDateString('es-MX', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+
+    document.getElementById("rol-actual-top").textContent =
+        rol.charAt(0).toUpperCase() + rol.slice(1);
+
+    if (rol === "admin") {
+        document.body.classList.add("admin-active");
+        document.getElementById("adminSidebar").style.display = "flex";
+        document.getElementById("navbarLogo").style.display = "none";
+        document.getElementById("adminCard").style.display = "flex";
+    } else if (rol === "recepcion") {
+        // Oculta navbar verde, muestra navbar azul de recepción
+        document.getElementById("mainNavbar").style.display = "none";
+        document.getElementById("recepNav").style.display = "flex";
+    } else {
+        document.getElementById("horizontalMenu").style.display = "flex";
+        ({ laboratorista:["analisisBtn","resultadosBtn","ParametrosBtn"],
+           capturista:[] }[rol] || [])
+        .forEach(id => { const b = document.getElementById(id); if (b) b.style.display = ""; });
+    }
+
+    const ir = p => location.href = p;
+    const cerrarSesion = () => {
+        localStorage.removeItem("rolUsuario");
+        localStorage.removeItem("usuarioLogueado");
+        location.href = "/";
+    };
+    const esc = s => String(s ?? '').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+    function empty(id, icon, msg) {
+        document.getElementById(id).innerHTML =
+            `<div class="empty"><span class="material-symbols-outlined">${icon}</span>${msg}</div>`;
+    }
+
+    async function refresh() {
+        if (!window.pywebview?.api) return;
+        try {
+            await Promise.all([cargarStats(), cargarFin(), cargarCitas(), cargarPac(), cargarNotif()]);
+        } catch(e) { console.error(e); }
+    }
+
+    async function cargarStats() {
+        const [pac, fin, pend] = await Promise.all([
+            pywebview.api.contarPacientesHoy(),
+            pywebview.api.obtenerFinalizadasHoy(),
+            pywebview.api.contarPendientes()
+        ]);
+        document.getElementById("statPacientes").textContent   = pac ?? 0;
+        document.getElementById("statFinalizados").textContent = fin?.length ?? 0;
+        document.getElementById("statPendientes").textContent  = pend ?? 0;
+        document.getElementById("badgeFin").textContent        = fin?.length ?? 0;
+    }
+
+    async function cargarFin() {
+        const lista = await pywebview.api.obtenerFinalizadasHoy();
+        if (!lista?.length) return empty("listaFin","science","Sin análisis finalizados hoy");
+        document.getElementById("listaFin").innerHTML = lista.map(it => `
+            <div class="row">
+                <div class="dot green"></div>
+                <div class="row-body">
+                    <div class="row-name">${esc(it.paciente)}</div>
+                    <div class="row-sub">${esc(it.tipo_estudio)} · ${esc(it.id_muestra)}</div>
                 </div>
-            </div>
-            <button class="logout-btn" onclick="cerrarSesion()">
-                <span class="material-symbols-outlined">logout</span> Cerrar sesión
-            </button>
-        </div>
+                <span class="pill green">Listo</span>
+            </div>`).join('');
+    }
 
-        <div class="sidebar-section-title">Recepción</div>
-        <button onclick="window.location.href='pacientes.html'"><span class="material-symbols-outlined">person</span>
-            Pacientes</button>
-        <button onclick="window.location.href='citas.html'"><span
-                class="material-symbols-outlined">calendar_today</span> Solicitudes</button>
-        <button onclick="window.location.href='espera.html'"><span
-                class="material-symbols-outlined">hourglass_empty</span> Espera</button>
-
-        <div class="sidebar-section-title">Laboratorista</div>
-        <button onclick="window.location.href='analisis.html'"><span class="material-symbols-outlined">biotech</span>
-            Análisis</button>
-        <button onclick="window.location.href='resultados.html'"><span
-                class="material-symbols-outlined">assignment_turned_in</span> Resultados</button>
-
-        <div class="sidebar-section-title">Capturista</div>
-        <button id="reportesBtnAdmin"><span class="material-symbols-outlined">description</span> Reportes</button>
-        <button id="capturaBtnAdmin"><span class="material-symbols-outlined">edit_note</span> Captura</button>
-        <button id="consultasBtnAdmin"><span class="material-symbols-outlined">search</span> Consultas</button>
-
-        <div class="sidebar-section-title">Admin</div>
-        <button onclick="window.location.href='usuarios.html'"><span
-                class="material-symbols-outlined">manage_accounts</span> Usuarios</button>
-    </div>
-
- 
-    <div class="navbar" id="mainNavbar">
-        <div class="nav-left">
-           
-            <div class="logo-container" id="navbarLogo">
-                <img src="Assets/Logo.png" alt="Analitic Logo" class="logo-img">
-                <div class="logo-text">
-                    <span class="logo-name">Analitic</span>
-                    <span class="logo-tag">Laboratorio</span>
+    async function cargarCitas() {
+        const lista = await pywebview.api.obtenerCitasHoy();
+        document.getElementById("badgeCitas").textContent = lista?.length ?? 0;
+        if (!lista?.length) return empty("listaCitas","event_busy","Sin citas hoy");
+        document.getElementById("listaCitas").innerHTML = lista.slice(0,10).map(c => `
+            <div class="row">
+                <div class="dot orange"></div>
+                <div class="row-body">
+                    <div class="row-name">${esc(c.nombre_paciente)}</div>
+                    <div class="row-sub">${esc(c.tipo)}</div>
                 </div>
-            </div>
+                <span class="pill orange">${esc(c.hora)}</span>
+            </div>`).join('');
+    }
 
-          
-            <div class="menu-horizontal" id="horizontalMenu">
-                <button id="pacientesBtn" onclick="window.location.href='pacientes.html'">Pacientes</button>
-                <button id="citasBtn" onclick="window.location.href='citas.html'">Solicitudes</button>
-                <button id="esperaBtn" onclick="window.location.href='espera.html'">Espera</button>
-                <button id="analisisBtn" onclick="window.location.href='analisis.html'">Análisis</button>
-                <button id="resultadosBtn" onclick="window.location.href='resultados.html'">Resultados</button>
-                <button id="usuariosBtn" onclick="window.location.href='usuarios.html'">Usuarios</button>
-                <button id="reportesBtn">Reportes</button>
-                <button id="capturaBtn">Captura</button>
-                <button id="consultasBtn">Consultas</button>
-                <button class="logout-btn" onclick="cerrarSesion()">Cerrar sesión</button>
-            </div>
-        </div>
+    async function cargarPac() {
+        const lista = await pywebview.api.obtenerPacientesDeHoy();
+        document.getElementById("badgePac").textContent = lista?.length ?? 0;
+        if (!lista?.length) return empty("listaPac","person_search","Sin registros hoy");
+        document.getElementById("listaPac").innerHTML = lista.map(p => `
+            <div class="row">
+                <div class="dot blue"></div>
+                <div class="row-body">
+                    <div class="row-name">${esc(p.nombre)}</div>
+                    <div class="row-sub">${esc(p.edad)} años · ${esc(p.telefono)}</div>
+                </div>
+                <span class="pill blue">Hoy</span>
+            </div>`).join('');
+    }
 
-        <div class="user-info">
-            <div class="avatar">
-                <span class="material-symbols-outlined">person</span>
-            </div>
-            <div class="user-details">
-                <span id="rol-actual-top">Cargando...</span>
-                <span class="user-status">En línea</span>
-            </div>
-        </div>
-    </div>
+    async function cargarNotif() {
+        const [pend, pac] = await Promise.all([
+            pywebview.api.contarPendientes(),
+            pywebview.api.obtenerPacientesDeHoy()
+        ]);
+        let html = '';
+        if (pend > 0)
+            html += `<div class="notif warn">
+                <div class="notif-em">⚠️</div>
+                <div>
+                    <div class="notif-title">Análisis pendientes</div>
+                    <div class="notif-desc">${pend} estudio${pend !== 1 ? 's' : ''} por procesar</div>
+                </div></div>`;
+        if (pac?.length)
+            html += `<div class="notif info">
+                <div class="notif-em">👤</div>
+                <div>
+                    <div class="notif-title">Pacientes registrados hoy</div>
+                    <div class="notif-desc">${pac.length} paciente${pac.length !== 1 ? 's' : ''} ingresaron hoy</div>
+                </div></div>`;
+        document.getElementById("listaNotif").innerHTML =
+            html || `<div class="empty"><span class="material-symbols-outlined">notifications_off</span>Sin notificaciones</div>`;
+    }
 
-    <div class="content">
-        <div class="top-bar">
-            <h1>Laboratorio de Análisis Clínicos</h1>
-        </div>
-
-        <div class="cards">
-            <div class="card" id="resumenCard">
-                <h3><span class="material-symbols-outlined">today</span> Resumen del día</h3>
-                <p id="resumenTexto">Cargando...</p>
-            </div>
-
-            <div class="card" id="actividadCard">
-                <h3><span class="material-symbols-outlined">history</span> Actividad reciente</h3>
-                <div id="actividadLista"></div>
-            </div>
-
-            <div class="card" id="notificacionesCard">
-                <h3><span class="material-symbols-outlined">notifications</span> Notificaciones</h3>
-                <div id="notificacionesLista"></div>
-            </div>
-
-            <div class="card admin-card" id="adminCard" style="display:none;">
-                <h3><span class="material-symbols-outlined">admin_panel_settings</span> Gestión de Usuarios</h3>
-                <p>Agregar, editar o eliminar usuarios del sistema.</p>
-                <button onclick="window.location.href='usuarios.html'">Ir a Gestión de Usuarios</button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        let rolUsuario = localStorage.getItem("rolUsuario");
-
-        if (!rolUsuario) {
-            alert("Por favor inicia sesión primero.");
-            window.location.href = "login.html";
-        } else {
-            const rolText = rolUsuario.charAt(0).toUpperCase() + rolUsuario.slice(1);
-            document.getElementById("rol-actual-top").innerText = rolText;
-
-         
-            document.getElementById("adminSidebar").style.display = "none";
-            document.getElementById("horizontalMenu").style.display = "none";
-            document.querySelectorAll("#horizontalMenu button:not(.logout-btn)").forEach(btn => btn.style.display = "none");
-
-            if (rolUsuario === "admin") {
-               
-                document.body.classList.add("admin-active");
-                document.getElementById("adminSidebar").style.display = "flex";
-                document.getElementById("navbarLogo").style.display = "none"; 
-                document.getElementById("adminCard").style.display = "block";
-            } else {
-             
-                document.getElementById("horizontalMenu").style.display = "flex";
-
-                if (rolUsuario === "recepcion") {
-                    mostrar("pacientesBtn", "citasBtn", "esperaBtn");
-                } else if (rolUsuario === "laboratorista") {
-                    // Eliminados XML y Ventas
-                    mostrar("analisisBtn", "resultadosBtn");
-                } else if (rolUsuario === "capturista") {
-                    mostrar("reportesBtn", "capturaBtn", "consultasBtn");
-                }
-            }
-        }
-
-        function mostrar(...ids) {
-            ids.forEach(id => {
-                const btn = document.getElementById(id);
-                if (btn) btn.style.display = "inline-block";
-            });
-        }
-
-        function cerrarSesion() {
-            localStorage.removeItem("rolUsuario");
-            localStorage.removeItem("usuarioLogueado");
-            window.location.href = "login.html";
-        }
-
-        window.addEventListener('load', () => {
-            if (window.pywebview && window.pywebview.api) {
-                cargarResumen();
-                cargarActividad();
-                cargarNotificaciones();
-            } else {
-                document.getElementById("resumenTexto").innerText = "Bienvenido. El sistema está listo para operar.";
-                document.getElementById("actividadLista").innerHTML = '<p class="empty-message">Inicia el sistema desde Python para ver datos reales.</p>';
-            }
-        });
-
-        function cargarResumen() {
-            window.pywebview.api.contarCitasHoy().then(count => {
-                document.getElementById("resumenTexto").innerText = `Hoy se han recibido ${count} solicitudes de análisis.`;
-            });
-        }
-
-        function cargarActividad() {
-            window.pywebview.api.obtenerFinalizadasHoy().then(lista => {
-                const cont = document.getElementById("actividadLista");
-                if (!lista || lista.length === 0) {
-                    cont.innerHTML = '<p class="empty-message">No hay actividad reciente finalizada hoy.</p>';
-                } else {
-                    cont.innerHTML = lista.map(item => `<div class="list-item">Estudio finalizado: ${item.paciente} - ${item.tipo}</div>`).join('');
-                }
-            });
-        }
-
-        function cargarNotificaciones() {
-            window.pywebview.api.contarPendientes().then(count => {
-                const cont = document.getElementById("notificacionesLista");
-                if (count > 0) {
-                    cont.innerHTML = `<div class="list-item" style="border-left-color: #f39c12;">Tienes ${count} estudios pendientes por procesar.</div>`;
-                } else {
-                    cont.innerHTML = '<p class="empty-message">No hay notificaciones pendientes.</p>';
-                }
-            });
-        }
-    </script>
+    function wait() {
+        if (window.pywebview?.api) { refresh(); setInterval(refresh, 7000); }
+        else setTimeout(wait, 200);
+    }
+    window.addEventListener('load', wait);
+    window.addEventListener('pywebviewready', wait);
+</script>
 </body>
-
 </html>

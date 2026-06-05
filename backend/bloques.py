@@ -1,4 +1,3 @@
-
 from backend.database import conectar
 import json
 
@@ -7,8 +6,8 @@ class Bloques:
         """Devuelve la lista de estudios con sus parámetros y valores de referencia diferenciados por sexo"""
         return [
             {
-                "id": 1, 
-                "nombre": "Química Sanguínea 35 Elementos", 
+                "id": 1,
+                "nombre": "Química Sanguínea 35 Elementos",
                 "parametros": [
                     {"nombre": "Glucosa", "unidades": "mg/dL", "referencia_masc": "70.00 - 106.00", "referencia_fem": "70.00 - 106.00"},
                     {"nombre": "Urea", "unidades": "mg/dL", "referencia_masc": "15.00 - 45.00", "referencia_fem": "15.00 - 45.00"},
@@ -51,7 +50,7 @@ class Bloques:
                 ]
             },
             {
-                "id": 2, 
+                "id": 2,
                 "nombre": "Perfil Lipídico",
                 "parametros": [
                     {"nombre": "Colesterol Total", "unidades": "mg/dL", "referencia_masc": "< 200.00", "referencia_fem": "< 200.00"},
@@ -61,7 +60,7 @@ class Bloques:
                 ]
             },
             {
-                "id": 4, 
+                "id": 4,
                 "nombre": "Citometría Hemática Completa",
                 "parametros": [
                     {"nombre": "Hemoglobina", "unidades": "g/dL", "referencia_masc": "13.5 - 17.5", "referencia_fem": "12.0 - 15.5"},
@@ -75,12 +74,12 @@ class Bloques:
     def guardar_bloques_solicitud(self, solicitud_id, bloques_json):
         """Guarda los bloques seleccionados para una solicitud"""
         conn = conectar()
-        cursor = conn.cursor()
+        cursor = conn.cursor(dictionary=True)
         try:
             cursor.execute("""
-                UPDATE solicitudes_analisis 
-                SET observaciones_generales = ?
-                WHERE id = ?
+                UPDATE solicitudes_analisis
+                SET observaciones_generales = %s
+                WHERE id = %s
             """, (bloques_json, solicitud_id))
             conn.commit()
             return True

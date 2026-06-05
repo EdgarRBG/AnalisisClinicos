@@ -1,0 +1,1299 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Documentación — Analitic</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.6.1/mermaid.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+  :root {
+    --green-dark:  #1b5e20;
+    --green-mid:   #2e7d32;
+    --green:       #4caf50;
+    --green-light: #e8f5e9;
+    --green-pale:  #f0fdf4;
+    --blue:        #1976d2;
+    --blue-light:  #e3f2fd;
+    --orange:      #f57c00;
+    --orange-light:#fff3e0;
+    --purple:      #7b1fa2;
+    --purple-light:#f3e5f5;
+    --red:         #c62828;
+    --red-light:   #ffebee;
+    --bg:          #f7faf7;
+    --white:       #ffffff;
+    --text:        #111827;
+    --text-mid:    #374151;
+    --text-soft:   #6b7280;
+    --border:      #e5e7eb;
+    --shadow-sm:   0 1px 4px rgba(0,0,0,0.06);
+    --shadow:      0 4px 16px rgba(0,0,0,0.07);
+    --shadow-lg:   0 8px 32px rgba(27,94,32,0.10);
+  }
+
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* ─── COVER ─── */
+  .cover {
+    background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 50%, #388e3c 100%);
+    color: white;
+    padding: 72px 48px 64px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .cover::before {
+    content:"";
+    position:absolute; inset:0;
+    background:
+      radial-gradient(ellipse at 15% 40%, rgba(255,255,255,0.07) 0%, transparent 55%),
+      radial-gradient(ellipse at 85% 70%, rgba(0,0,0,0.12) 0%, transparent 50%);
+  }
+  .cover-inner { position:relative; z-index:1; }
+  .cover-chip {
+    display:inline-flex; align-items:center; gap:6px;
+    background:rgba(255,255,255,0.15);
+    border:1px solid rgba(255,255,255,0.25);
+    padding:5px 16px; border-radius:99px;
+    font-size:0.72rem; font-weight:700; letter-spacing:1.8px;
+    text-transform:uppercase; margin-bottom:22px;
+  }
+  .cover h1 {
+    font-size:3.2rem; font-weight:900; letter-spacing:-2px;
+    line-height:1.05; margin-bottom:8px;
+  }
+  .cover h1 span { opacity:0.7; font-weight:400; }
+  .cover-sub {
+    font-size:1.05rem; opacity:0.8; font-weight:400; margin-bottom:36px;
+  }
+  .cover-pills {
+    display:flex; justify-content:center; gap:10px; flex-wrap:wrap;
+  }
+  .cover-pill {
+    background:rgba(255,255,255,0.12);
+    border:1px solid rgba(255,255,255,0.2);
+    padding:6px 15px; border-radius:8px;
+    font-size:0.78rem; font-weight:600;
+  }
+
+  /* ─── NAV ─── */
+  .nav {
+    position:sticky; top:0; z-index:200;
+    background:rgba(255,255,255,0.95);
+    backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--border);
+    padding:0 48px;
+    box-shadow: var(--shadow-sm);
+  }
+  .nav-list {
+    display:flex; gap:0; list-style:none;
+    overflow-x:auto; scrollbar-width:none;
+  }
+  .nav-list::-webkit-scrollbar { display:none; }
+  .nav-list a {
+    display:block; padding:14px 16px;
+    text-decoration:none; color:var(--text-soft);
+    font-size:0.79rem; font-weight:600;
+    border-bottom:2.5px solid transparent;
+    white-space:nowrap; transition:all 0.18s;
+  }
+  .nav-list a:hover { color:var(--green-mid); border-bottom-color:var(--green); }
+
+  /* ─── LAYOUT ─── */
+  .page { max-width:1080px; margin:0 auto; padding:0 40px 80px; }
+
+  section { padding-top:64px; }
+
+  .section-header {
+    display:flex; align-items:center; gap:14px;
+    margin-bottom:32px; padding-bottom:14px;
+    border-bottom:1.5px solid var(--border);
+  }
+  .section-num {
+    width:36px; height:36px; border-radius:10px; flex-shrink:0;
+    background:linear-gradient(135deg, var(--green-dark), var(--green-mid));
+    color:white; display:flex; align-items:center; justify-content:center;
+    font-size:0.82rem; font-weight:900;
+  }
+  .section-title { font-size:1.45rem; font-weight:800; color:var(--green-dark); }
+  .section-sub { font-size:0.85rem; color:var(--text-soft); margin-top:1px; }
+
+  /* ─── GRID ─── */
+  .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+  .grid-4 { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
+  @media(max-width:800px) {
+    .grid-2,.grid-3,.grid-4 { grid-template-columns:1fr; }
+  }
+
+  /* ─── CARD ─── */
+  .card {
+    background:var(--white);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:22px;
+    box-shadow:var(--shadow);
+    transition:transform 0.2s, box-shadow 0.2s;
+  }
+  .card:hover { transform:translateY(-2px); box-shadow:var(--shadow-lg); }
+  .card-label {
+    font-size:0.68rem; font-weight:800; text-transform:uppercase;
+    letter-spacing:1.2px; color:var(--text-soft); margin-bottom:10px;
+  }
+  .card-title {
+    font-size:0.95rem; font-weight:800; color:var(--text);
+    margin-bottom:8px; display:flex; align-items:center; gap:8px;
+  }
+  .card-body { font-size:0.84rem; color:var(--text-mid); line-height:1.7; }
+
+  /* ─── DIAGRAM BOX ─── */
+  .dbox {
+    background:var(--white);
+    border:1px solid var(--border);
+    border-radius:16px;
+    overflow:hidden;
+    box-shadow:var(--shadow);
+    margin-bottom:20px;
+  }
+  .dbox-header {
+    background: linear-gradient(135deg, var(--green-pale), #f8fffe);
+    border-bottom:1px solid rgba(27,94,32,0.1);
+    padding:14px 22px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .dbox-dot {
+    width:9px; height:9px; border-radius:50%;
+    background:linear-gradient(135deg, var(--green), var(--green-mid));
+  }
+  .dbox-title { font-size:0.82rem; font-weight:800; color:var(--green-dark); }
+  .dbox-body { padding:24px 20px; overflow-x:auto; }
+  .dbox-body .mermaid { display:flex; justify-content:center; }
+
+  /* ─── TECH CARDS ─── */
+  .tech-card {
+    background:var(--white);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:18px 16px;
+    box-shadow:var(--shadow-sm);
+    display:flex; flex-direction:column; align-items:center;
+    text-align:center; gap:8px;
+    transition:transform 0.2s, box-shadow 0.2s;
+  }
+  .tech-card:hover { transform:translateY(-3px); box-shadow:var(--shadow-lg); }
+  .tech-icon { font-size:2rem; line-height:1; }
+  .tech-name { font-weight:800; font-size:0.88rem; color:var(--green-dark); }
+  .tech-desc { font-size:0.72rem; color:var(--text-soft); line-height:1.5; }
+  .tech-badge {
+    font-size:0.65rem; font-weight:700; padding:2px 10px;
+    border-radius:99px; margin-top:2px;
+  }
+  .badge-back  { background:#e8f5e9; color:#1b5e20; }
+  .badge-front { background:#e3f2fd; color:#1565c0; }
+  .badge-db    { background:#fce4ec; color:#880e4f; }
+  .badge-sec   { background:#f3e5f5; color:#6a1b9a; }
+  .badge-desk  { background:#fff3e0; color:#e65100; }
+  .badge-rep   { background:#e0f2f1; color:#004d40; }
+
+  /* ─── ROLE CARDS ─── */
+  .role-card {
+    background:var(--white);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:20px;
+    box-shadow:var(--shadow-sm);
+  }
+  .role-header {
+    display:flex; align-items:center; gap:10px;
+    margin-bottom:14px; padding-bottom:10px;
+    border-bottom:1px solid var(--border);
+  }
+  .role-icon {
+    width:38px; height:38px; border-radius:10px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:1.1rem; flex-shrink:0;
+  }
+  .role-name { font-weight:800; font-size:0.9rem; }
+  .role-tag  { font-size:0.68rem; color:var(--text-soft); }
+  .role-list { list-style:none; }
+  .role-list li {
+    font-size:0.8rem; color:var(--text-mid);
+    padding:5px 0; border-bottom:1px dashed var(--border);
+    display:flex; align-items:center; gap:7px;
+  }
+  .role-list li:last-child { border:none; }
+
+  .role-admin .role-icon { background:#f3e5f5; }
+  .role-admin .role-name { color:#7b1fa2; }
+  .role-recep .role-icon { background:#e3f2fd; }
+  .role-recep .role-name { color:#1565c0; }
+  .role-lab   .role-icon { background:#e8f5e9; }
+  .role-lab   .role-name { color:#1b5e20; }
+  .role-cap   .role-icon { background:#fff3e0; }
+  .role-cap   .role-name { color:#e65100; }
+
+  /* ─── ARCH LAYERS ─── */
+  .arch-stack { display:flex; flex-direction:column; gap:0; }
+  .arch-layer {
+    display:flex; align-items:center; gap:16px;
+    padding:20px 24px; transition:transform 0.18s;
+  }
+  .arch-layer:hover { transform:translateX(4px); }
+  .arch-layer.l-fe   { background:#e3f2fd; border-left:4px solid #1976d2; }
+  .arch-layer.l-api  { background:#e8f5e9; border-left:4px solid #2e7d32; }
+  .arch-layer.l-biz  { background:#fff3e0; border-left:4px solid #f57c00; }
+  .arch-layer.l-db   { background:#fce4ec; border-left:4px solid #c62828; }
+  .arch-arrow-row {
+    text-align:center; padding:4px 0;
+    font-size:1.1rem; color:var(--text-soft);
+    background:var(--white);
+  }
+  .arch-icon { font-size:1.6rem; flex-shrink:0; }
+  .arch-name { font-weight:800; font-size:0.88rem; margin-bottom:3px; }
+  .arch-desc { font-size:0.76rem; color:var(--text-mid); line-height:1.5; }
+
+  /* ─── DB TABLE CARDS ─── */
+  .db-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:12px; }
+  .db-card {
+    background:var(--white); border:1px solid var(--border);
+    border-radius:12px; padding:14px; box-shadow:var(--shadow-sm);
+  }
+  .db-card-name {
+    font-size:0.78rem; font-weight:800; color:var(--red);
+    margin-bottom:8px; display:flex; align-items:center; gap:5px;
+  }
+  .db-card ul { list-style:none; }
+  .db-card ul li {
+    font-size:0.7rem; color:var(--text-soft); padding:2px 0;
+    border-bottom:1px dashed var(--border);
+    display:flex; align-items:center; gap:5px;
+  }
+  .db-card ul li:last-child { border:none; }
+  .pk { color:var(--orange); font-weight:800; font-size:0.65rem; }
+  .fk { color:var(--blue);   font-weight:800; font-size:0.65rem; }
+
+  .mermaid svg { max-width:100%; height:auto; }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background:var(--green-dark); color:rgba(255,255,255,0.8);
+    text-align:center; padding:24px;
+    font-size:0.78rem; letter-spacing:0.3px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ══ PORTADA ══ -->
+<div class="cover">
+  <div class="cover-inner">
+    <div class="cover-chip">📄 Documentación Técnica</div>
+    <h1>🧪 Analitic <span>/ Sistema Clínico</span></h1>
+    <p class="cover-sub">Gestión de Análisis Clínicos · Universidad Veracruzana · Servicio Social 2026</p>
+    <div class="cover-pills">
+      <span class="cover-pill">🐍 Python 3.12</span>
+      <span class="cover-pill">🪟 pywebview</span>
+      <span class="cover-pill">🐬 MySQL</span>
+      <span class="cover-pill">🌐 HTML / CSS / JS</span>
+      <span class="cover-pill">🔐 bcrypt</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══ NAV ══ -->
+<nav class="nav">
+  <ul class="nav-list">
+    <li><a href="#s1">1 · Arquitectura</a></li>
+    <li><a href="#s2">2 · Base de Datos</a></li>
+    <li><a href="#s3">3 · Tecnologías</a></li>
+    <li><a href="#s4">4 · Roles</a></li>
+    <li><a href="#s5">5 · Casos de Uso</a></li>
+    <li><a href="#s6">6 · Clases UML</a></li>
+    <li><a href="#s7">7 · Actividades</a></li>
+    <li><a href="#s8">8 · Flujo</a></li>
+    <li><a href="#s9">9 · Secuencia</a></li>
+  </ul>
+</nav>
+
+<div class="page">
+
+<!-- ══════════════════════════════════════════
+     1. ARQUITECTURA
+══════════════════════════════════════════ -->
+<section id="s1">
+  <div class="section-header">
+    <div class="section-num">1</div>
+    <div>
+      <div class="section-title">Arquitectura del Sistema</div>
+      <div class="section-sub">Patrón de 3 capas implementado como aplicación de escritorio</div>
+    </div>
+  </div>
+
+  <!-- Descripción -->
+  <div class="grid-2" style="margin-bottom:20px">
+    <div class="card">
+      <div class="card-label">Patrón</div>
+      <div class="card-title">🏗️ Three-Tier Architecture</div>
+      <div class="card-body">Presentación → Lógica de negocio → Datos. La comunicación entre el frontend HTML/JS y el backend Python ocurre a través del bridge <code>window.pywebview.api</code>, que expone métodos Python como funciones JavaScript asíncronas.</div>
+    </div>
+    <div class="card">
+      <div class="card-label">Modelo de despliegue</div>
+      <div class="card-title">🖥️ Aplicación de Escritorio</div>
+      <div class="card-body">La app corre localmente. pywebview incrusta un navegador Chromium que sirve los HTML desde un servidor HTTP interno (Bottle). El ejecutable final se genera con PyInstaller como un solo <code>.exe</code> portable.</div>
+    </div>
+  </div>
+
+  <!-- Stack de capas -->
+  <div class="dbox">
+    <div class="dbox-header"><div class="dbox-dot"></div><div class="dbox-title">Capas del sistema</div></div>
+    <div class="dbox-body" style="padding:0">
+      <div class="arch-stack">
+        <div class="arch-layer l-fe">
+          <div class="arch-icon">🌐</div>
+          <div>
+            <div class="arch-name" style="color:#1565c0">Presentación — Frontend</div>
+            <div class="arch-desc">HTML5 · CSS3 · JavaScript Vanilla · Material Symbols · Inter Font<br>
+            9 páginas: login, dashboard, pacientes, citas, espera, análisis, resultados, parámetros, usuarios</div>
+          </div>
+        </div>
+        <div class="arch-arrow-row">⬍ &nbsp; window.pywebview.api &nbsp; ⬍</div>
+        <div class="arch-layer l-api">
+          <div class="arch-icon">🔌</div>
+          <div>
+            <div class="arch-name" style="color:#1b5e20">API Bridge — main.py · Clase API</div>
+            <div class="arch-desc">Punto de entrada único. Recibe todas las llamadas JS, delega a módulos de negocio y serializa fechas a JSON.</div>
+          </div>
+        </div>
+        <div class="arch-arrow-row">⬍ &nbsp; llamadas Python &nbsp; ⬍</div>
+        <div class="arch-layer l-biz">
+          <div class="arch-icon">⚙️</div>
+          <div>
+            <div class="arch-name" style="color:#e65100">Lógica de Negocio — backend/</div>
+            <div class="arch-desc">Auth · Pacientes · Citas · Analisis · Usuarios · Espera · Bloques · Parametros<br>
+            Cada módulo encapsula su lógica y consultas SQL propias.</div>
+          </div>
+        </div>
+        <div class="arch-arrow-row">⬍ &nbsp; mysql-connector-python &nbsp; ⬍</div>
+        <div class="arch-layer l-db">
+          <div class="arch-icon">🗄️</div>
+          <div>
+            <div class="arch-name" style="color:#c62828">Datos — MySQL · sistema_laboratorio</div>
+            <div class="arch-desc">7 tablas relacionales con InnoDB, charset utf8mb4. Foreign keys para integridad referencial.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Componentes -->
+  <div class="dbox">
+    <div class="dbox-header"><div class="dbox-dot"></div><div class="dbox-title">Diagrama de componentes — visión general</div></div>
+    <div class="dbox-body">
+      <div class="mermaid">
+graph LR
+    subgraph WIN["🖥️ pywebview Window"]
+        direction TB
+        subgraph HTML["Frontend"]
+            FE["9 páginas HTML\n+ CSS + JS"]
+        end
+        subgraph PY["Python Backend"]
+            API["Clase API\nmain.py"]
+            M1["Auth"]
+            M2["Pacientes"]
+            M3["Citas"]
+            M4["Analisis"]
+            M5["Usuarios"]
+            M6["Espera · Bloques\nParametros"]
+            DB["database.py"]
+        end
+    end
+    MySQL[("🗄️ MySQL\nsistema_laboratorio")]
+
+    FE -- "window.pywebview.api" --> API
+    API --> M1 & M2 & M3 & M4 & M5 & M6
+    M1 & M2 & M3 & M4 & M5 & M6 --> DB
+    DB --> MySQL
+
+    style WIN fill:#f0fdf4,stroke:#4caf50,stroke-width:1.5px
+    style HTML fill:#e3f2fd,stroke:#90caf9
+    style PY fill:#e8f5e9,stroke:#a5d6a7
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     2. BASE DE DATOS
+══════════════════════════════════════════ -->
+<section id="s2">
+  <div class="section-header">
+    <div class="section-num">2</div>
+    <div>
+      <div class="section-title">Base de Datos</div>
+      <div class="section-sub">MySQL · InnoDB · utf8mb4 · 7 tablas relacionales</div>
+    </div>
+  </div>
+
+  <div class="db-grid" style="margin-bottom:20px">
+    <div class="db-card">
+      <div class="db-card-name">🧑 pacientes</div>
+      <ul>
+        <li><span class="pk">PK</span> id</li>
+        <li>nombre</li>
+        <li>edad · sexo</li>
+        <li>telefono · correo</li>
+        <li>direccion</li>
+        <li>fecha_nacimiento</li>
+        <li>fecha_registro</li>
+        <li>observaciones</li>
+      </ul>
+    </div>
+    <div class="db-card">
+      <div class="db-card-name">📅 citas</div>
+      <ul>
+        <li><span class="pk">PK</span> id</li>
+        <li><span class="fk">FK</span> paciente_id</li>
+        <li>fecha · hora</li>
+        <li>tipo · estado</li>
+        <li>observaciones</li>
+      </ul>
+    </div>
+    <div class="db-card">
+      <div class="db-card-name">🔬 solicitudes_analisis</div>
+      <ul>
+        <li><span class="pk">PK</span> id</li>
+        <li><span class="fk">FK</span> paciente_id</li>
+        <li><span class="fk">FK</span> cita_id</li>
+        <li>id_muestra</li>
+        <li>tipo_estudio</li>
+        <li>estado</li>
+        <li>medico_solicitante</li>
+        <li>fecha_recepcion</li>
+      </ul>
+    </div>
+    <div class="db-card">
+      <div class="db-card-name">📊 resultados_parametros</div>
+      <ul>
+        <li><span class="pk">PK</span> id</li>
+        <li><span class="fk">FK</span> solicitud_id</li>
+        <li>parametro</li>
+        <li>resultado</li>
+        <li>unidades</li>
+        <li>valor_referencia</li>
+        <li>fuera_de_rango</li>
+        <li>observacion</li>
+      </ul>
+    </div>
+    <div class="db-card">
+      <div class="db-card-name">👤 usuarios</div>
+      <ul>
+        <li><span class="pk">PK</span> id</li>
+        <li>usuario (UNIQUE)</li>
+        <li>contrasena (hash)</li>
+        <li>rol</li>
+        <li>fecha_creacion</li>
+      </ul>
+    </div>
+    <div class="db-card">
+      <div class="db-card-name">⏳ espera</div>
+      <ul>
+        <li><span class="pk">PK</span> id</li>
+        <li>nombre · edad</li>
+        <li>telefono</li>
+        <li>fecha_cita · hora_cita</li>
+        <li>tipo_estudio</li>
+        <li>estado · procesado</li>
+      </ul>
+    </div>
+    <div class="db-card">
+      <div class="db-card-name">⚗️ parametros</div>
+      <ul>
+        <li><span class="pk">PK</span> id</li>
+        <li>nombre · unidades</li>
+        <li>tipo_estudio</li>
+        <li>val_ref_min/max</li>
+        <li>rango_hombre</li>
+        <li>rango_mujer</li>
+        <li>observaciones</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="dbox">
+    <div class="dbox-header"><div class="dbox-dot"></div><div class="dbox-title">Relaciones entre tablas (ER simplificado)</div></div>
+    <div class="dbox-body">
+      <div class="mermaid">
+erDiagram
+    pacientes {
+        int id PK
+        text nombre
+        int edad
+        text telefono
+        text sexo
+        datetime fecha_registro
+    }
+    citas {
+        int id PK
+        int paciente_id FK
+        text fecha
+        text hora
+        text tipo
+        varchar estado
+    }
+    solicitudes_analisis {
+        int id PK
+        int paciente_id FK
+        int cita_id FK
+        varchar id_muestra
+        text tipo_estudio
+        varchar estado
+    }
+    resultados_parametros {
+        int id PK
+        int solicitud_id FK
+        text parametro
+        text resultado
+        text unidades
+    }
+    usuarios {
+        int id PK
+        varchar usuario
+        text contrasena
+        text rol
+    }
+    espera {
+        int id PK
+        text nombre
+        int edad
+        varchar estado
+        int procesado
+    }
+    parametros {
+        int id PK
+        varchar nombre
+        varchar tipo_estudio
+        varchar valor_referencia_min
+        varchar valor_referencia_max
+    }
+
+    pacientes ||--o{ citas : "tiene"
+    pacientes ||--o{ solicitudes_analisis : "tiene"
+    citas ||--o{ solicitudes_analisis : "origina"
+    solicitudes_analisis ||--o{ resultados_parametros : "contiene"
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     3. TECNOLOGÍAS
+══════════════════════════════════════════ -->
+<section id="s3">
+  <div class="section-header">
+    <div class="section-num">3</div>
+    <div>
+      <div class="section-title">Tecnologías Utilizadas</div>
+      <div class="section-sub">Stack completo del proyecto</div>
+    </div>
+  </div>
+
+  <div class="grid-4">
+    <div class="tech-card">
+      <div class="tech-icon">🐍</div>
+      <div class="tech-name">Python 3.12</div>
+      <div class="tech-desc">Lenguaje principal del backend y lógica de negocio</div>
+      <span class="tech-badge badge-back">Backend</span>
+    </div>
+    <div class="tech-card">
+      <div class="tech-icon">🪟</div>
+      <div class="tech-name">pywebview</div>
+      <div class="tech-desc">Ventana nativa con Chromium. Bridge JS ↔ Python</div>
+      <span class="tech-badge badge-desk">Desktop</span>
+    </div>
+    <div class="tech-card">
+      <div class="tech-icon">🐬</div>
+      <div class="tech-name">MySQL</div>
+      <div class="tech-desc">Base de datos relacional. Motor InnoDB, utf8mb4</div>
+      <span class="tech-badge badge-db">Base de datos</span>
+    </div>
+    <div class="tech-card">
+      <div class="tech-icon">🔌</div>
+      <div class="tech-name">mysql-connector</div>
+      <div class="tech-desc">Driver oficial de MySQL para Python</div>
+      <span class="tech-badge badge-db">Conector</span>
+    </div>
+    <div class="tech-card">
+      <div class="tech-icon">🔐</div>
+      <div class="tech-name">bcrypt</div>
+      <div class="tech-desc">Hashing seguro de contraseñas con salt automático</div>
+      <span class="tech-badge badge-sec">Seguridad</span>
+    </div>
+    <div class="tech-card">
+      <div class="tech-icon">🌐</div>
+      <div class="tech-name">HTML5 / CSS3 / JS</div>
+      <div class="tech-desc">UI sin frameworks — Vanilla JS puro</div>
+      <span class="tech-badge badge-front">Frontend</span>
+    </div>
+    <div class="tech-card">
+      <div class="tech-icon">🔤</div>
+      <div class="tech-name">Material Symbols</div>
+      <div class="tech-desc">Iconografía variable de Google + fuente Inter</div>
+      <span class="tech-badge badge-front">UI / UX</span>
+    </div>
+    <div class="tech-card">
+      <div class="tech-icon">📦</div>
+      <div class="tech-name">PyInstaller</div>
+      <div class="tech-desc">Compilación a .exe portable sin necesitar Python</div>
+      <span class="tech-badge badge-desk">Distribución</span>
+    </div>
+    <div class="tech-card">
+      <div class="tech-icon">📊</div>
+      <div class="tech-name">openpyxl</div>
+      <div class="tech-desc">Respaldos de pacientes en formato Excel .xlsx</div>
+      <span class="tech-badge badge-rep">Reportes</span>
+    </div>
+    <div class="tech-card">
+      <div class="tech-icon">🍾</div>
+      <div class="tech-name">Bottle</div>
+      <div class="tech-desc">Servidor HTTP interno integrado con pywebview</div>
+      <span class="tech-badge badge-back">Servidor</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     4. ROLES
+══════════════════════════════════════════ -->
+<section id="s4">
+  <div class="section-header">
+    <div class="section-num">4</div>
+    <div>
+      <div class="section-title">Roles del Sistema</div>
+      <div class="section-sub">Accesos y permisos por tipo de usuario</div>
+    </div>
+  </div>
+
+  <div class="grid-4">
+    <div class="role-card role-admin">
+      <div class="role-header">
+        <div class="role-icon">👑</div>
+        <div>
+          <div class="role-name">Administrador</div>
+          <div class="role-tag">Acceso total</div>
+        </div>
+      </div>
+      <ul class="role-list">
+        <li>✅ Gestionar usuarios y roles</li>
+        <li>✅ Ver dashboard completo</li>
+        <li>✅ Todas las secciones</li>
+        <li>✅ Sidebar lateral exclusivo</li>
+      </ul>
+    </div>
+    <div class="role-card role-recep">
+      <div class="role-header">
+        <div class="role-icon">🏥</div>
+        <div>
+          <div class="role-name">Recepción</div>
+          <div class="role-tag">Gestión de pacientes</div>
+        </div>
+      </div>
+      <ul class="role-list">
+        <li>✅ Registrar / editar pacientes</li>
+        <li>✅ Crear y ver citas</li>
+        <li>✅ Lista de espera</li>
+        <li>✅ Respaldo / restauración</li>
+      </ul>
+    </div>
+    <div class="role-card role-lab">
+      <div class="role-header">
+        <div class="role-icon">🔬</div>
+        <div>
+          <div class="role-name">Laboratorista</div>
+          <div class="role-tag">Análisis y resultados</div>
+        </div>
+      </div>
+      <ul class="role-list">
+        <li>✅ Crear solicitudes de análisis</li>
+        <li>✅ Capturar resultados</li>
+        <li>✅ Finalizar análisis</li>
+        <li>✅ Gestionar parámetros</li>
+      </ul>
+    </div>
+    <div class="role-card role-cap">
+      <div class="role-header">
+        <div class="role-icon">📋</div>
+        <div>
+          <div class="role-name">Capturista</div>
+          <div class="role-tag">En desarrollo</div>
+        </div>
+      </div>
+      <ul class="role-list">
+        <li>🔄 Reportes</li>
+        <li>🔄 Captura masiva</li>
+        <li>🔄 Consultas</li>
+        <li>🔄 (módulos futuros)</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     5. CASOS DE USO
+══════════════════════════════════════════ -->
+<section id="s5">
+  <div class="section-header">
+    <div class="section-num">5</div>
+    <div>
+      <div class="section-title">Diagramas de Casos de Uso</div>
+      <div class="section-sub">Separados por módulo del sistema</div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="dbox">
+      <div class="dbox-header"><div class="dbox-dot"></div><div class="dbox-title">Autenticación y Dashboard</div></div>
+      <div class="dbox-body">
+        <div class="mermaid">
+graph TD
+    A(["👑 Admin"])
+    R(["🏥 Recepción"])
+    L(["🔬 Laboratorista"])
+    UC1["Iniciar sesión"]
+    UC2["Cerrar sesión"]
+    UC3["Ver dashboard\ny estadísticas"]
+
+    A --- UC1 & UC2 & UC3
+    R --- UC1 & UC2 & UC3
+    L --- UC1 & UC2 & UC3
+        </div>
+      </div>
+    </div>
+
+    <div class="dbox">
+      <div class="dbox-header"><div class="dbox-dot"></div><div class="dbox-title">Gestión de Pacientes</div></div>
+      <div class="dbox-body">
+        <div class="mermaid">
+graph TD
+    A(["👑 Admin"])
+    R(["🏥 Recepción"])
+    UC1["Registrar paciente"]
+    UC2["Editar paciente"]
+    UC3["Eliminar paciente"]
+    UC4["Buscar paciente"]
+    UC5["Respaldar / Restaurar\npacientes en Excel"]
+
+    A --- UC1 & UC2 & UC3 & UC4 & UC5
+    R --- UC1 & UC2 & UC4 & UC5
+        </div>
+      </div>
+    </div>
+
+    <div class="dbox">
+      <div class="dbox-header"><div class="dbox-dot"></div><div class="dbox-title">Citas y Espera</div></div>
+      <div class="dbox-body">
+        <div class="mermaid">
+graph TD
+    A(["👑 Admin"])
+    R(["🏥 Recepción"])
+    UC1["Crear cita"]
+    UC2["Ver citas del día"]
+    UC3["Eliminar cita"]
+    UC4["Registrar en\nlista de espera"]
+    UC5["Marcar como\nprocesado"]
+
+    A --- UC1 & UC2 & UC3 & UC4 & UC5
+    R --- UC1 & UC2 & UC3 & UC4 & UC5
+        </div>
+      </div>
+    </div>
+
+    <div class="dbox">
+      <div class="dbox-header"><div class="dbox-dot"></div><div class="dbox-title">Análisis y Resultados</div></div>
+      <div class="dbox-body">
+        <div class="mermaid">
+graph TD
+    A(["👑 Admin"])
+    L(["🔬 Laboratorista"])
+    UC1["Crear solicitud\nde análisis"]
+    UC2["Seleccionar\nbloques de estudio"]
+    UC3["Capturar\nresultados"]
+    UC4["Finalizar análisis"]
+    UC5["Generar reporte\n(.docx)"]
+    UC6["Eliminar solicitud"]
+
+    A --- UC1 & UC2 & UC3 & UC4 & UC5 & UC6
+    L --- UC1 & UC2 & UC3 & UC4 & UC5 & UC6
+        </div>
+      </div>
+    </div>
+
+    <div class="dbox">
+      <div class="dbox-header"><div class="dbox-dot"></div><div class="dbox-title">Parámetros de Laboratorio</div></div>
+      <div class="dbox-body">
+        <div class="mermaid">
+graph TD
+    A(["👑 Admin"])
+    L(["🔬 Laboratorista"])
+    UC1["Ver parámetros\npor bloques"]
+    UC2["Agregar\nparámetro"]
+    UC3["Editar parámetro\n(rangos, unidades)"]
+    UC4["Eliminar\nparámetro"]
+    UC5["Crear nuevo\nbloque de estudio"]
+
+    A --- UC1 & UC2 & UC3 & UC4 & UC5
+    L --- UC1 & UC2 & UC3 & UC4 & UC5
+        </div>
+      </div>
+    </div>
+
+    <div class="dbox">
+      <div class="dbox-header"><div class="dbox-dot"></div><div class="dbox-title">Gestión de Usuarios</div></div>
+      <div class="dbox-body">
+        <div class="mermaid">
+graph TD
+    A(["👑 Admin"])
+    UC1["Crear usuario"]
+    UC2["Asignar / cambiar\nrol"]
+    UC3["Cambiar\ncontraseña"]
+    UC4["Eliminar usuario"]
+    UC5["Ver lista de\nusuarios"]
+
+    A --- UC1 & UC2 & UC3 & UC4 & UC5
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     6. CLASES UML
+══════════════════════════════════════════ -->
+<section id="s6">
+  <div class="section-header">
+    <div class="section-num">6</div>
+    <div>
+      <div class="section-title">Diagrama de Clases UML</div>
+      <div class="section-sub">Separado en grupos para mejor legibilidad</div>
+    </div>
+  </div>
+
+  <div class="dbox" style="margin-bottom:16px">
+    <div class="dbox-header"><div class="dbox-dot"></div><div class="dbox-title">Relaciones generales entre clases</div></div>
+    <div class="dbox-body">
+      <div class="mermaid">
+classDiagram
+    class API { <<entry point>> }
+    class Auth { +validar_login()\n+hashear_contrasena() }
+    class Pacientes { +guardar()\n+obtener_todos()\n+editar()\n+eliminar() }
+    class Citas { +registrar()\n+obtener_todas()\n+eliminar() }
+    class Analisis { +registrar_solicitud()\n+agregar_resultado()\n+actualizar_estado() }
+    class Usuarios { +crear_usuario()\n+actualizar_rol()\n+eliminar_usuario() }
+    class Espera { +registrar()\n+marcar_procesado() }
+    class Bloques { +obtener_estudios()\n+guardar_bloques() }
+    class Parametros { +sembrar_datos()\n+agregar()\n+editar()\n+eliminar() }
+    class Database { +conectar()\n+crear_tablas() }
+
+    API --> Auth
+    API --> Pacientes
+    API --> Citas
+    API --> Analisis
+    API --> Usuarios
+    API --> Espera
+    API --> Bloques
+    API --> Parametros
+    Auth --> Database
+    Pacientes --> Database
+    Citas --> Database
+    Analisis --> Database
+    Usuarios --> Database
+    Espera --> Database
+    Bloques --> Database
+    Parametros --> Database
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="dbox">
+      <div class="dbox-header"><div class="dbox-dot"></div><div class="dbox-title">Módulos de Pacientes y Citas</div></div>
+      <div class="dbox-body">
+        <div class="mermaid">
+classDiagram
+    class Pacientes {
+        +guardar(nombre, edad, telefono, ...) int
+        +obtener_todos() list
+        +obtener_para_select() list
+        +obtener_por_id(id) dict
+        +editar(id, ...) bool
+        +eliminar(id, pass_admin) bool
+        +contar_registrados_hoy() int
+        +obtener_recientes(limite) list
+        +respaldar_pacientes() dict
+        +restaurar_respaldo(path) dict
+    }
+    class Citas {
+        +registrar(paciente_id, fecha, hora, tipo) int
+        +obtener_todas() list
+        +obtener_citas_hoy_con_nombre() list
+        +contar_citas_hoy() int
+        +eliminar(cita_id) bool
+    }
+    class Espera {
+        +registrar(nombre, edad, telefono, ...) int
+        +obtener_todos() list
+        +marcar_procesado(id) bool
+    }
+        </div>
+      </div>
+    </div>
+
+    <div class="dbox">
+      <div class="dbox-header"><div class="dbox-dot"></div><div class="dbox-title">Módulos de Análisis y Parámetros</div></div>
+      <div class="dbox-body">
+        <div class="mermaid">
+classDiagram
+    class Analisis {
+        +generar_id_muestra() str
+        +registrar_solicitud(paciente_id, ...) int
+        +obtener_pendientes() list
+        +obtener_solicitud(id) dict
+        +agregar_resultado(solicitud_id, ...) bool
+        +actualizar_estado(id, estado) bool
+        +obtener_finalizadas_hoy() list
+        +contar_pendientes() int
+        +eliminar_solicitud(id) bool
+    }
+    class Parametros {
+        +sembrar_datos_iniciales()
+        +obtener_todos() list
+        +agregar(nombre, unidades, ...) dict
+        +editar(id, ...) dict
+        +eliminar(id) dict
+        +obtener_por_tipo(tipo) list
+    }
+    class Bloques {
+        +obtener_estudios_disponibles() list
+        +guardar_bloques_solicitud(id, json) bool
+    }
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     7. ACTIVIDADES
+══════════════════════════════════════════ -->
+<section id="s7">
+  <div class="section-header">
+    <div class="section-num">7</div>
+    <div>
+      <div class="section-title">Diagrama de Actividades</div>
+      <div class="section-sub">Pasos principales que realiza cada usuario en el sistema</div>
+    </div>
+  </div>
+
+  <!-- Actividad 1: Día completo -->
+  <div class="dbox" style="margin-bottom:20px">
+    <div class="dbox-header"><div class="dbox-dot"></div><div class="dbox-title">Flujo general del día en el laboratorio</div></div>
+    <div class="dbox-body">
+      <div class="mermaid">
+flowchart LR
+    A(["🟢 Inicio"]) --> B["🔑 Inicia sesión"]
+    B --> C{Rol}
+
+    C -->|Recepción| D["👤 Registra\npaciente"]
+    D --> E["📅 Agenda\ncita"]
+    E --> F["⏳ Lista\nde espera"]
+
+    C -->|Laboratorista| G["🔬 Crea\nsolicitud"]
+    G --> H["✏️ Captura\nresultados"]
+    H --> I["✅ Finaliza\nanálisis"]
+    I --> J["📄 Genera\nreporte"]
+
+    C -->|Admin| K["📊 Revisa\ndashboard"]
+    K --> L["👥 Gestiona\nusuarios"]
+
+    F --> G
+    J --> M(["🔴 Fin"])
+    L --> M
+
+    style A fill:#e8f5e9,stroke:#4caf50
+    style M fill:#ffebee,stroke:#ef9a9a
+    style C fill:#fff3e0,stroke:#ffb74d
+      </div>
+    </div>
+  </div>
+
+  <!-- Actividad 2 y 3 en grid -->
+  <div class="grid-2">
+    <div class="dbox">
+      <div class="dbox-header"><div class="dbox-dot"></div><div class="dbox-title">Registro de un paciente nuevo</div></div>
+      <div class="dbox-body">
+        <div class="mermaid">
+flowchart TD
+    A(["🟢 Inicio"]) --> B["Abre módulo\nPacientes"]
+    B --> C["Llena el\nformulario"]
+    C --> D{¿Todo\ncompleto?}
+    D -- ❌ No --> E["Señala\nel campo"] --> C
+    D -- ✅ Sí --> F["Guarda en\nla base de datos"]
+    F --> G["✅ Paciente\nregistrado"]
+    G --> H(["🔴 Fin"])
+
+    style A fill:#e8f5e9,stroke:#4caf50
+    style H fill:#ffebee,stroke:#ef9a9a
+    style D fill:#fff9c4,stroke:#f9a825
+    style G fill:#e8f5e9,stroke:#66bb6a
+        </div>
+      </div>
+    </div>
+
+    <div class="dbox">
+      <div class="dbox-header"><div class="dbox-dot"></div><div class="dbox-title">Proceso completo de un análisis</div></div>
+      <div class="dbox-body">
+        <div class="mermaid">
+flowchart TD
+    A(["🟢 Inicio"]) --> B["Crea solicitud\nde análisis"]
+    B --> C["Selecciona\nestudios"]
+    C --> D["Captura\nresultado"]
+    D --> E{¿Valor\nnormal?}
+    E -- ⚠️ No --> F["Marca como\nanormal"]
+    E -- ✅ Sí --> G["Resultado\nregistrado"]
+    F & G --> H{¿Más\nparámetros?}
+    H -- Sí --> D
+    H -- No --> I["Finaliza\nanálisis"]
+    I --> J["📄 Genera\nreporte"]
+    J --> K(["🔴 Fin"])
+
+    style A fill:#e8f5e9,stroke:#4caf50
+    style K fill:#ffebee,stroke:#ef9a9a
+    style E fill:#fff9c4,stroke:#f9a825
+    style H fill:#fff9c4,stroke:#f9a825
+    style F fill:#ffebee,stroke:#ef9a9a
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     8. FLUJO
+══════════════════════════════════════════ -->
+<section id="s8">
+  <div class="section-header">
+    <div class="section-num">8</div>
+    <div>
+      <div class="section-title">Diagramas de Flujo</div>
+      <div class="section-sub">Autenticación y navegación por rol</div>
+    </div>
+  </div>
+
+  <div class="dbox" style="margin-bottom:16px">
+    <div class="dbox-header"><div class="dbox-dot"></div><div class="dbox-title">Flujo de inicio de sesión</div></div>
+    <div class="dbox-body">
+      <div class="mermaid">
+flowchart LR
+    A([Abrir app]) --> B[login.html]
+    B --> C[Ingresar\ncredenciales]
+    C --> D[api.login\nPython]
+    D --> E{Usuario\nexiste?}
+    E -- No --> F[Error UI] --> C
+    E -- Sí --> G[bcrypt.checkpw]
+    G --> H{Contraseña\ncorrecta?}
+    H -- No --> F
+    H -- Sí --> I[Retorna rol]
+    I --> J[localStorage\nguarda rol]
+    J --> K[→ dashboard.html]
+      </div>
+    </div>
+  </div>
+
+  <div class="dbox">
+    <div class="dbox-header"><div class="dbox-dot"></div><div class="dbox-title">Flujo de navegación por rol</div></div>
+    <div class="dbox-body">
+      <div class="mermaid">
+flowchart TD
+    A[Dashboard carga\nrol de localStorage] --> B{¿Qué rol?}
+
+    B -- admin --> C[Sidebar completo\nvisible]
+    C --> C1[Pacientes · Citas\nEspera · Análisis\nResultados · Parámetros\nUsuarios]
+
+    B -- recepcion --> D[Menú horizontal]
+    D --> D1[Pacientes\nCitas\nEspera]
+
+    B -- laboratorista --> E[Menú horizontal]
+    E --> E1[Análisis\nResultados\nParámetros]
+
+    B -- capturista --> F[Menú horizontal]
+    F --> F1[Reportes\nCaptura\nConsultas]
+
+    B -- sin rol --> G[Redirige a\nlogin.html]
+
+    style C fill:#f3e5f5,stroke:#7b1fa2
+    style D fill:#e3f2fd,stroke:#1976d2
+    style E fill:#e8f5e9,stroke:#2e7d32
+    style F fill:#fff3e0,stroke:#f57c00
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     9. SECUENCIA
+══════════════════════════════════════════ -->
+<section id="s9">
+  <div class="section-header">
+    <div class="section-num">9</div>
+    <div>
+      <div class="section-title">Diagramas de Secuencia</div>
+      <div class="section-sub">Cómo se comunican el usuario, la app y la base de datos</div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+
+    <div class="dbox">
+      <div class="dbox-header"><div class="dbox-dot"></div><div class="dbox-title">1 · Iniciar sesión</div></div>
+      <div class="dbox-body">
+        <div class="mermaid">
+sequenceDiagram
+    actor U as 👤 Usuario
+    participant A as 🖥️ App
+    participant B as 🗄️ Base de datos
+
+    U->>A: Escribe usuario y contraseña
+    A->>B: ¿Existe este usuario?
+    B-->>A: Sí, aquí está su contraseña
+    A->>A: Verifica que coincida
+    alt ✅ Correcta
+        A-->>U: Entra al sistema
+    else ❌ Incorrecta
+        A-->>U: Muestra error
+    end
+        </div>
+      </div>
+    </div>
+
+    <div class="dbox">
+      <div class="dbox-header"><div class="dbox-dot"></div><div class="dbox-title">2 · Cargar el dashboard</div></div>
+      <div class="dbox-body">
+        <div class="mermaid">
+sequenceDiagram
+    participant A as 🖥️ App
+    participant B as 🗄️ Base de datos
+
+    Note over A: Al abrir el dashboard
+
+    A->>B: ¿Cuántos pacientes hay hoy?
+    B-->>A: 5
+
+    A->>B: ¿Qué análisis se terminaron hoy?
+    B-->>A: Lista de análisis
+
+    A->>B: ¿Cuántos análisis están pendientes?
+    B-->>A: 3
+
+    A->>A: Muestra todo en pantalla
+
+    Note over A: Se repite cada 7 segundos
+        </div>
+      </div>
+    </div>
+
+    <div class="dbox">
+      <div class="dbox-header"><div class="dbox-dot"></div><div class="dbox-title">3 · Registrar y finalizar un análisis</div></div>
+      <div class="dbox-body">
+        <div class="mermaid">
+sequenceDiagram
+    actor L as 🔬 Laboratorista
+    participant A as 🖥️ App
+    participant B as 🗄️ Base de datos
+
+    L->>A: Elige paciente y tipo de estudio
+    A->>B: Guarda la solicitud
+    B-->>A: Solicitud creada ✅
+
+    L->>A: Escribe resultados de cada prueba
+    A->>B: Guarda cada resultado
+    B-->>A: Guardado ✅
+
+    L->>A: Clic en "Finalizar"
+    A->>B: Marca el análisis como terminado
+    B-->>A: Listo ✅
+    A-->>L: Análisis finalizado 🎉
+        </div>
+      </div>
+    </div>
+
+    <div class="dbox">
+      <div class="dbox-header"><div class="dbox-dot"></div><div class="dbox-title">4 · Gestionar parámetros</div></div>
+      <div class="dbox-body">
+        <div class="mermaid">
+sequenceDiagram
+    actor L as 🔬 Laboratorista
+    participant A as 🖥️ App
+    participant B as 🗄️ Base de datos
+
+    Note over A: Al abrir Parámetros
+
+    A->>B: Dame todos los parámetros
+    B-->>A: Lista completa
+    A-->>L: Muestra bloques por tipo de estudio
+
+    L->>A: Agrega un parámetro nuevo
+    A->>B: Guarda el parámetro
+    B-->>A: Guardado ✅
+    A-->>L: Listo, aparece en la lista 🎉
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+</div><!-- /page -->
+
+<footer>
+  📄 Documentación Técnica — Analitic · Sistema de Gestión de Análisis Clínicos · Universidad Veracruzana · Servicio Social 2026
+</footer>
+
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      primaryColor: '#e8f5e9',
+      primaryTextColor: '#1b5e20',
+      primaryBorderColor: '#4caf50',
+      lineColor: '#4caf50',
+      secondaryColor: '#e3f2fd',
+      tertiaryColor: '#fff3e0',
+      background: '#ffffff',
+      mainBkg: '#e8f5e9',
+      nodeBorder: '#4caf50',
+      clusterBkg: '#f0fdf4',
+      edgeLabelBackground: '#f0fdf4',
+      actorBkg: '#e8f5e9',
+      actorBorder: '#2e7d32',
+      actorTextColor: '#1b5e20',
+      actorLineColor: '#4caf50',
+      signalColor: '#2e7d32',
+      signalTextColor: '#1b5e20',
+    },
+    er: { diagramPadding: 20, layoutDirection: 'TB', minEntityWidth: 100 },
+    flowchart: { curve: 'basis', padding: 18, nodeSpacing: 40, rankSpacing: 50 },
+    sequence: { actorMargin: 50, messageMargin: 35, boxMargin: 10, useMaxWidth: true }
+  });
+</script>
+</body>
+</html>

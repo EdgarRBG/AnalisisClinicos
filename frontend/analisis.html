@@ -1,15 +1,13 @@
 <!DOCTYPE html>
 <html lang="es">
-
+ 
 <head>
     <meta charset="UTF-8">
-    
     <title>Análisis Clínicos - Analitic</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+ 
     <style>
         :root {
             --primary: #2e7d32;
@@ -19,586 +17,722 @@
             --bg: #f5f9f0;
             --card-bg: rgba(255, 255, 255, 0.98);
             --shadow-soft: 0 10px 40px rgba(0, 0, 0, 0.06);
-            --shadow-strong: 0 20px 60px rgba(46, 125, 50, 0.2);
+            --shadow-strong: 0 20px 60px rgba(46, 125, 50, 0.15);
             --text-main: #2c3e50;
             --text-muted: #64748b;
+            --danger: #ef5350;
+            --warning: #ffa726;
         }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+ 
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+ 
         body {
             font-family: 'Inter', sans-serif;
             background: linear-gradient(135deg, #f5f9f0, #e8f5e9);
             color: var(--text-main);
             min-height: 100vh;
+            padding-top: 120px;
         }
-
+ 
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+ 
+        .nav-left { display: flex; align-items: center; gap: 20px; }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 20px;
+            border-radius: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+ 
+        .logo-name { color: white; font-size: 1.4rem; font-weight: 800; letter-spacing: -0.5px; }
+ 
+        .nav-actions { display: flex; gap: 15px; }
+ 
+        .btn-nav {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+        }
+ 
+        .btn-nav:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+ 
         .container {
             max-width: 1400px;
             margin: 0 auto;
             padding: 40px 20px;
         }
-
-       
+ 
         .header-section {
             text-align: center;
             margin-bottom: 50px;
-            animation: fadeInDown 0.8s ease;
         }
-
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
+ 
         .header-section h1 {
             font-size: 2.8rem;
             color: var(--primary-dark);
             font-weight: 900;
             letter-spacing: -1.5px;
-            margin-bottom: 10px;
         }
-
-        .new-btn {
-            background: linear-gradient(to right, var(--primary), var(--primary-dark));
-            color: white;
-            padding: 16px 32px;
-            font-size: 1.1rem;
-            border: none;
-            border-radius: 18px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin: 0 auto 40px;
-            transition: all 0.3s ease;
-            font-weight: 700;
-            box-shadow: 0 10px 25px rgba(46, 125, 50, 0.2);
-        }
-
-        .new-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 30px rgba(46, 125, 50, 0.3);
-        }
-
-       
+ 
         .layout {
             display: grid;
             grid-template-columns: 400px 1fr;
-            gap: 30px;
+            gap: 40px;
             align-items: start;
         }
-
-      
+ 
         .panel-card {
             background: var(--card-bg);
-            border-radius: 25px;
+            border-radius: 30px;
             padding: 30px;
             box-shadow: var(--shadow-soft);
-            border: 1px solid rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.8);
             transition: all 0.3s ease;
         }
-
+ 
         .panel-card h3 {
             color: var(--primary);
             margin-bottom: 25px;
-            font-size: 1.3rem;
+            font-size: 1.4rem;
             font-weight: 800;
             display: flex;
             align-items: center;
-            gap: 10px;
-        }
-
-        .pending-item {
-            padding: 20px;
-            margin-bottom: 15px;
-            border-radius: 18px;
-            background: rgba(165, 214, 167, 0.05);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border-left: 5px solid transparent;
-            display: flex;
             justify-content: space-between;
-            align-items: center;
         }
-
-        .pending-item:hover,
-        .pending-item.selected {
-            background: rgba(165, 214, 167, 0.15);
-            transform: translateX(5px);
-            border-left-color: var(--primary-light);
-        }
-
-        .pending-item strong {
-            display: block;
-            font-size: 1.1rem;
-            color: var(--primary-dark);
-            margin-bottom: 4px;
-        }
-
-        .pending-item small {
-            color: var(--text-muted);
-            font-weight: 500;
-        }
-
-        .delete-btn-mini {
-            background: #fee2e2;
-            color: #ef4444;
-            border: none;
-            border-radius: 10px;
-            padding: 8px;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        .delete-btn-mini:hover {
-            background: #ef4444;
-            color: white;
-        }
-
-       
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 0.9rem;
-            font-weight: 700;
-            color: var(--text-muted);
-            margin-bottom: 8px;
-            margin-left: 5px;
-        }
-
-        input,
-        select,
-        textarea {
-            width: 100%;
-            padding: 14px 18px;
-            border: 2px solid #f1f5f9;
-            border-radius: 16px;
-            font-size: 1rem;
-            background: #f8fafc;
-            transition: all 0.3s;
-            color: var(--text-main);
-        }
-
-        input:focus,
-        select:focus,
-        textarea:focus {
-            outline: none;
-            border-color: var(--primary-light);
-            background: white;
-            box-shadow: 0 8px 20px rgba(76, 175, 80, 0.08);
-        }
-
-       
-        .capture-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid #f1f5f9;
-        }
-
-        .capture-header h2 {
-            font-size: 1.6rem;
-            font-weight: 800;
-            color: var(--primary-dark);
-        }
-
-        .info-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 30px;
-            background: #f8fafc;
-            padding: 25px;
-            border-radius: 20px;
-        }
-
-        .info-item label {
-            font-size: 0.75rem;
+ 
+     
+        .list-section-label {
+            font-size: 0.72rem;
+            font-weight: 900;
             text-transform: uppercase;
             letter-spacing: 1px;
-            color: var(--text-muted);
-            font-weight: 800;
-            display: block;
-            margin-bottom: 5px;
+            padding: 6px 10px;
+            border-radius: 8px;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
-
-        .info-item p {
-            font-size: 1.1rem;
+        .list-section-label.citas-label {
+            color: var(--primary);
+            background: #f0fdf4;
+        }
+        .list-section-label.espera-label {
+            color: #92400e;
+            background: #fffbeb;
+            margin-top: 10px;
+        }
+ 
+        .waiting-list { 
+            max-height: 600px; 
+            overflow-y: auto; 
+            padding-right: 5px; 
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+ 
+        .waiting-item {
+            padding: 18px;
+            border-radius: 20px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-left: 6px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+        }
+ 
+        .waiting-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.05);
+        }
+ 
+        .waiting-item.cita  { border-left-color: var(--primary-light); background: #f0fdf4; }
+        .waiting-item.espera { border-left-color: var(--warning); background: #fffaf0; }
+ 
+        .waiting-item strong { display: block; font-size: 1.05rem; color: var(--text-main); margin-bottom: 4px; }
+        .waiting-item small { color: var(--text-muted); font-size: 0.85rem; font-weight: 600; }
+ 
+        .tag {
+            font-size: 0.7rem;
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-top: 6px;
+            display: inline-block;
+        }
+        .tag-cita   { background: #dcfce7; color: #166534; }
+        .tag-espera { background: #fef3c7; color: #92400e; }
+ 
+        .empty-list {
+            text-align: center;
+            color: #94a3b8;
+            padding: 30px 10px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+ 
+        .work-area { min-height: 600px; }
+ 
+        .initial-state {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            height: 100%; text-align: center; color: var(--text-muted); padding: 100px 0;
+        }
+        .initial-state .material-symbols-outlined { font-size: 80px; opacity: 0.2; margin-bottom: 20px; }
+ 
+        .patient-info-box {
+            background: #f0fdf4;
+            border: 2px solid #bbf7d0;
+            border-radius: 25px;
+            padding: 25px 30px;
+            margin-bottom: 25px;
+        }
+ 
+        .patient-info-box .info-title {
+            font-size: 0.8rem;
+            font-weight: 800;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+ 
+        .patient-data-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 14px;
+        }
+ 
+        .patient-data-item {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+ 
+        .patient-data-item .data-label {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+ 
+        .patient-data-item .data-value {
+            font-size: 1rem;
             font-weight: 700;
             color: var(--text-main);
         }
-
-        .verification-btn-large {
-            width: 100%;
-            padding: 25px;
-            background: white;
-            border: 2px dashed var(--primary-light);
+ 
+        .patient-data-item.full-width {
+            grid-column: 1 / -1;
+        }
+ 
+        .emergency-info-box {
+            background: #fffbeb;
+            border: 2px solid #fde68a;
             border-radius: 25px;
-            color: var(--primary-dark);
+            padding: 25px 30px;
+            margin-bottom: 25px;
+        }
+ 
+        .emergency-info-box .info-title {
+            font-size: 0.8rem;
             font-weight: 800;
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 30px;
-        }
-
-        .verification-btn-large:hover {
-            background: rgba(76, 175, 80, 0.05);
-            border-color: var(--primary);
-            transform: translateY(-3px);
-        }
-
-        .verification-btn-large .material-symbols-outlined {
-            font-size: 48px;
-            color: var(--primary-light);
-        }
-
-        .actions-footer {
-            display: flex;
-            gap: 15px;
-            margin-top: 40px;
-        }
-
-        .btn-action {
-            flex: 1;
-            padding: 16px;
-            border-radius: 15px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.3s;
-            border: none;
+            color: #b45309;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 18px;
             display: flex;
             align-items: center;
-            justify-content: center;
             gap: 8px;
         }
-
-        .btn-finish {
-            background: var(--primary);
-            color: white;
-            box-shadow: 0 10px 20px rgba(46, 125, 50, 0.2);
+ 
+        .form-group { position: relative; margin-bottom: 0; }
+        .form-group label {
+            position: absolute; top: 14px; left: 16px; color: #757575; font-size: 1rem;
+            transition: all 0.3s; pointer-events: none;
         }
-
-        .btn-finish:hover {
-            background: var(--primary-dark);
-            transform: translateY(-2px);
+ 
+        .form-group input:focus+label,
+        .form-group input:not(:placeholder-shown)+label,
+        .form-group select:focus+label,
+        .form-group select:not(:placeholder-shown)+label,
+        .form-group textarea:focus+label,
+        .form-group textarea:not(:placeholder-shown)+label {
+            top: -8px; left: 12px; font-size: 0.85rem; color: var(--primary);
+            background: white; padding: 0 6px; font-weight: 700;
         }
-
-        .btn-back {
-            background: #f1f5f9;
-            color: #64748b;
+ 
+        input, select, textarea {
+            width: 100%; padding: 16px 20px; border: 2px solid #f1f5f9; border-radius: 18px;
+            font-size: 1rem; background: #f8fafc; transition: 0.3s; color: var(--text-main);
         }
-
-        .btn-back:hover {
-            background: #e2e8f0;
+ 
+        input:focus, select:focus, textarea:focus {
+            outline: none; border-color: var(--primary-light); background: white;
+            box-shadow: 0 0 0 4px rgba(76, 175, 80, 0.1);
         }
-
-        .back-dashboard {
-            margin: 40px auto 0;
-            display: block;
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            font-weight: 700;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 5px;
+ 
+        .btn-save {
+            width: 100%; padding: 20px;
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
+            color: white; border: none; border-radius: 20px;
+            font-weight: 800; font-size: 1.2rem; cursor: pointer;
+            transition: 0.3s; box-shadow: 0 10px 25px rgba(46, 125, 50, 0.2);
+            display: flex; align-items: center; justify-content: center; gap: 12px;
         }
-
-        .back-dashboard:hover {
-            color: var(--primary);
-        }
+ 
+        .btn-save:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(46, 125, 50, 0.3); }
+ 
+        .extra-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+ 
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
     </style>
+    <script src="/static/js/api.js"></script>
 </head>
-
+ 
 <body>
-
-    <div class="container">
-        <div class="header-section">
-            <h1>Análisis Clínicos</h1>
-            <button class="new-btn" onclick="mostrarNuevaSolicitud()">
-                <span class="material-symbols-outlined">add_circle</span>
-                Nueva Solicitud de Análisis
+ 
+    <nav class="navbar">
+        <div class="nav-left">
+            <div class="logo-container">
+                <span class="material-symbols-outlined" style="color:white; font-size:30px;">biotech</span>
+                <span class="logo-name">Analitic Análisis</span>
+            </div>
+        </div>
+        <div class="nav-actions">
+            <button class="btn-nav" onclick="volver()">
+                <span class="material-symbols-outlined">arrow_back</span>
+                Dashboard
             </button>
         </div>
-
+    </nav>
+ 
+    <div class="container">
+        <div class="header-section">
+            <h1>Panel de Procesamiento</h1>
+        </div>
+ 
         <div class="layout">
-           
-            <div class="panel-card">
-                <h3><span class="material-symbols-outlined">pending_actions</span> Pendientes</h3>
-                <div id="pendingList">
-                    <p style="text-align:center; color:#94a3b8; padding:20px;">Cargando...</p>
+            <div class="sidebar">
+                <div class="panel-card">
+                    <h3>
+                        <span>Pacientes de Hoy</span>
+                        <span class="material-symbols-outlined" style="cursor:pointer; color:var(--text-muted)" onclick="cargarHoy()">refresh</span>
+                    </h3>
+                    
+                    <div class="waiting-list" id="waitingList">
+                        <p style="text-align:center; color:#94a3b8; padding:20px;">Cargando...</p>
+                    </div>
                 </div>
             </div>
-
-         
-            <div id="workArea">
-             
-                <div class="panel-card" id="newSolicitudForm" style="display:none;">
-                    <h3><span class="material-symbols-outlined">note_add</span> Nueva Solicitud</h3>
-
-                    <div class="form-group">
-                        <label>PACIENTE *</label>
-                        <input id="nuevoPaciente" list="pacientesList" placeholder="Buscar por nombre..."
-                            autocomplete="off">
-                        <datalist id="pacientesList"></datalist>
-                        <input type="hidden" id="nuevoPacienteId">
-                        <small id="pacienteError" style="color:#ef4444; display:none; margin-top:5px; font-weight:600;">
-                            Selecciona un paciente de la lista
-                        </small>
-                    </div>
-
-                    <div class="form-group">
-                        <label>ESTUDIO SOLICITADO *</label>
-                        <select id="nuevoTipoEstudio">
-                            <option value="" disabled selected>Selecciona un estudio...</option>
-                            <option value="Química Sanguínea 35 Elementos">Química Sanguínea 35 Elementos</option>
-                            <option value="Perfil Lipídico">Perfil Lipídico</option>
-                            <option value="Ácido Úrico">Ácido Úrico</option>
-                            <option value="Citometría Hemática Completa">Citometría Hemática Completa</option>
-                            <option value="Tiempos de Coagulación">Tiempos de Coagulación</option>
-                            <option value="Perfil Tiroideo">Perfil Tiroideo</option>
-                            <option value="Otro">Otro</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label>MÉDICO SOLICITANTE</label>
-                        <input id="nuevoMedico" type="text" placeholder="Nombre del médico">
-                    </div>
-
-                    <div class="form-group">
-                        <label>OBSERVACIONES / INDICACIONES</label>
-                        <textarea id="nuevasObservaciones" placeholder="Notas adicionales..."></textarea>
-                    </div>
-
-                    <div class="actions-footer">
-                        <button class="btn-action btn-back" onclick="ocultarNuevaSolicitud()">Cancelar</button>
-                        <button class="btn-action btn-finish" onclick="crearNuevaSolicitud()">Crear Solicitud</button>
-                    </div>
+ 
+            <div class="work-area">
+                <div id="initialMessage" class="initial-state">
+                    <span class="material-symbols-outlined">clinical_notes</span>
+                    <h2>Selecciona un paciente</h2>
+                    <p>Elige un paciente de la lista de hoy para iniciar su solicitud</p>
                 </div>
-
+ 
+                <div id="formContainer" class="panel-card" style="display:none;">
+                    <h3><span class="material-symbols-outlined">assignment_add</span> Nueva Solicitud</h3>
+                    
+                
+                    <div id="pacienteRegistradoBox" class="patient-info-box" style="display:none;">
+                        <div class="info-title">
+                            <span class="material-symbols-outlined" style="font-size:18px; color:var(--primary)">verified_user</span>
+                            Paciente Registrado
+                        </div>
+                        <div class="patient-data-grid">
+                            <div class="patient-data-item full-width">
+                                <span class="data-label">Nombre</span>
+                                <span class="data-value" id="infoNombre">—</span>
+                            </div>
+                            <div class="patient-data-item">
+                                <span class="data-label">Edad</span>
+                                <span class="data-value" id="infoEdad">—</span>
+                            </div>
+                            <div class="patient-data-item">
+                                <span class="data-label">Teléfono</span>
+                                <span class="data-value" id="infoTelefono">—</span>
+                            </div>
+                            <div class="patient-data-item">
+                                <span class="data-label">Sexo</span>
+                                <span class="data-value" id="infoSexo">—</span>
+                            </div>
+                            <div class="patient-data-item">
+                                <span class="data-label">Fecha de Nacimiento</span>
+                                <span class="data-value" id="infoNacimiento">—</span>
+                            </div>
+                            <div class="patient-data-item">
+                                <span class="data-label">Correo</span>
+                                <span class="data-value" id="infoCorreo">—</span>
+                            </div>
+                            <div class="patient-data-item">
+                                <span class="data-label">Fecha de Registro</span>
+                                <span class="data-value" id="infoFechaReg">—</span>
+                            </div>
+                            <div class="patient-data-item full-width" id="infoObsBox" style="display:none;">
+                                <span class="data-label">Observaciones</span>
+                                <span class="data-value" id="infoObservaciones">—</span>
+                            </div>
+                        </div>
+                    </div>
+ 
                
-                <div class="panel-card" id="formContainer" style="display:none;">
-                    <div class="capture-header">
-                        <h2 id="solicitudTitle">Captura de Resultados</h2>
-                        <span class="material-symbols-outlined"
-                            style="color: var(--primary-light); font-size: 32px;">biotech</span>
+                    <div id="pacienteEmergenciaBox" class="emergency-info-box" style="display:none;">
+                        <div class="info-title">
+                            <span class="material-symbols-outlined" style="font-size:18px; color:#b45309">bolt</span>
+                            Datos del Paciente de Emergencia
+                        </div>
+                        <div class="extra-grid" style="gap: 16px;">
+                            <div class="form-group" style="grid-column: 1 / -1;">
+                                <input type="text" id="emerNombre" placeholder=" ">
+                                <label>NOMBRE COMPLETO *</label>
+                            </div>
+                            <div class="form-group">
+                                <input type="number" id="emerEdad" min="0" max="130" placeholder=" ">
+                                <label>EDAD *</label>
+                            </div>
+                            <div class="form-group">
+                                <input type="tel" id="emerTelefono" maxlength="10" placeholder=" ">
+                                <label>TELÉFONO *</label>
+                            </div>
+                            <div class="form-group">
+                                <input type="date" id="emerNacimiento" placeholder=" ">
+                                <label>FECHA DE NACIMIENTO</label>
+                            </div>
+                            <div class="form-group">
+                                <select id="emerSexo">
+                                    <option value="" disabled selected></option>
+                                    <option value="M">Masculino</option>
+                                    <option value="F">Femenino</option>
+                                    <option value="O">Otro / No especificado</option>
+                                </select>
+                                <label>SEXO</label>
+                            </div>
+                        </div>
+                        <p style="margin-top:14px; font-size:0.8rem; color:#92400e; font-weight:600;">
+                            <span class="material-symbols-outlined" style="font-size:15px; vertical-align:middle;">info</span>
+                            Al procesar, este paciente quedará guardado en la base de datos.
+                        </p>
                     </div>
-
-                    <input type="hidden" id="solicitudId">
-
-                    <div class="info-grid">
-                        <div class="info-item">
-                            <label>Paciente</label>
-                            <p id="displayPaciente">Cargando...</p>
+ 
+                
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px; margin-bottom: 24px;">
+                        <div class="form-group">
+                            <select id="estudio" required>
+                                <option value="" disabled selected>Seleccione estudio...</option>
+                                <option value="Quimica sanguinea 35 elementos">Quimica sanguinea 35 elementos</option>
+                                <option value="Perfil lipidico">Perfil lipidico</option>
+                                <option value="Citometria hematica completa">Citometria hematica completa</option>
+                                <option value="Examen General de Orina">Examen General de Orina</option>
+                                <option value="Glucosa">Glucosa</option>
+                                <option value="Ácido Úrico">Ácido Úrico</option>
+                                <option value="Perfil Tiroideo">Perfil Tiroideo</option>
+                                <option value="Tiempos de Coagulación">Tiempos de Coagulación</option>
+                                <option value="Prueba de Embarazo">Prueba de Embarazo</option>
+                                <option value="Otro">Otro</option>
+                            </select>
+                            <label>ESTUDIO SOLICITADO</label>
                         </div>
-                        <div class="info-item">
-                            <label>Estudio</label>
-                            <p id="displayEstudio">Cargando...</p>
-                        </div>
-                        <div class="info-item" style="grid-column: span 2;">
-                            <label>Observaciones Generales</label>
-                            <p id="displayObservaciones"
-                                style="font-weight: 500; font-size: 1rem; color: var(--text-muted);">Ninguna</p>
+                        <div class="form-group">
+                            <textarea id="observaciones" rows="1" placeholder=" "></textarea>
+                            <label>MUESTRA / OBSERVACIONES</label>
                         </div>
                     </div>
-
-                  
-                    <button class="verification-btn-large" onclick="irAVerificacionDocumentos()">
-                        <span class="material-symbols-outlined">upload_file</span>
-                        Verificación de Documentos
-                        <small style="font-size: 0.9rem; font-weight: 500; opacity: 0.7;">Carga o escanea los resultados
-                            aquí</small>
+ 
+                    <button class="btn-save" onclick="guardarSolicitud()">
+                        <span class="material-symbols-outlined">rocket_launch</span>
+                        Procesar y Pasar a Bloques
                     </button>
-
-                    <div class="actions-footer">
-                        <button class="btn-action btn-back" onclick="volverALista()">
-                            <span class="material-symbols-outlined">arrow_back</span> Volver
-                        </button>
-                        <button class="btn-action btn-finish" onclick="finalizarSolicitud()">
-                            <span class="material-symbols-outlined">check_circle</span> Finalizar y Validar
-                        </button>
-                    </div>
-                </div>
-
-              
-                <div id="initialMessage" style="text-align: center; padding: 100px 40px; color: #94a3b8;">
-                    <span class="material-symbols-outlined"
-                        style="font-size: 80px; opacity: 0.2; margin-bottom: 20px;">analytics</span>
-                    <p style="font-size: 1.2rem; font-weight: 600;">Selecciona una solicitud para comenzar la captura
-                    </p>
                 </div>
             </div>
         </div>
-
-        <button class="back-dashboard" onclick="window.location.href='dashboard.html'">
-            <span class="material-symbols-outlined">grid_view</span> Volver al Dashboard
-        </button>
     </div>
-
+ 
     <script>
-        let solicitudesPendientes = [];
-        let pacientes = [];
-
-        window.addEventListener('pywebviewready', async () => {
-            try {
-                pacientes = await window.pywebview.api.obtenerPacientes() || [];
-                solicitudesPendientes = await window.pywebview.api.obtenerSolicitudesPendientes() || [];
-                renderPacientesDatalist();
-                renderSolicitudesPendientes();
-            } catch (err) { console.error(err); }
-        }, { once: true });
-
-        function renderPacientesDatalist() {
-            const datalist = document.getElementById("pacientesList");
-            datalist.innerHTML = "";
-            pacientes.forEach(p => {
-                const option = document.createElement("option");
-                option.value = p.nombre;
-                option.dataset.id = p.id;
-                datalist.appendChild(option);
-            });
-        }
-
-        document.getElementById("nuevoPaciente").addEventListener("input", function () {
-            const input = this.value.trim();
-            const selected = Array.from(document.getElementById("pacientesList").options).find(opt => opt.value === input);
-            const error = document.getElementById("pacienteError");
-            if (selected) {
-                document.getElementById("nuevoPacienteId").value = selected.dataset.id;
-                error.style.display = "none";
+        let pSeleccionado = null;
+ 
+        function iniciar() {
+            if (window.pywebview && window.pywebview.api) {
+                cargarHoy();
             } else {
-                document.getElementById("nuevoPacienteId").value = "";
-                if (input.length > 0) error.style.display = "block";
+                window.addEventListener('pywebviewready', cargarHoy);
             }
-        });
-
-        function renderSolicitudesPendientes() {
-            const lista = document.getElementById("pendingList");
+        }
+ 
+        document.addEventListener("DOMContentLoaded", iniciar);
+ 
+        async function cargarHoy() {
+            document.getElementById('waitingList').innerHTML =
+                '<p style="text-align:center; color:#94a3b8; padding:20px;">Cargando...</p>';
+            try {
+              
+                let citas    = [];
+                let espera   = [];
+ 
+                try {
+                    citas = await window.pywebview.api.obtenerCitasHoy();
+                    if (!Array.isArray(citas)) citas = [];
+                } catch(e) {
+                    console.error("Error al cargar citas:", e);
+                }
+ 
+                try {
+                    espera = await window.pywebview.api.obtenerPacientesEnEspera();
+                    if (!Array.isArray(espera)) espera = [];
+                } catch(e) {
+                    console.error("Error al cargar espera:", e);
+                }
+ 
+                console.log("Citas hoy:", citas);
+                console.log("Espera:", espera);
+ 
+              
+                const listaCitas = citas.map(c => ({
+                    id:          c.paciente_id,
+                    nombre:      c.nombre_paciente || "Paciente sin nombre",
+                    info:        `Cita: ${c.hora}`,
+                    tipo:        'cita',
+                    cita_id:     c.id,
+                    registrado:  true,
+                    estudio:     c.tipo || ''
+                }));
+ 
+             
+                const hoy = new Date().toISOString().slice(0, 10);
+                const listaEspera = espera
+                    .filter(e => e.fecha_cita === hoy && !e.procesado)
+                    .map(e => ({
+                        id:         e.id,
+                        nombre:     e.nombre || "Sin nombre",
+                        info:       `Emergencia: ${e.hora_cita || ''}`,
+                        tipo:       'espera',
+                        espera_id:  e.id,
+                        estudio:    e.tipo_estudio || '',
+                        registrado: false
+                    }));
+ 
+                renderizarLista([...listaCitas, ...listaEspera]);
+ 
+            } catch (err) {
+                console.error("Error general al cargar datos:", err);
+                document.getElementById('waitingList').innerHTML =
+                    '<p style="text-align:center; color:#ef5350; padding:20px;">Error al cargar pacientes.</p>';
+            }
+        }
+ 
+        function renderizarLista(pacientes) {
+            const lista = document.getElementById("waitingList");
             lista.innerHTML = "";
-            if (solicitudesPendientes.length === 0) {
-                lista.innerHTML = "<p style='text-align:center; color:#94a3b8; padding:20px;'>No hay pendientes.</p>";
+            
+            if (pacientes.length === 0) {
+                lista.innerHTML = '<p class="empty-list">No hay pacientes para hoy.</p>';
                 return;
             }
-            solicitudesPendientes.forEach(s => {
-                const item = document.createElement("div");
-                item.className = "pending-item";
-                item.innerHTML = `
-                    <div onclick="cargarSolicitud(${s.id})">
-                        <strong>${s.paciente_nombre || 'Desconocido'}</strong>
-                        <small>${s.tipo_estudio}</small>
-                    </div>
-                    <button class="delete-btn-mini" onclick="confirmarEliminar(${s.id})">
-                        <span class="material-symbols-outlined" style="font-size:18px">delete</span>
-                    </button>
-                `;
-                lista.appendChild(item);
-            });
-        }
-
-        async function cargarSolicitud(id) {
-            try {
-                const data = await window.pywebview.api.obtenerSolicitud(id);
-                if (!data) return;
-
-                document.getElementById("initialMessage").style.display = "none";
-                document.getElementById("newSolicitudForm").style.display = "none";
-                document.getElementById("formContainer").style.display = "block";
-
-                document.getElementById("solicitudId").value = id;
-             
-                document.getElementById("displayPaciente").textContent = data.solicitud.paciente_nombre || '—';
-                document.getElementById("displayEstudio").textContent = data.solicitud.tipo_estudio || '—';
-                document.getElementById("displayObservaciones").textContent = data.solicitud.observaciones_generales || 'Ninguna';
-
-            } catch (err) { console.error(err); }
-        }
-
-        function mostrarNuevaSolicitud() {
-            document.getElementById("initialMessage").style.display = "none";
-            document.getElementById("formContainer").style.display = "none";
-            document.getElementById("newSolicitudForm").style.display = "block";
-            document.getElementById("nuevoPaciente").value = "";
-            document.getElementById("nuevoPacienteId").value = "";
-        }
-
-        function ocultarNuevaSolicitud() {
-            document.getElementById("newSolicitudForm").style.display = "none";
-            document.getElementById("initialMessage").style.display = "block";
-        }
-
-        async function crearNuevaSolicitud() {
-            const pId = document.getElementById("nuevoPacienteId").value;
-            const estudio = document.getElementById("nuevoTipoEstudio").value;
-            const medico = document.getElementById("nuevoMedico").value;
-            const obs = document.getElementById("nuevasObservaciones").value;
-
-            if (!pId) return alert("Selecciona un paciente.");
-            if (!estudio) return alert("Selecciona el estudio.");
-
-            try {
-                const res = await window.pywebview.api.registrarSolicitudAnalisis(pId, null, null, medico, estudio, obs);
-                if (res) {
-                    alert("Solicitud creada.");
-                    ocultarNuevaSolicitud();
-                    solicitudesPendientes = await window.pywebview.api.obtenerSolicitudesPendientes();
-                    renderSolicitudesPendientes();
-                }
-            } catch (err) { console.error(err); }
-        }
-
-        function volverALista() {
-            document.getElementById("formContainer").style.display = "none";
-            document.getElementById("initialMessage").style.display = "block";
-        }
-
-        async function finalizarSolicitud() {
-            const id = document.getElementById("solicitudId").value;
-            if (confirm("¿Finalizar y validar esta solicitud?")) {
-                const ok = await window.pywebview.api.actualizarEstadoSolicitud(id, "finalizado");
-                if (ok) window.location.href = "resultados.html";
+ 
+           
+            const citas  = pacientes.filter(p => p.tipo === 'cita');
+            const espera = pacientes.filter(p => p.tipo === 'espera');
+ 
+         
+            if (citas.length > 0) {
+                const labelCitas = document.createElement('div');
+                labelCitas.className = 'list-section-label citas-label';
+                labelCitas.innerHTML = `<span class="material-symbols-outlined" style="font-size:15px;">event_available</span> Citas (${citas.length})`;
+                lista.appendChild(labelCitas);
+                citas.forEach(p => lista.appendChild(crearItem(p)));
+            }
+ 
+        
+            if (espera.length > 0) {
+                const labelEspera = document.createElement('div');
+                labelEspera.className = 'list-section-label espera-label';
+                labelEspera.innerHTML = `<span class="material-symbols-outlined" style="font-size:15px;">bolt</span> Emergencias (${espera.length})`;
+                lista.appendChild(labelEspera);
+                espera.forEach(p => lista.appendChild(crearItem(p)));
             }
         }
-
-        async function confirmarEliminar(id) {
-            if (confirm("¿Eliminar solicitud?")) {
-                const ok = await window.pywebview.api.eliminarSolicitud(id);
-                if (ok) {
-                    solicitudesPendientes = await window.pywebview.api.obtenerSolicitudesPendientes();
-                    renderSolicitudesPendientes();
-                    volverALista();
+ 
+        function crearItem(p) {
+            const item = document.createElement("div");
+            item.className = `waiting-item ${p.tipo}`;
+            item.onclick = () => seleccionar(p);
+            
+            const tagClass = p.tipo === 'cita' ? 'tag-cita' : 'tag-espera';
+            const tagText  = p.tipo === 'cita' ? 'Cita'    : 'Emergencia';
+            const iconColor = p.tipo === 'cita' ? 'var(--primary-light)' : 'var(--warning)';
+            const icon      = p.tipo === 'cita' ? 'event_available'      : 'bolt';
+ 
+            item.innerHTML = `
+                <div>
+                    <strong>${p.nombre}</strong>
+                    <small>${p.info}</small>
+                    <span class="tag ${tagClass}">${tagText}</span>
+                </div>
+                <span class="material-symbols-outlined" style="color:${iconColor}">${icon}</span>
+            `;
+            return item;
+        }
+ 
+        async function seleccionar(p) {
+            pSeleccionado = p;
+            document.getElementById('initialMessage').style.display = 'none';
+            document.getElementById('formContainer').style.display = 'block';
+ 
+            document.getElementById('observaciones').value = '';
+ 
+       
+            const selectEstudio = document.getElementById('estudio');
+            const estudioValor  = p.estudio || "";
+            let existe = [...selectEstudio.options].some(o => o.value === estudioValor);
+            if (!existe && estudioValor !== "") {
+                selectEstudio.add(new Option(estudioValor, estudioValor));
+            }
+            selectEstudio.value = estudioValor;
+ 
+            if (p.registrado) {
+                document.getElementById('pacienteRegistradoBox').style.display = 'block';
+                document.getElementById('pacienteEmergenciaBox').style.display = 'none';
+ 
+                try {
+                    const datos = await window.pywebview.api.obtenerPacientePorId(p.id);
+                    if (datos) {
+                        document.getElementById('infoNombre').textContent    = datos.nombre        || '—';
+                        document.getElementById('infoEdad').textContent      = datos.edad != null  ? datos.edad + ' años' : '—';
+                        document.getElementById('infoTelefono').textContent  = datos.telefono      || '—';
+                        document.getElementById('infoSexo').textContent      = formatSexo(datos.sexo);
+                        document.getElementById('infoNacimiento').textContent= datos.fecha_nacimiento || '—';
+                        document.getElementById('infoCorreo').textContent    = datos.correo        || '—';
+                        document.getElementById('infoFechaReg').textContent  = datos.fecha_registro || '—';
+ 
+                        const obsBox = document.getElementById('infoObsBox');
+                        if (datos.observaciones) {
+                            document.getElementById('infoObservaciones').textContent = datos.observaciones;
+                            obsBox.style.display = 'flex';
+                        } else {
+                            obsBox.style.display = 'none';
+                        }
+                    }
+                } catch (err) {
+                    console.error("Error al obtener datos del paciente:", err);
                 }
+ 
+            } else {
+                document.getElementById('pacienteRegistradoBox').style.display = 'none';
+                document.getElementById('pacienteEmergenciaBox').style.display = 'block';
+ 
+                document.getElementById('emerNombre').value    = p.nombre || '';
+                document.getElementById('emerEdad').value      = '';
+                document.getElementById('emerTelefono').value  = '';
+                document.getElementById('emerNacimiento').value= '';
+                document.getElementById('emerSexo').value      = '';
+            }
+ 
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+ 
+        function formatSexo(s) {
+            if (!s) return '—';
+            if (s === 'M') return 'Masculino';
+            if (s === 'F') return 'Femenino';
+            return s;
+        }
+ 
+        async function guardarSolicitud() {
+            if (!pSeleccionado) return;
+            
+            const estudio = document.getElementById('estudio').value;
+            if (!estudio) return alert("Selecciona un estudio.");
+ 
+            try {
+                let pacienteId = pSeleccionado.id;
+ 
+                if (!pSeleccionado.registrado) {
+                    const nombre    = document.getElementById('emerNombre').value.trim();
+                    const edad      = document.getElementById('emerEdad').value.trim();
+                    const telefono  = document.getElementById('emerTelefono').value.trim();
+                    const nacimiento= document.getElementById('emerNacimiento').value;
+                    const sexo      = document.getElementById('emerSexo').value;
+ 
+                    if (!nombre)   return alert("El nombre del paciente es obligatorio.");
+                    if (!edad)     return alert("La edad del paciente es obligatoria.");
+                    if (!telefono) return alert("El teléfono del paciente es obligatorio.");
+ 
+                    const resP = await window.pywebview.api.guardarPaciente(
+                        nombre, parseInt(edad), telefono,
+                        sexo || 'O', '', '', '', nacimiento
+                    );
+ 
+                    if (resP && resP.ok) {
+                        pacienteId = resP.id;
+                    } else {
+                        return alert("Error al registrar paciente: " + (resP?.error || "desconocido"));
+                    }
+                }
+ 
+                const resS = await window.pywebview.api.registrarSolicitudAnalisis(
+                    pacienteId,
+                    pSeleccionado.cita_id || null,
+                    null,
+                    '',
+                    estudio,
+                    document.getElementById('observaciones').value
+                );
+ 
+                if (resS) {
+                    let url = "bloques.html?solicitudId=" + resS;
+                    if (pSeleccionado.espera_id) url += "&esperaId=" + pSeleccionado.espera_id;
+                    if (pSeleccionado.cita_id)   url += "&citaId="   + pSeleccionado.cita_id;
+                    alert("¡Solicitud procesada con éxito!");
+                    window.location.href = url;
+                } else {
+                    alert("Error al crear la solicitud de análisis.");
+                }
+            } catch (err) {
+                console.error(err);
+                alert("Ocurrió un error al procesar la solicitud.");
             }
         }
-
-        function irAVerificacionDocumentos() {
-            const id = document.getElementById("solicitudId").value;
-            window.location.href = `bloques.html?solicitudId=${id}`;
-        }
+ 
+        function volver() { window.location.href = '/dashboard'; }
     </script>
 </body>
-
+ 
 </html>

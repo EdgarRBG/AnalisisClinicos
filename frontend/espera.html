@@ -121,6 +121,7 @@
             font-size: 1.02rem;
         }
     </style>
+    <script src="/static/js/api.js"></script>
 </head>
 
 <body>
@@ -227,18 +228,21 @@
 
             try {
               
-                const exitoPaciente = await window.pywebview.api.guardarPaciente(
+                const respuesta = await window.pywebview.api.guardarPaciente(
                     nombre, edad, telefono, '', '', '', '', fechaNacimiento
                 );
 
-                if (exitoPaciente) {
-                  
+                
+                const exito = (respuesta === true || (respuesta && respuesta.ok === true));
+
+                if (exito) {
                     await window.pywebview.api.marcarProcesado(parseInt(esperaId));
                     alert("¡Paciente guardado correctamente en el sistema!");
                     cerrarModal('completarModal');
                     cargarEspera();
                 } else {
-                    alert("Error al guardar el paciente en el sistema");
+                    const msg = (respuesta && respuesta.error) ? respuesta.error : "Error al guardar el paciente en el sistema";
+                    alert(msg);
                 }
             } catch (err) {
                 console.error(err);
@@ -260,7 +264,7 @@
         }
 
         function volver() {
-            window.location.href = "dashboard.html";
+            window.location.href = "/dashboard";
         }
 
         window.addEventListener('pywebviewready', cargarEspera);

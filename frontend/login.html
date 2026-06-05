@@ -183,6 +183,7 @@
             .login-card { max-width: 450px; }
         }
     </style>
+    <script src="/static/js/api.js"></script>
 </head>
 
 <body>
@@ -190,7 +191,7 @@
     <div class="login-card">
      
         <div class="login-left">
-          <img src="Assets/Logo.png" alt="Logo Analitic">
+          <img src="/static/Assets/Logo.png" alt="Logo Analitic">
             <h2>Analitic</h2>
             <p>Laboratorio</p>
         </div>
@@ -234,26 +235,25 @@
                 return;
             }
 
-            if (window.pywebview && window.pywebview.api) {
-                window.pywebview.api.login(usuario, contraseña)
-                    .then(respuesta => {
-                        if (respuesta.ok) {
-                            localStorage.setItem("rolUsuario", respuesta.rol);
-                            localStorage.setItem("usuarioLogueado", usuario);
-                            window.location.href = "dashboard.html";
-                        } else {
-                            errorElement.innerText = "Datos incorrectos";
-                        }
-                    })
-                    .catch(err => {
-                        errorElement.innerText = "Error de conexión";
-                    });
-            }
+            window.pywebview.api.login(usuario, contraseña)
+                .then(respuesta => {
+                    if (respuesta && respuesta.ok) {
+                        localStorage.setItem("rolUsuario", respuesta.rol);
+                        localStorage.setItem("usuarioLogueado", usuario);
+                        window.location.href = "/dashboard";
+                    } else {
+                        errorElement.innerText = "Datos incorrectos";
+                    }
+                })
+                .catch(() => {
+                    errorElement.innerText = "Error de conexión";
+                });
         }
 
-        if (localStorage.getItem("rolUsuario")) {
-            window.location.href = "dashboard.html";
-        }
+        // Verificar si ya hay sesión activa (cookie JWT)
+        fetch("/api/check_auth", { credentials: "include" })
+            .then(r => { if (r.ok) window.location.href = "/dashboard"; })
+            .catch(() => {});
 
         document.addEventListener("keypress", (e) => {
             if (e.key === "Enter") login();

@@ -26,6 +26,8 @@
             --text-main: #2c3e50;
             --text-muted: #64748b;
             --shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
+            --danger: #ef4444;
+            --warning: #f59e0b;
         }
 
         * {
@@ -329,9 +331,9 @@
         }
 
         .hour-pill.selected {
-            background: var(--selection);
-            color: white;
-            border-color: var(--selection);
+            background: var(--selection) !important;
+            color: white !important;
+            border-color: var(--selection) !important;
         }
 
         .hour-pill.occupied {
@@ -377,76 +379,141 @@
             border-radius: 30px;
             width: 90%;
             max-width: 500px;
-            padding: 40px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h3 {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--primary-dark);
+        }
+
+        .modal-body {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+
+        .patient-item-modal {
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn-delete-mini {
+            color: var(--danger);
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 5px;
+            border-radius: 8px;
+            transition: 0.2s;
+        }
+
+        .btn-delete-mini:hover {
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .btn-modal {
+            padding: 10px 20px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
         }
     </style>
+    <script src="/static/js/api.js"></script>
 </head>
 
 <body>
     <div class="header">
-        <h1>Solicitudes de Análisis</h1>
-        <button class="btn-back" onclick="window.location.assign('dashboard.html')">
-            <span class="material-symbols-outlined">dashboard</span> Dashboard
-        </button>
+        <div style="display: flex; align-items: center; gap: 20px;">
+            <button class="btn-back" onclick="window.location.assign('/dashboard')">
+                <span class="material-symbols-outlined">arrow_back</span>
+                Volver
+            </button>
+            <h1>SOLICITUDES DE ANÁLISIS</h1>
+        </div>
     </div>
 
     <div class="container">
         <div class="layout">
             <div class="panel-registro">
-                <h3><span class="material-symbols-outlined">add_circle</span> Nueva Solicitud</h3>
-
-                <div class="form-group" id="containerBusqueda">
-                    <label>PACIENTE</label>
-                    <input type="text" id="buscarPaciente" placeholder="Buscar paciente..." autocomplete="off">
-                    <input type="hidden" id="pacienteId">
-                    <div id="searchResults" class="search-results"></div>
-                </div>
+                <h3><span class="material-symbols-outlined">person_add</span> Nueva Solicitud</h3>
 
                 <div class="switch-box">
-                    <span class="switch-label">EMERGENCIA / SOBRECUPO</span>
+                    <span class="switch-label">¿PACIENTE DE EMERGENCIA?</span>
                     <label class="switch">
                         <input type="checkbox" id="switchSinRegistro" onchange="toggleSinRegistro()">
                         <span class="slider"></span>
                     </label>
                 </div>
 
+                <div class="form-group" id="containerBusqueda">
+                    <label>PACIENTE</label>
+                    <input type="text" id="buscarPaciente" placeholder="Buscar paciente...">
+                    <input type="hidden" id="pacienteId">
+                    <div id="searchResults" class="search-results"></div>
+                </div>
+
                 <div id="camposNormales">
                     <div class="form-group">
-                        <label>ESTUDIO SOLICITADO</label>
-                        <input type="text" id="tipoEstudio" placeholder="Ej: Química Sanguínea">
+                        <label>ESTUDIO / ANÁLISIS</label>
+                        <select id="tipoEstudio">
+                            <option value="" disabled selected>Selecciona un estudio...</option>
+                            <option value="Quimica sanguinea 35 elementos">Quimica sanguinea 35 elementos</option>
+                            <option value="Perfil lipidico">Perfil lipidico</option>
+                            <option value="Citometria hematica completa">Citometria hematica completa</option>
+                        </select>
                     </div>
-
                     <div class="form-group">
                         <label>OBSERVACIONES</label>
-                        <textarea id="observaciones" placeholder="Notas adicionales..."></textarea>
+                        <textarea id="observaciones" rows="3" placeholder="Notas adicionales..."></textarea>
                     </div>
                 </div>
 
-                <div id="displaySeleccion" class="selection-display">Selecciona fecha y hora</div>
+                <div id="displaySeleccion" class="selection-display">
+                    Selecciona fecha y hora
+                </div>
 
-                <button class="btn-save" id="btnGuardar" onclick="guardarSolicitud()">Registrar Solicitud</button>
+                <button class="btn-save" id="btnGuardar" onclick="guardarSolicitud()">
+                    Registrar Solicitud
+                </button>
             </div>
 
             <div class="panel-calendario">
                 <div class="cal-header">
-                    <button class="btn-nav" onclick="cambiarMes(-1)"><span
-                            class="material-symbols-outlined">chevron_left</span></button>
-                    <h2 id="mesAnio">Mayo 2026</h2>
-                    <button class="btn-nav" onclick="cambiarMes(1)"><span
-                            class="material-symbols-outlined">chevron_right</span></button>
+                    <button class="btn-nav" onclick="cambiarMes(-1)">
+                        <span class="material-symbols-outlined">chevron_left</span>
+                    </button>
+                    <h2 id="mesAnio">MAYO 2026</h2>
+                    <button class="btn-nav" onclick="cambiarMes(1)">
+                        <span class="material-symbols-outlined">chevron_right</span>
+                    </button>
                 </div>
 
                 <div class="weekdays">
-                    <div>Dom</div>
-                    <div>Lun</div>
-                    <div>Mar</div>
-                    <div>Mié</div>
-                    <div>Jue</div>
-                    <div>Vie</div>
-                    <div>Sáb</div>
+                    <div>DOM</div><div>LUN</div><div>MAR</div><div>MIE</div><div>JUE</div><div>VIE</div><div>SAB</div>
                 </div>
 
                 <div id="diasGrid" class="days"></div>
+
                 <div id="horasGrid" class="hours-grid"></div>
             </div>
         </div>
@@ -454,36 +521,32 @@
 
     <div id="infoModal" class="modal-overlay">
         <div class="modal">
-            <h3 id="modalTitulo" style="color:var(--primary-dark); margin-bottom:20px;">Detalles</h3>
-            <div id="modalCuerpo" style="line-height:1.6; color:var(--text-main);"></div>
-            <div style="margin-top:30px; display:flex; gap:10px;">
-                <button class="btn-save" style="background:#f1f5f9; color:#64748b; box-shadow:none;"
-                    onclick="cerrarModal()">Cerrar</button>
-                <button class="btn-save" style="background:#fee2e2; color:#ef4444; box-shadow:none;"
-                    onclick="cancelarCita()">Cancelar</button>
+            <div class="modal-header">
+                <h3 id="modalTitulo">Detalles del Horario</h3>
+                <span class="material-symbols-outlined" style="cursor:pointer" onclick="cerrarModal()">close</span>
+            </div>
+            <div id="modalCuerpo" class="modal-body"></div>
+            <div class="modal-footer">
+                <button class="btn-modal" style="background:#e2e8f0" onclick="cerrarModal()">Cerrar</button>
             </div>
         </div>
     </div>
 
     <script>
+        const HORARIOS = ["07:00", "07:30", "08:00", "08:30", "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00"];
         let pacientes = [];
         let citas = [];
-        let fechaSel = "";
-        let horaSel = "";
+        let emergencias = [];
+        let fechaSel = null;
+        let horaSel = null;
         let mesAct = new Date().getMonth();
         let anioAct = new Date().getFullYear();
-        let citaActId = null;
-
-        const HORARIOS = [];
-        for (let h = 8; h < 20; h++) {
-            HORARIOS.push(`${h.toString().padStart(2, '0')}:00`);
-            HORARIOS.push(`${h.toString().padStart(2, '0')}:30`);
-        }
 
         window.addEventListener('pywebviewready', async () => {
             try {
                 pacientes = await window.pywebview.api.obtenerTodosLosPacientes() || [];
                 citas = await window.pywebview.api.obtenerCitas() || [];
+                emergencias = await window.pywebview.api.obtenerPacientesEnEspera() || [];
                 renderCalendario();
             } catch (e) { console.error(e); }
         });
@@ -499,7 +562,6 @@
                 resBusca.style.display = "none";
                 return;
             }
-
             const matches = pacientes.filter(p => (p.nombre || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes(val));
             if (matches.length > 0) {
                 matches.forEach(p => {
@@ -539,6 +601,7 @@
                 btn.textContent = "Registrar Solicitud";
                 btn.style.background = "linear-gradient(to right, var(--primary), var(--primary-dark))";
             }
+         
             if (fechaSel) renderHoras();
         }
 
@@ -555,7 +618,14 @@
                 const div = document.createElement("div");
                 div.className = "day";
                 div.textContent = d;
-                if (citas.some(c => c.fecha === fStr)) div.classList.add("has-citas");
+                
+                const tieneCita = citas.some(c => c.fecha === fStr);
+                const tieneEmergencia = emergencias.some(e => e.fecha_cita === fStr);
+                
+                if (tieneCita || tieneEmergencia) {
+                    div.classList.add("has-citas");
+                }
+                
                 if (fechaSel === fStr) div.classList.add("active");
                 div.onclick = () => { fechaSel = fStr; renderCalendario(); renderHoras(); actualizarDisplay(); };
                 grid.appendChild(div);
@@ -565,27 +635,93 @@
         function renderHoras() {
             const grid = document.getElementById("horasGrid");
             grid.innerHTML = "";
-            const sinRegistro = document.getElementById("switchSinRegistro").checked;
+            const esModoEmergencia = document.getElementById("switchSinRegistro").checked;
+
             HORARIOS.forEach(h => {
                 const div = document.createElement("div");
                 div.className = "hour-pill";
                 div.textContent = h;
                 const citaExistente = citas.find(c => c.fecha === fechaSel && c.hora === h);
-
-                if (citaExistente) {
+                const emergenciaExistente = emergencias.find(e => e.fecha_cita === fechaSel && e.hora_cita === h);
+                
+                if (citaExistente && emergenciaExistente) {
+                    div.style.background = "linear-gradient(to right, #1976d2 50%, #f59e0b 50%)";
+                    div.style.color = "white";
+                    div.onclick = () => verDetallesHorario(h);
+                } else if (citaExistente) {
                     div.classList.add("occupied");
-                    if (sinRegistro) {
+                   
+                    if (esModoEmergencia) {
                         div.onclick = () => seleccionarHora(h, div);
                     } else {
-                        div.onclick = () => verDetalleCita(citaExistente);
+                        div.onclick = () => verDetallesHorario(h);
+                    }
+                } else if (emergenciaExistente) {
+                    div.style.background = "#f59e0b";
+                    div.style.color = "white";
+                  
+                    if (!esModoEmergencia) {
+                        div.onclick = () => seleccionarHora(h, div);
+                    } else {
+                        div.onclick = () => verDetallesHorario(h);
                     }
                 } else {
                     div.onclick = () => seleccionarHora(h, div);
                 }
-
+                
                 if (horaSel === h) div.classList.add("selected");
                 grid.appendChild(div);
             });
+        }
+
+        function verDetallesHorario(hora) {
+            const citasHorario = citas.filter(c => c.fecha === fechaSel && c.hora === hora);
+            const emergenciasHorario = emergencias.filter(e => e.fecha_cita === fechaSel && e.hora_cita === hora);
+            let contenido = "";
+
+            citasHorario.forEach(c => {
+                contenido += `
+                    <div class="patient-item-modal" style="background:#e3f2fd;">
+                        <div>
+                            <p><b>Paciente:</b> ${c.nombre_paciente}</p>
+                            <p style="font-size:0.8rem">Estudio: ${c.tipo || 'N/A'}</p>
+                        </div>
+                        <span class="material-symbols-outlined btn-delete-mini" title="Eliminar Cita" 
+                              onclick="eliminarCitaIndividual(${c.id}, '${c.nombre_paciente}')">delete</span>
+                    </div>
+                `;
+            });
+
+            emergenciasHorario.forEach(e => {
+                contenido += `
+                    <div class="patient-item-modal" style="background:#fff3e0;">
+                        <div>
+                            <p><b>EMERGENCIA:</b> ${e.nombre}</p>
+                            <p style="font-size:0.8rem">Hora: ${e.hora_cita}</p>
+                        </div>
+                        <span class="material-symbols-outlined btn-delete-mini" title="Eliminar Emergencia" 
+                              onclick="eliminarEmergenciaIndividual(${e.id}, '${e.nombre}')">delete</span>
+                    </div>
+                `;
+            });
+
+            document.getElementById("modalTitulo").textContent = `Horario ${hora}`;
+            document.getElementById("modalCuerpo").innerHTML = contenido;
+            document.getElementById("infoModal").style.display = "flex";
+        }
+
+        async function eliminarCitaIndividual(id, nombre) {
+            if (confirm(`¿Eliminar la cita de ${nombre}?`)) {
+                const res = await window.pywebview.api.eliminarCita(id);
+                if (res) location.reload();
+            }
+        }
+
+        async function eliminarEmergenciaIndividual(id, nombre) {
+            if (confirm(`¿Eliminar el registro de emergencia de ${nombre}?`)) {
+                const res = await window.pywebview.api.marcarProcesado(id);
+                if (res) location.reload();
+            }
         }
 
         function seleccionarHora(h, el) {
@@ -615,7 +751,6 @@
             if (!fechaSel || !horaSel) return alert("Selecciona fecha y hora primero");
 
             if (isEmergencia) {
-               
                 const nom = nombreManual || "PACIENTE EMERGENCIA";
                 const res = await window.pywebview.api.registrarEnEspera(
                     nom, '', null, '', fechaSel, horaSel, 'Emergencia (Por definir)', 'Registrado desde Citas (Modo Emergencia)'
@@ -623,26 +758,10 @@
                 if (res) { alert("¡Enviado a la lista de ESPERA!"); location.reload(); }
                 else { alert("Error al enviar a espera"); }
             } else {
-               
                 const pacId = idPac.value;
                 if (!pacId || !estudio) return alert("Faltan datos (Paciente o Estudio)");
                 const res = await window.pywebview.api.registrarCita(pacId, fechaSel, horaSel, estudio, 'pendiente', obs);
                 if (res) { alert("¡Cita registrada!"); location.reload(); }
-                else { alert("Error al registrar cita"); }
-            }
-        }
-
-        function verDetalleCita(c) {
-            citaActId = c.id;
-            document.getElementById("modalTitulo").textContent = c.nombre_paciente;
-            document.getElementById("modalCuerpo").innerHTML = `<p><b>Estudio:</b> ${c.tipo}</p><p><b>Hora:</b> ${c.hora}</p><p><b>Notas:</b> ${c.observaciones || 'N/A'}</p>`;
-            document.getElementById("infoModal").style.display = "flex";
-        }
-
-        async function cancelarCita() {
-            if (confirm("¿Cancelar esta solicitud?")) {
-                const res = await window.pywebview.api.eliminarCita(citaActId);
-                if (res) location.reload();
             }
         }
 
@@ -655,5 +774,4 @@
         }
     </script>
 </body>
-
 </html>

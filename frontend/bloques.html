@@ -1,17 +1,14 @@
 <!DOCTYPE html>
 <html lang="es">
-
+ 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reportes Profesionales - Analitic</title>
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Roboto+Mono:wght@500&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-
+ 
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Roboto+Mono:wght@500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+ 
     <style>
         :root {
             --primary: #1b5e20;
@@ -22,13 +19,9 @@
             --text-main: #1a202c;
             --shadow: 0 15px 35px rgba(27, 94, 32, 0.1);
         }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+ 
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+ 
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--bg);
@@ -38,8 +31,7 @@
             display: flex;
             flex-direction: column;
         }
-
-      
+ 
         .header {
             background: linear-gradient(135deg, var(--primary), #2e7d32);
             color: white;
@@ -51,12 +43,9 @@
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             z-index: 100;
         }
-
-        .header-actions {
-            display: flex;
-            gap: 15px;
-        }
-
+ 
+        .header-actions { display: flex; gap: 15px; }
+ 
         .btn-action {
             background: rgba(255, 255, 255, 0.1);
             color: white;
@@ -70,18 +59,23 @@
             align-items: center;
             gap: 8px;
         }
-
-        .btn-action:hover {
-            background: rgba(255, 255, 255, 0.2);
+ 
+        .btn-action:hover { background: rgba(255, 255, 255, 0.2); transform: translateY(-2px); }
+        .btn-print { background: #f59e0b; border-color: #d97706; }
+ 
+        .btn-finalizar {
+            background: linear-gradient(135deg, #e53935, #b71c1c);
+            border-color: #b71c1c;
+            font-size: 1rem;
+            padding: 10px 22px;
+            box-shadow: 0 4px 15px rgba(229, 57, 53, 0.4);
+        }
+        .btn-finalizar:hover {
+            background: linear-gradient(135deg, #c62828, #b71c1c);
             transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(229, 57, 53, 0.5);
         }
-
-        .btn-print {
-            background: #f59e0b;
-            border-color: #d97706;
-        }
-
-       
+ 
         .main {
             display: flex;
             flex: 1;
@@ -89,7 +83,7 @@
             gap: 20px;
             overflow: hidden;
         }
-
+ 
         .left-panel {
             width: 320px;
             background: var(--white);
@@ -98,36 +92,155 @@
             box-shadow: var(--shadow);
             display: flex;
             flex-direction: column;
+            gap: 12px;
         }
-
-        .import-section {
+ 
+        .patient-summary {
             background: #f0fdf4;
+            border: 2px solid #bbf7d0;
+            border-radius: 14px;
+            padding: 14px 16px;
+        }
+ 
+        .patient-summary .ps-title {
+            font-size: 0.72rem;
+            font-weight: 800;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+ 
+        .patient-summary .ps-name {
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 6px;
+        }
+ 
+        .patient-summary .ps-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4px 10px;
+        }
+ 
+        .patient-summary .ps-item {
+            font-size: 0.78rem;
+            color: #475569;
+        }
+ 
+        .patient-summary .ps-item span {
+            font-weight: 700;
+            color: var(--text-main);
+        }
+ 
+        .import-section {
+            background: linear-gradient(135deg, #f0fdf4, #dcfce7);
             border: 2px dashed var(--primary-light);
-            padding: 15px;
+            padding: 20px 15px;
             border-radius: 15px;
-            margin-bottom: 20px;
             text-align: center;
             cursor: pointer;
             transition: 0.3s;
         }
 
         .import-section:hover {
-            background: #dcfce7;
+            background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(27, 94, 32, 0.12);
         }
 
-        .import-section span {
-            font-size: 0.8rem;
-            font-weight: 700;
+        .import-section .import-title {
+            font-size: 0.9rem;
+            font-weight: 800;
             color: var(--primary);
             display: block;
-            margin-top: 5px;
+            margin-top: 8px;
         }
 
-        #bloquesDisponibles {
-            flex: 1;
-            overflow-y: auto;
+        .import-section .import-sub {
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: #4ade80;
+            display: block;
+            margin-top: 3px;
         }
 
+        .result-input.csv-filled {
+            border-color: #4ade80;
+            background: #f0fdf4;
+        }
+
+        /* ── MODAL CSV ── */
+        .modal-overlay {
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            z-index: 2000;
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.25s;
+        }
+        .modal-overlay.visible { opacity: 1; pointer-events: all; }
+
+        .modal-csv {
+            background: white; border-radius: 20px;
+            padding: 30px; width: 520px;
+            max-width: 95vw; max-height: 80vh;
+            display: flex; flex-direction: column; gap: 16px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.25);
+            transform: translateY(20px); transition: transform 0.25s;
+        }
+        .modal-overlay.visible .modal-csv { transform: translateY(0); }
+
+        .modal-csv h3 {
+            font-size: 1.1rem; font-weight: 800; color: var(--primary);
+            display: flex; align-items: center; gap: 10px;
+        }
+        .modal-csv p { font-size: 0.85rem; color: #64748b; font-weight: 500; }
+
+        .muestras-lista {
+            flex: 1; overflow-y: auto;
+            display: flex; flex-direction: column; gap: 8px;
+            max-height: 340px;
+        }
+
+        .muestra-item {
+            padding: 14px 16px; border-radius: 12px;
+            border: 2px solid #e2e8f0; cursor: pointer;
+            transition: 0.2s; display: flex;
+            justify-content: space-between; align-items: center;
+        }
+        .muestra-item:hover { border-color: var(--primary-light); background: #f0fdf4; }
+        .muestra-item .m-nombre { font-weight: 700; font-size: 0.95rem; }
+        .muestra-item .m-detalle { font-size: 0.78rem; color: #64748b; margin-top: 3px; }
+        .muestra-item .m-badge {
+            background: #e8f5e9; color: var(--primary);
+            font-size: 0.72rem; font-weight: 800;
+            padding: 4px 10px; border-radius: 20px; white-space: nowrap;
+        }
+
+        .modal-csv-cancel {
+            padding: 11px; border-radius: 12px;
+            border: 2px solid #e2e8f0; background: #f8fafc;
+            font-weight: 700; cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem; color: #475569; transition: 0.2s;
+        }
+        .modal-csv-cancel:hover { background: #e2e8f0; }
+ 
+        .bloques-label {
+            font-size: 0.85rem;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+ 
+        #bloquesDisponibles { flex: 1; overflow-y: auto; }
+ 
         .block {
             background: #f8fafc;
             border: 2px solid #f1f5f9;
@@ -142,8 +255,9 @@
             align-items: center;
             gap: 10px;
         }
-
-        /* DOCUMENT PREVIEW */
+ 
+        .block:hover { border-color: var(--primary-light); background: #f0fdf4; }
+ 
         .right-panel {
             flex: 1;
             background: var(--white);
@@ -154,19 +268,22 @@
             flex-direction: column;
             overflow: hidden;
         }
-
+ 
         .drop-zone {
             border: 2px dashed var(--accent);
             border-radius: 20px;
-            padding: 15px;
+            padding: 12px 20px;
             text-align: center;
             background: #fcfdfc;
             margin-bottom: 15px;
             color: var(--primary);
             font-weight: 700;
             font-size: 0.9rem;
+            transition: 0.3s;
         }
-
+ 
+        .drop-zone.drag-over { background: #f0fdf4; border-color: var(--primary); }
+ 
         .preview-container {
             flex: 1;
             background: #94a3b8;
@@ -178,14 +295,12 @@
             align-items: center;
             gap: 30px;
         }
-
-      
+ 
         .document-page {
             background: white;
             width: 215.9mm;
-            height: 279.4mm;
+            min-height: 279.4mm;
             padding: 15mm 20mm 25mm 20mm;
-           
             position: relative;
             display: flex;
             flex-direction: column;
@@ -193,19 +308,17 @@
             font-size: 13pt;
             flex-shrink: 0;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            overflow: hidden;
         }
-
-     
+ 
         .doc-header {
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
             position: relative;
             width: 100%;
         }
-
+ 
         .doc-logo {
             position: absolute;
             left: 0;
@@ -214,51 +327,54 @@
             height: 85px;
             width: auto;
         }
-
-        .header-text {
-            text-align: center;
-        }
-
+ 
+        .header-text { text-align: center; }
+ 
         .header-text h1 {
             font-size: 28pt;
             font-weight: 900;
             text-transform: uppercase;
             letter-spacing: 2px;
         }
-
+ 
         .header-text p {
             color: var(--primary);
             font-weight: 700;
             font-size: 12pt;
             margin-top: -5px;
         }
-
+ 
         .patient-info {
             display: grid;
-            grid-template-columns: 1.2fr 0.8fr;
-            gap: 8px 30px;
-            margin-bottom: 20px;
-            padding: 12px;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 6px 20px;
+            margin-bottom: 18px;
+            padding: 12px 14px;
             border: 2px solid #000;
             border-radius: 4px;
         }
-
+ 
         .info-line {
-            font-size: 11pt;
+            font-size: 10.5pt;
             display: flex;
-            gap: 8px;
+            gap: 6px;
+            align-items: baseline;
         }
-
+ 
         .info-line strong {
-            font-size: 9pt;
+            font-size: 8.5pt;
             text-transform: uppercase;
-            width: 85px;
+            min-width: 80px;
+            color: #555;
         }
-
+ 
         .info-line span {
             font-weight: 800;
+            font-size: 10.5pt;
         }
-
+ 
+        .info-line.full { grid-column: 1 / -1; }
+ 
         .doctor-input {
             border: none;
             border-bottom: 1px dotted #000;
@@ -267,32 +383,46 @@
             font-size: 11pt;
             font-weight: 800;
             outline: none;
+            font-family: 'Inter', sans-serif;
         }
-
+ 
         .page-content {
             flex: 1;
             display: flex;
             flex-direction: column;
         }
-
+ 
         .study-title-row {
             background: #eee;
             padding: 6px 12px;
             font-weight: 900;
             font-size: 13pt;
             text-transform: uppercase;
-            margin: 15px 0 8px 0;
+            margin: 12px 0 6px 0;
             display: flex;
             justify-content: space-between;
+            align-items: center;
             border-left: 8px solid var(--primary);
         }
-
+ 
+        .remove-study {
+            background: #ef5350;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 2px 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 900;
+            line-height: 1.4;
+        }
+ 
         .results-table {
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 5px;
         }
-
+ 
         .results-table th {
             text-align: left;
             padding: 8px;
@@ -301,58 +431,34 @@
             text-transform: uppercase;
             font-weight: 900;
         }
-
+ 
         .results-table td {
-            padding: 6px 8px;
+            padding: 5px 8px;
             border-bottom: 1px solid #eee;
-            font-size: 13pt;
+            font-size: 11pt;
         }
-
-        .param-name {
-            font-weight: 700;
-            width: 45%;
-        }
-
+ 
+        .param-name { font-weight: 700; width: 40%; }
+ 
         .result-input {
-            width: 85px;
-            padding: 3px;
+            width: 100%;
             border: 1px solid #ccc;
-            border-radius: 4px;
-            text-align: center;
-            font-weight: 900;
-            font-size: 13pt;
+            padding: 4px 8px;
             font-family: 'Roboto Mono', monospace;
+            font-weight: 800;
+            font-size: 11pt;
+            border-radius: 4px;
         }
-
+ 
         .signature-block {
-            position: absolute;
-            bottom: 12mm;
-            left: 20mm;
-            right: 20mm;
+            margin-top: 30px;
             text-align: center;
             padding-top: 10px;
-            border-top: 1px solid #eee;
+            border-top: 1px solid #ddd;
         }
-
-        .signature-block p {
-            font-size: 13pt;
-            line-height: 1.3;
-        }
-
-        .btn-save-final {
-            background: var(--primary);
-            color: white;
-            width: 100%;
-            padding: 18px;
-            border-radius: 15px;
-            border: none;
-            font-weight: 800;
-            font-size: 1.1rem;
-            cursor: pointer;
-            margin-top: 15px;
-        }
-
-       
+ 
+        .signature-block p { font-size: 12pt; line-height: 1.4; }
+ 
         .page-header-mini {
             display: flex;
             justify-content: space-between;
@@ -360,124 +466,339 @@
             margin-bottom: 15px;
             padding-bottom: 8px;
         }
-
+ 
         .page-header-mini span {
             font-size: 10pt;
             font-weight: 800;
             text-transform: uppercase;
         }
-
+ 
+        .loading-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: white;
+            gap: 16px;
+        }
+ 
+        .loading-state .material-symbols-outlined { font-size: 60px; opacity: 0.5; }
+ 
         @media print {
-            @page {
-                size: letter;
-                margin: 0;
-            }
-
-            body {
-                background: white;
-            }
-
-            body * {
-                visibility: hidden;
-            }
-
-            .preview-container,
-            .preview-container * {
-                visibility: visible;
-            }
-
+            @page { size: letter; margin: 0; }
+            body { background: white; }
+            body * { visibility: hidden; }
+            .preview-container, .preview-container * { visibility: visible; }
             .preview-container {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100%;
-                padding: 0;
-                margin: 0;
-                background: none;
-                overflow: visible;
+                position: absolute; left: 0; top: 0;
+                width: 100%; padding: 0; margin: 0;
+                background: none; overflow: visible;
             }
-
             .document-page {
-                box-shadow: none;
-                margin: 0;
-                page-break-after: always;
-                border: none;
+                box-shadow: none; margin: 0;
+                page-break-after: always; border: none;
             }
-
-            .remove-study,
-            .btn-save-final,
-            .header,
-            .left-panel,
-            .drop-zone {
-                display: none !important;
-            }
+            .remove-study, .header,
+            .left-panel, .drop-zone { display: none !important; }
         }
     </style>
+    <script src="/static/js/api.js"></script>
 </head>
-
+ 
 <body>
-
+ 
     <div class="header">
         <h2>Reportes Clínicos Analitic</h2>
         <div class="header-actions">
             <button class="btn-action btn-print" onclick="window.print()">
                 <span class="material-symbols-outlined">print</span> Imprimir Reporte
             </button>
+ 
+            <button class="btn-action btn-finalizar" onclick="finalizarCita()">
+                <span class="material-symbols-outlined">task_alt</span> Finalizar Cita
+            </button>
+ 
             <button class="btn-action" onclick="volver()">
                 <span class="material-symbols-outlined">arrow_back</span> Regresar
             </button>
         </div>
     </div>
-
+ 
     <div class="main">
         <div class="left-panel">
-            <div class="import-section" onclick="importarCSV()">
-                <span class="material-symbols-outlined"
-                    style="font-size: 32px; color: var(--primary);">upload_file</span>
-                <span>IMPORTAR RESULTADOS CSV</span>
+            <div class="patient-summary" id="patientSummary" style="display:none;">
+                <div class="ps-title">
+                    <span class="material-symbols-outlined" style="font-size:16px;">person</span>
+                    Paciente
+                </div>
+                <div class="ps-name" id="psNombre">—</div>
+                <div class="ps-grid">
+                    <div class="ps-item">Edad: <span id="psEdad">—</span></div>
+                    <div class="ps-item">Sexo: <span id="psSexo">—</span></div>
+                    <div class="ps-item" style="grid-column:1/-1;">Nacimiento: <span id="psNacimiento">—</span></div>
+                </div>
             </div>
-            <h3>Estudios Disponibles</h3>
+ 
+            <div class="import-section" onclick="importarCSV()">
+                <span class="material-symbols-outlined" style="font-size:40px; color:var(--primary);">upload_file</span>
+                <span class="import-title">IMPORTAR CSV</span>
+                <span class="import-sub">Auto-rellena y divide por estudios</span>
+            </div>
+ 
+            <span class="bloques-label">Estudios Disponibles</span>
             <div id="bloquesDisponibles"></div>
         </div>
-
+ 
         <div class="right-panel">
             <div id="dropZone" class="drop-zone">
                 Arrastre estudios aquí para integrarlos al reporte oficial
             </div>
-            <div class="preview-container" id="previewContainer"></div>
-            <button class="btn-save-final" onclick="guardarReporte()">Finalizar y Guardar en Sistema</button>
+            <div class="preview-container" id="previewContainer">
+                <div class="loading-state" id="loadingState">
+                    <span class="material-symbols-outlined">hourglass_top</span>
+                    <p style="font-weight:700;">Cargando datos del paciente...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+ 
+    <!-- Modal selección de muestra CSV -->
+    <div class="modal-overlay" id="modalMuestras">
+        <div class="modal-csv">
+            <h3>
+                <span class="material-symbols-outlined">science</span>
+                Seleccionar muestra del CSV
+            </h3>
+            <p>El archivo contiene varias muestras. Selecciona la que corresponde al paciente actual.</p>
+            <div class="muestras-lista" id="muestrasList"></div>
+            <button class="modal-csv-cancel" onclick="cerrarModalMuestras()">Cancelar</button>
         </div>
     </div>
 
     <script>
-        let estudiosData = [];
-        let solicitudId = null;
-        let datosPaciente = {};
-        let estudiosAgregados = [];
+        // ── Diccionario de abreviaturas de laboratorio ──
+        const ABREVIATURAS = {
+            'GLU':    ['glucosa','glucose','glicemia'],
+            'COLES':  ['colesterol','colesterol total','cholesterol'],
+            'CREAT':  ['creatinina','creatinine'],
+            'AC. URI':['acido urico','uric acid'],
+            'UREA':   ['urea','bun','nitrogeno ureico'],
+            'TRIG':   ['trigliceridos','triglycerides'],
+            'TGO':    ['tgo','ast','transaminasa oxalacetica','aspartato aminotransferasa'],
+            'TGP':    ['tgp','alt','transaminasa piruvica','alanino aminotransferasa'],
+            'BT E':   ['bilirrubina total','bili total'],
+            'BD E':   ['bilirrubina directa','bili directa'],
+            'BI':     ['bilirrubina indirecta','bili indirecta'],
+            'NA CPT': ['sodio','sodium','na'],
+            'K':      ['potasio','potassium'],
+            'CL':     ['cloro','cloruro','chloride'],
+            'CA':     ['calcio','calcium'],
+            'MG':     ['magnesio','magnesium'],
+            'P':      ['fosforo','phosphorus','fosfatos'],
+            'FK':     ['fosfatasa alcalina','alkaline phosphatase','fosfatasa'],
+            'HDL':    ['hdl','colesterol hdl'],
+            'LDL':    ['ldl','colesterol ldl'],
+            'VLDL':   ['vldl','colesterol vldl'],
+            'PROT T': ['proteinas totales','proteinas'],
+            'ALB':    ['albumina'],
+            'GLOB':   ['globulina','globulinas'],
+            'GGT':    ['ggt','gamma glutamil transferasa'],
+            'LDH':    ['ldh','lactato deshidrogenasa'],
+            'HB':     ['hemoglobina'],
+            'HTO':    ['hematocrito'],
+            'LEUCOS': ['leucocitos','globulos blancos'],
+            'ERITRO': ['eritrocitos','globulos rojos'],
+            'PLAQ':   ['plaquetas','trombocitos'],
+            'TSH':    ['tsh','tirotropina'],
+            'T3':     ['t3','triyodotironina'],
+            'T4':     ['t4','t4 libre','tiroxina'],
+            'PCR':    ['proteina c reactiva','pcr'],
+        };
 
-       
-        const FILAS_PRIMERA_PAGINA = 13;
-        const FILAS_PAGINA_SIGUIENTE = 22; 
+        function normalizarTexto(texto) {
+            return String(texto).toLowerCase()
+                .normalize('NFD').replace(/[̀-ͯ]/g, '')
+                .replace(/[^a-z0-9\s]/g, ' ')
+                .replace(/\s+/g, ' ').trim();
+        }
 
+        function construirMapaCsv(datosCsv) {
+            const mapa = {};
+            for (const [csvKey, val] of Object.entries(datosCsv)) {
+                mapa[normalizarTexto(csvKey)] = val;
+                const upperKey = csvKey.toUpperCase().trim();
+                if (ABREVIATURAS[upperKey]) {
+                    for (const alias of ABREVIATURAS[upperKey]) {
+                        mapa[normalizarTexto(alias)] = val;
+                    }
+                }
+            }
+            return mapa;
+        }
+
+        function encontrarValorCSV(nombreParam, mapaCsv) {
+            const norm = normalizarTexto(nombreParam);
+            if (mapaCsv[norm] !== undefined) return mapaCsv[norm];
+            for (const [key, val] of Object.entries(mapaCsv)) {
+                if (key.length > 2 && (norm.includes(key) || key.includes(norm))) return val;
+            }
+            return null;
+        }
+
+        function procesarCSVCompleto(datosCsv) {
+            const mapaCsv = construirMapaCsv(datosCsv);
+
+            const estudiosDetectados = [];
+            estudiosData.forEach(estudio => {
+                let hits = 0;
+                estudio.parametros.forEach(p => {
+                    if (encontrarValorCSV(p.nombre, mapaCsv) !== null) hits++;
+                });
+                if (hits > 0) estudiosDetectados.push({ estudio, hits });
+            });
+
+            if (estudiosDetectados.length === 0) {
+                alert('No se encontraron coincidencias con los estudios.\nVerifica los nombres de parámetros en el CSV.');
+                return;
+            }
+
+            estudiosDetectados.sort((a, b) => b.hits - a.hits);
+
+            estudiosAgregados = estudiosDetectados.map(({ estudio }) => {
+                const copia = JSON.parse(JSON.stringify(estudio));
+                copia.parametros.forEach(p => {
+                    const val = encontrarValorCSV(p.nombre, mapaCsv);
+                    if (val !== null) { p.val = val; p.csvFilled = true; }
+                });
+                return copia;
+            });
+
+            reconstruirDocumento();
+
+            const total = estudiosAgregados.reduce((acc, e) => acc + e.parametros.filter(p => p.csvFilled).length, 0);
+            const nombres = estudiosAgregados.map(e => e.nombre).join('\n  • ');
+            alert(`✅ ${estudiosDetectados.length} estudio(s) detectado(s), ${total} parámetro(s) importados:\n\n  • ${nombres}`);
+        }
+
+        let _muestrasCallback = null;
+
+        function mostrarSelectorMuestras(muestras) {
+            return new Promise(resolve => {
+                _muestrasCallback = resolve;
+                const lista = document.getElementById('muestrasList');
+                lista.innerHTML = '';
+                muestras.forEach(m => {
+                    const div = document.createElement('div');
+                    div.className = 'muestra-item';
+                    const keys = Object.keys(m.datos);
+                    div.innerHTML = `
+                        <div>
+                            <div class="m-nombre">${m.nombre || 'Paciente ' + m.no}</div>
+                            <div class="m-detalle">Muestra #${m.no} &nbsp;·&nbsp; ${keys.length} parámetros</div>
+                        </div>
+                        <span class="m-badge">${keys.slice(0,4).join(', ')}${keys.length > 4 ? '…' : ''}</span>`;
+                    div.onclick = () => {
+                        document.getElementById('modalMuestras').classList.remove('visible');
+                        _muestrasCallback = null;
+                        resolve(m.datos);
+                    };
+                    lista.appendChild(div);
+                });
+                document.getElementById('modalMuestras').classList.add('visible');
+            });
+        }
+
+        function cerrarModalMuestras() {
+            document.getElementById('modalMuestras').classList.remove('visible');
+            if (_muestrasCallback) { _muestrasCallback(null); _muestrasCallback = null; }
+        }
+
+        async function importarCSV() {
+            const res = await window.pywebview.api.seleccionarYLeerCSV();
+            if (!res || !res.ok) {
+                if (res?.error) alert('Error al leer CSV: ' + res.error);
+                return;
+            }
+
+            const muestras = res.muestras;
+            let datosCsv;
+
+            if (muestras.length === 1) {
+                datosCsv = muestras[0].datos;
+            } else {
+                datosCsv = await mostrarSelectorMuestras(muestras);
+                if (!datosCsv) return;
+            }
+
+            procesarCSVCompleto(datosCsv);
+        }
+
+        let estudiosData         = [];
+        let solicitudId          = null;
+        let esperaId             = null;
+        let citaId               = null;
+        let datosPaciente        = {};
+        let estudiosAgregados    = [];
+
+        let nombreDoctorTemporal = "";
+ 
+        const FILAS_PRIMERA_PAGINA   = 13;
+        const FILAS_PAGINA_SIGUIENTE = 22;
+ 
         async function inicializar() {
             const params = new URLSearchParams(window.location.search);
-            solicitudId = params.get('solicitudId');
+            solicitudId  = params.get('solicitudId');
+            esperaId     = params.get('esperaId') || null;
+            citaId       = params.get('citaId')   || null;
+ 
             try {
                 estudiosData = await window.pywebview.api.obtenerEstudiosDisponibles();
                 renderBloques();
+ 
                 if (solicitudId) {
                     const data = await window.pywebview.api.obtenerSolicitud(solicitudId);
                     if (data && data.solicitud) {
                         datosPaciente = data.solicitud;
-                        reconstruirDocumento();
+                       
+                        if (!nombreDoctorTemporal) {
+                            nombreDoctorTemporal = datosPaciente.medico_solicitante || "";
+                        }
+                        actualizarResumenPaciente();
                     }
                 }
-            } catch (err) { console.error(err); }
+ 
+                document.getElementById('loadingState').style.display = 'none';
+                reconstruirDocumento();
+ 
+            } catch (err) {
+                console.error("Error al inicializar:", err);
+                document.getElementById('loadingState').innerHTML = `
+                    <span class="material-symbols-outlined">error</span>
+                    <p style="font-weight:700;">Error al cargar datos</p>`;
+            }
         }
-
+ 
         if (window.pywebview) inicializar();
         else window.addEventListener('pywebviewready', inicializar);
-
+ 
+        function actualizarResumenPaciente() {
+            if (!datosPaciente.paciente_nombre) return;
+            document.getElementById('patientSummary').style.display = 'block';
+            document.getElementById('psNombre').textContent     = datosPaciente.paciente_nombre || '—';
+            document.getElementById('psEdad').textContent       = datosPaciente.paciente_edad != null ? datosPaciente.paciente_edad + ' años' : '—';
+            document.getElementById('psSexo').textContent       = formatSexoCorto(datosPaciente.paciente_sexo);
+            document.getElementById('psNacimiento').textContent = datosPaciente.paciente_fecha_nacimiento || '—';
+        }
+ 
+        function formatSexoCorto(s) {
+            if (!s) return '—';
+            const lower = s.toLowerCase();
+            if (lower === 'm' || lower.startsWith('mas')) return 'Masculino';
+            if (lower === 'f' || lower.startsWith('fem')) return 'Femenino';
+            return s;
+        }
+ 
         function renderBloques() {
             const container = document.getElementById("bloquesDisponibles");
             container.innerHTML = "";
@@ -490,89 +811,91 @@
                 container.appendChild(div);
             });
         }
-
-        async function importarCSV() {
-            const res = await window.pywebview.api.seleccionarYLeerCSV();
-            if (res.ok) {
-                const datosCsv = res.datos;
-                if (estudiosAgregados.length === 0) {
-                    const qs35 = JSON.parse(JSON.stringify(estudiosData.find(e => e.id == 1)));
-                    estudiosAgregados.push(qs35);
-                }
-                estudiosAgregados.forEach(est => {
-                    est.parametros.forEach(p => {
-                        if (datosCsv[p.nombre]) p.val = datosCsv[p.nombre];
-                    });
-                });
-                reconstruirDocumento();
-                alert("Resultados importados correctamente.");
-            }
-        }
-
+ 
         const dropZone = document.getElementById("dropZone");
-        dropZone.ondragover = (e) => e.preventDefault();
+        dropZone.ondragover  = (e) => { e.preventDefault(); dropZone.classList.add('drag-over'); };
+        dropZone.ondragleave = ()  => dropZone.classList.remove('drag-over');
         dropZone.ondrop = (e) => {
             e.preventDefault();
+            dropZone.classList.remove('drag-over');
             const studyId = e.dataTransfer.getData("studyId");
             const estudioOriginal = estudiosData.find(est => est.id == studyId);
             if (estudioOriginal) {
-                const estudioClon = JSON.parse(JSON.stringify(estudioOriginal));
-                estudiosAgregados.push(estudioClon);
+                estudiosAgregados.push(JSON.parse(JSON.stringify(estudioOriginal)));
                 reconstruirDocumento();
             }
         };
-
+ 
+      
+        function guardarNombreDoctor(val) {
+            nombreDoctorTemporal = val;
+        }
+ 
         function reconstruirDocumento() {
             const container = document.getElementById("previewContainer");
             container.innerHTML = "";
-
+ 
             let todasLasFilas = [];
             estudiosAgregados.forEach((estudio, estIdx) => {
-                todasLasFilas.push({ type: 'title', content: estudio.nombre, estIdx: estIdx });
+                todasLasFilas.push({ type: 'title', content: estudio.nombre, estIdx });
                 estudio.parametros.forEach((p, pIdx) => {
-                    todasLasFilas.push({ type: 'param', data: p, estIdx: estIdx, pIdx: pIdx });
+                    todasLasFilas.push({ type: 'param', data: p, estIdx, pIdx });
                 });
             });
-
+ 
             if (todasLasFilas.length === 0) {
                 crearPaginaBase(container, 1);
-                actualizarFirma();
+                agregarFirmaFinal(container);
                 return;
             }
-
+ 
             let filaActual = 0;
-            let numPagina = 1;
-
+            let numPagina  = 1;
+ 
             while (filaActual < todasLasFilas.length) {
                 const limiteFilas = (numPagina === 1) ? FILAS_PRIMERA_PAGINA : FILAS_PAGINA_SIGUIENTE;
-                const page = crearPaginaBase(container, numPagina);
+                const page        = crearPaginaBase(container, numPagina);
                 const contentArea = page.querySelector('.page-content');
-
+ 
                 let filasEnEstaPagina = 0;
-                let currentTable = null;
-                let currentTbody = null;
-
+                let currentTable  = null;
+                let currentTbody  = null;
+ 
                 while (filaActual < todasLasFilas.length && filasEnEstaPagina < limiteFilas) {
                     const item = todasLasFilas[filaActual];
+ 
                     if (item.type === 'title') {
                         const titleDiv = document.createElement("div");
                         titleDiv.className = "study-title-row";
-                        titleDiv.innerHTML = `<span>${item.content}</span> <button class="remove-study" onclick="removerEstudio(${item.estIdx})">×</button>`;
+                        titleDiv.innerHTML = `<span>${item.content}</span>
+                            <button class="remove-study" onclick="removerEstudio(${item.estIdx})">×</button>`;
                         contentArea.appendChild(titleDiv);
                         currentTable = null;
                         filasEnEstaPagina += 3;
                     } else {
                         if (!currentTable) {
-                            currentTable = document.createElement("table");
+                            currentTable  = document.createElement("table");
                             currentTable.className = "results-table";
-                            currentTable.innerHTML = `<thead><tr><th>Parámetro</th><th>Resultado</th><th>Unidades</th><th>Valores Ref.</th></tr></thead><tbody></tbody>`;
+                            currentTable.innerHTML = `<thead><tr>
+                                <th>Parámetro</th><th>Resultado</th>
+                                <th>Unidades</th><th>Valores Ref.</th>
+                            </tr></thead><tbody></tbody>`;
                             contentArea.appendChild(currentTable);
                             currentTbody = currentTable.querySelector("tbody");
                         }
+ 
                         const tr = document.createElement("tr");
-                        const p = item.data;
-                        let refValue = (datosPaciente.paciente_sexo && (datosPaciente.paciente_sexo.toLowerCase().startsWith('f') || datosPaciente.paciente_sexo.toLowerCase().includes('mujer'))) ? p.referencia_fem : p.referencia_masc;
-                        tr.innerHTML = `<td class="param-name">${p.nombre}</td><td><input type="text" class="result-input" value="${p.val || ''}" oninput="actualizarValor(${item.estIdx}, ${item.pIdx}, this.value)"></td><td style="width:15%;">${p.unidades}</td><td style="width:25%; font-size:10pt; font-style:italic; color:#666;">${refValue}</td>`;
+                        const p  = item.data;
+                        const sexo = (datosPaciente.paciente_sexo || '').toLowerCase();
+                        const esFem = sexo.startsWith('f') || sexo.includes('mujer') || sexo === 'fem';
+                        const refValue = esFem ? p.referencia_fem : p.referencia_masc;
+ 
+                        tr.innerHTML = `
+                            <td class="param-name">${p.nombre}</td>
+                            <td><input type="text" class="result-input" value="${p.val || ''}"
+                                oninput="actualizarValor(${item.estIdx}, ${item.pIdx}, this.value)"></td>
+                            <td style="width:15%;">${p.unidades}</td>
+                            <td style="width:25%; font-size:10pt; font-style:italic; color:#666;">${refValue}</td>`;
                         currentTbody.appendChild(tr);
                         filasEnEstaPagina++;
                     }
@@ -580,55 +903,162 @@
                 }
                 numPagina++;
             }
-            actualizarFirma();
+ 
+            agregarFirmaFinal(container);
         }
-
-        function actualizarValor(estIdx, pIdx, val) { estudiosAgregados[estIdx].parametros[pIdx].val = val; }
-
+ 
+        function actualizarValor(estIdx, pIdx, val) {
+            estudiosAgregados[estIdx].parametros[pIdx].val = val;
+        }
+ 
         function crearPaginaBase(container, numPagina) {
             const page = document.createElement("div");
             page.className = "document-page";
-            let headerHtml = (numPagina === 1) ? `
+ 
+            const nombre     = datosPaciente.paciente_nombre      || '—';
+            const edad       = datosPaciente.paciente_edad != null  ? datosPaciente.paciente_edad + ' años' : '—';
+            const sexo       = formatSexoCorto(datosPaciente.paciente_sexo);
+            const nacimiento = datosPaciente.paciente_fecha_nacimiento || '—';
+            const fechaHoy   = new Date().toLocaleDateString('es-MX', { day: '2-digit', month: '2-digit', year: 'numeric' });
+ 
+            let headerHtml;
+ 
+            if (numPagina === 1) {
+             
+                headerHtml = `
                 <div class="doc-header">
-                    <img src="Assets/Logo.png" class="doc-logo" alt="Logo">
+                    <img src="/static/Assets/Logo.png" class="doc-logo" alt="Logo">
                     <div class="header-text">
                         <h1>Analitic</h1>
                         <p>LABORATORIO CLÍNICO PROFESIONAL</p>
                     </div>
                 </div>
+ 
                 <div class="patient-info">
-                    <div class="info-line"><strong>Paciente</strong> <span>${datosPaciente.paciente_nombre || '—'}</span></div>
-                    <div class="info-line"><strong>Fecha</strong> <span>${new Date().toLocaleDateString('es-MX')}</span></div>
-                    <div class="info-line"><strong>Edad</strong> <span>${datosPaciente.paciente_edad || '—'} AÑOS</span></div>
-                    <div class="info-line"><strong>Sexo</strong> <span>${(datosPaciente.paciente_sexo || '—').toUpperCase()}</span></div>
-                    <div class="info-line" style="grid-column: span 2; margin-top:10px;">
-                        <strong>Doctor(a)</strong> <input type="text" class="doctor-input" value="${datosPaciente.medico_solicitante || ''}">
+                    <div class="info-line full" style="grid-column:1/-1;">
+                        <strong>Paciente</strong>
+                        <span>${nombre}</span>
                     </div>
-                </div>
-            ` : `
+                    <div class="info-line">
+                        <strong>Edad</strong>
+                        <span>${edad}</span>
+                    </div>
+                    <div class="info-line">
+                        <strong>Sexo</strong>
+                        <span>${sexo}</span>
+                    </div>
+                    <div class="info-line">
+                        <strong>Fecha</strong>
+                        <span>${fechaHoy}</span>
+                    </div>
+                    <div class="info-line">
+                        <strong>F. Nacimiento</strong>
+                        <span>${nacimiento}</span>
+                    </div>
+                    <div class="info-line" style="grid-column:2/-1;">
+                        <strong>Doctor(a)</strong>
+                        <input type="text" class="doctor-input" id="doctorInput"
+                               value="${nombreDoctorTemporal}"
+                               oninput="guardarNombreDoctor(this.value)"
+                               placeholder="Nombre del médico...">
+                    </div>
+                </div>`;
+            } else {
+                headerHtml = `
                 <div class="page-header-mini">
-                    <span>Reporte de Resultados</span>
-                    <span>Paciente: ${datosPaciente.paciente_nombre}</span>
+                    <span>Reporte de Resultados — Pág. ${numPagina}</span>
+                    <span>Paciente: ${nombre}</span>
+                </div>`;
+            }
+ 
+            page.innerHTML = `
+                <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%) rotate(-30deg); font-size:90px; color:rgba(0,0,0,0.02); font-weight:900; pointer-events:none; z-index:0;">
+                    ANALITIC
                 </div>
-            `;
-            page.innerHTML = `<div class="watermark" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); font-size: 90px; color: rgba(0, 0, 0, 0.02); font-weight: 900; pointer-events: none; z-index: 0;">ANALITIC</div>${headerHtml}<div class="page-content"></div><div class="signature-container"></div>`;
+                ${headerHtml}
+                <div class="page-content"></div>`;
+ 
             container.appendChild(page);
             return page;
         }
-
-        function actualizarFirma() {
-            document.querySelectorAll('.signature-container').forEach(c => c.innerHTML = '');
-            const paginas = document.querySelectorAll('.signature-container');
-            const ultimaFirma = paginas[paginas.length - 1];
-            if (ultimaFirma) {
-                ultimaFirma.innerHTML = `<div class="signature-block"><p>_______________________________________</p><p><strong>Q. C. Ma. Eugenia Velásquez Trejo</strong></p><p style="font-size: 10pt; color: #444; font-weight: 500;">Cédula Profesional 1536778 UV</p></div>`;
+ 
+        function agregarFirmaFinal(container) {
+            const paginas = container.querySelectorAll('.document-page');
+            if (paginas.length === 0) return;
+            const ultima = paginas[paginas.length - 1];
+            const firmaDiv = document.createElement("div");
+            firmaDiv.className = "signature-block";
+            firmaDiv.innerHTML = `
+                <p>_______________________________________</p>
+                <p><strong>Q. C. Ma. Eugenia Velásquez Trejo</strong></p>
+                <p style="font-size:10pt; color:#444; font-weight:500;">Cédula Profesional 1536778 UV</p>`;
+            ultima.appendChild(firmaDiv);
+        }
+ 
+        function removerEstudio(index) {
+            estudiosAgregados.splice(index, 1);
+            reconstruirDocumento();
+        }
+ 
+        async function finalizarCita() {
+            if (!solicitudId) return alert("No hay solicitud activa.");
+            if (estudiosAgregados.length === 0) return alert("Agrega al menos un estudio.");
+ 
+            // Leer el input del doctor del DOM por si no se disparó oninput
+            const inputDoctor = document.getElementById('doctorInput');
+            if (inputDoctor && inputDoctor.value) {
+                nombreDoctorTemporal = inputDoctor.value;
+            }
+ 
+            if (!confirm("¿Finalizar esta cita?")) return;
+ 
+            try {
+          
+                if (nombreDoctorTemporal) {
+                    await window.pywebview.api.actualizarMedicoSolicitud(parseInt(solicitudId), nombreDoctorTemporal);
+                }
+ 
+             
+                for (const estudio of estudiosAgregados) {
+                    for (const p of estudio.parametros) {
+                        const sexo  = (datosPaciente.paciente_sexo || '').toLowerCase();
+                        const esFem = sexo.startsWith('f') || sexo.includes('mujer') || sexo === 'fem';
+                        const ref   = esFem ? p.referencia_fem : p.referencia_masc;
+                        const valor = (p.val !== undefined && p.val !== null && p.val !== "") ? String(p.val) : "—";
+ 
+                        await window.pywebview.api.agregarResultadoAnalisis(
+                            parseInt(solicitudId),
+                            p.nombre,
+                            valor,
+                            p.unidades || '',
+                            ref || '',
+                            '',
+                            ''
+                        );
+                    }
+                }
+ 
+              
+                await window.pywebview.api.actualizarEstadoSolicitud(solicitudId, 'finalizado');
+ 
+          
+                if (esperaId) {
+                    await window.pywebview.api.marcarProcesado(parseInt(esperaId));
+                }
+                if (citaId) {
+                    await window.pywebview.api.eliminarCita(parseInt(citaId));
+                }
+ 
+                alert("¡Cita finalizada con éxito!");
+                window.location.href = "/resultados";
+ 
+            } catch (err) {
+                console.error("Error al finalizar:", err);
+                alert("Error al finalizar. Revisa la consola.");
             }
         }
-
-        function removerEstudio(index) { estudiosAgregados.splice(index, 1); reconstruirDocumento(); }
-        async function guardarReporte() { alert("Reporte guardado con éxito."); volver(); }
-        function volver() { window.location.href = "analisis.html"; }
+ 
+        function volver() { window.location.href = "/analisis"; }
     </script>
 </body>
-
 </html>

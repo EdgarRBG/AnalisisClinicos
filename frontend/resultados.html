@@ -1,456 +1,608 @@
 <!DOCTYPE html>
 <html lang="es">
-
+ 
 <head>
     <meta charset="UTF-8">
     <title>Resultados Finalizados - Analitic</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/css/styles.css">
-
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Roboto+Mono:wght@500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+ 
     <style>
         :root {
-            --primary: #2e7d32;
-            --primary-dark: #1b5e20;
+            --primary: #1b5e20;
             --primary-light: #4caf50;
-            --accent: #a5d6a7;
-            --text: #1a5c22;
-            --text-light: #424242;
-            --shadow: 0 10px 30px rgba(46, 125, 50, 0.12);
-            --hover-shadow: 0 20px 50px rgba(46, 125, 50, 0.22);
-            --border: #d1d5db;
+            --accent: #81c784;
+            --bg: #f0f4f0;
+            --white: #ffffff;
+            --text-main: #1a202c;
+            --shadow: 0 15px 35px rgba(27, 94, 32, 0.1);
+            --danger: #ef5350;
         }
-
+ 
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+ 
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #f5f9f0 0%, #e8f5e9 100%);
-            margin: 0;
-            color: var(--text);
+            background-color: var(--bg);
+            color: var(--text-main);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
-
-        .container {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 2rem 1.5rem;
-        }
-
-        h1 {
-            text-align: center;
-            font-size: 2.4rem;
-            margin-bottom: 2.2rem;
-            color: var(--primary);
-            font-weight: 700;
-        }
-
-        .layout {
-            display: grid;
-            grid-template-columns: 400px 1fr;
-            gap: 2rem;
-        }
-
-        .results-list,
-        .detail-container {
-            background: white;
-            border-radius: 16px;
-            padding: 2rem;
-            box-shadow: var(--shadow);
-        }
-
-        .results-list {
-            max-height: 82vh;
-            overflow-y: auto;
-            position: sticky;
-            top: 2rem;
-            align-self: start;
-        }
-
-        .results-list h3 {
-            color: var(--primary);
-            margin-top: 0;
-            margin-bottom: 1.4rem;
-            font-weight: 600;
-        }
-
-        .result-item {
-            padding: 1.3rem 1.5rem;
-            margin-bottom: 1rem;
-            border-radius: 12px;
-            background: #f8fafc;
-            cursor: pointer;
-            transition: all 0.25s;
-            border-left: 4px solid transparent;
-        }
-
-        .result-item:hover,
-        .result-item.selected {
-            background: #e8f5e9;
-            transform: translateX(4px);
-            border-left-color: var(--primary);
-        }
-
-        .result-item .content strong {
-            color: var(--primary);
-            display: block;
-            margin-bottom: 4px;
-        }
-
-        .delete-btn {
-            background: #ef4444;
+ 
+        .header {
+            background: linear-gradient(135deg, var(--primary), #2e7d32);
             color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 0.55rem 1.1rem;
-            font-size: 0.9rem;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .delete-btn:hover {
-            background: #dc2626;
-        }
-
-        .detail-container {
-            display: none;
-        }
-
-        .detail-header {
+            padding: 0 40px;
+            height: 70px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 2rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid #e0e0e0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            flex-shrink: 0;
         }
-
-        .detail-header h3 {
-            margin: 0;
-            color: var(--primary);
-            font-size: 1.75rem;
+ 
+        .header h2 { font-size: 1.3rem; font-weight: 800; }
+ 
+        .header-actions { display: flex; gap: 12px; }
+ 
+        .btn-action {
+            background: rgba(255,255,255,0.12);
+            color: white;
+            padding: 9px 18px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.2);
+            cursor: pointer;
             font-weight: 700;
-        }
-
-        .action-buttons {
+            font-size: 0.9rem;
+            transition: 0.25s;
             display: flex;
-            gap: 1rem;
-        }
-
-        .back-btn,
-        .report-btn {
-            padding: 0.85rem 1.6rem;
-            border-radius: 10px;
-            font-weight: 600;
-            cursor: pointer;
-            border: none;
-        }
-
-        .back-btn {
-            background: #6b7280;
-            color: white;
-        }
-
-        .report-btn {
-            background: var(--primary);
-            color: white;
-        }
-
-        .detail-group {
-            margin-bottom: 1.6rem;
-        }
-
-        .detail-group label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: var(--text);
-        }
-
-        .detail-group input,
-        .detail-group textarea {
-            width: 100%;
-            padding: 0.95rem 1.1rem;
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            background: #f8fafc;
-        }
-
-        .detail-group textarea {
-            min-height: 110px;
-            resize: vertical;
-        }
-
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 1.8rem 2rem;
-            margin-bottom: 2.5rem;
-        }
-
-        .results-section h4 {
-            color: var(--primary);
-            margin: 2.2rem 0 1.4rem;
-            font-weight: 700;
-        }
-
-        .results-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.4rem;
-        }
-
-        .result-card {
-            background: #f8fafc;
-            border-radius: 12px;
-            padding: 1.4rem 1.6rem;
-            border-left: 5px solid var(--primary-light);
-            transition: all 0.25s;
-        }
-
-        .result-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--hover-shadow);
-        }
-
-        .result-card strong {
-            font-size: 1.15rem;
-            color: var(--text);
-            display: block;
-            margin-bottom: 0.6rem;
-        }
-
-        .result-card .valor {
-            font-size: 1.85rem;
-            font-weight: 700;
-            color: var(--primary-dark);
-        }
-
-        .back {
-            background: #6b7280;
-            color: white;
-            padding: 1rem 2.5rem;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            font-size: 1.05rem;
-            margin: 2.5rem auto 0;
-            display: block;
-            font-weight: 600;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            justify-content: center;
             align-items: center;
+            gap: 7px;
         }
-
-        .modal-content {
+        .btn-action:hover { background: rgba(255,255,255,0.22); transform: translateY(-2px); }
+        .btn-print { background: #f59e0b; border-color: #d97706; }
+        .btn-delete { background: rgba(239,83,80,0.8); border-color: #ef5350; }
+ 
+        .main {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+            gap: 0;
+        }
+ 
+        .left-panel {
+            width: 320px;
+            background: var(--white);
+            border-right: 1px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+ 
+        .left-panel-header {
+            padding: 20px 20px 14px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+ 
+        .left-panel-header h3 {
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+ 
+        .results-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+ 
+        .result-item {
+            padding: 14px 16px;
+            border-radius: 14px;
+            background: #f8fafc;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-left: 4px solid transparent;
+        }
+ 
+        .result-item:hover { background: #f0fdf4; border-left-color: var(--primary-light); }
+        .result-item.selected { background: #e8f5e9; border-left-color: var(--primary); }
+ 
+        .result-item strong {
+            display: block;
+            color: var(--primary);
+            font-size: 0.95rem;
+            margin-bottom: 3px;
+        }
+ 
+        .result-item small {
+            color: #64748b;
+            font-size: 0.78rem;
+            font-weight: 600;
+        }
+ 
+        .right-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: var(--bg);
+        }
+ 
+        .doc-actions-bar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 24px;
+            background: var(--white);
+            border-bottom: 1px solid #e2e8f0;
+            flex-shrink: 0;
+        }
+ 
+        .doc-actions-bar .patient-label {
+            flex: 1;
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+ 
+        .empty-right {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #94a3b8;
+            gap: 14px;
+        }
+ 
+        .empty-right .material-symbols-outlined { font-size: 72px; opacity: 0.25; }
+        .empty-right p { font-size: 1rem; font-weight: 600; }
+ 
+        .preview-scroll {
+            flex: 1;
+            background: #94a3b8;
+            overflow-y: auto;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+        }
+ 
+        .document-page {
             background: white;
-            padding: 2rem;
-            border-radius: 16px;
-            max-width: 520px;
-            box-shadow: var(--shadow);
+            width: 215.9mm;
+            min-height: 279.4mm;
+            padding: 15mm 20mm 25mm 20mm;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            color: #000;
+            font-size: 13pt;
+            flex-shrink: 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+ 
+        .doc-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            position: relative;
+            width: 100%;
+        }
+ 
+        .doc-logo {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 85px;
+        }
+ 
+        .header-text { text-align: center; }
+ 
+        .header-text h1 {
+            font-size: 28pt;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+ 
+        .header-text p {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 12pt;
+            margin-top: -5px;
+        }
+ 
+        .patient-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 6px 20px;
+            margin-bottom: 18px;
+            padding: 12px 14px;
+            border: 2px solid #000;
+            border-radius: 4px;
+        }
+ 
+        .info-line {
+            font-size: 10.5pt;
+            display: flex;
+            gap: 6px;
+            align-items: baseline;
+        }
+ 
+        .info-line strong {
+            font-size: 8.5pt;
+            text-transform: uppercase;
+            min-width: 80px;
+            color: #555;
+        }
+ 
+        .info-line span { font-weight: 800; font-size: 10.5pt; }
+        .info-line.full { grid-column: 1 / -1; }
+ 
+        .page-content { flex: 1; display: flex; flex-direction: column; }
+ 
+        .study-title-row {
+            background: #eee;
+            padding: 6px 12px;
+            font-weight: 900;
+            font-size: 13pt;
+            text-transform: uppercase;
+            margin: 12px 0 6px 0;
+            border-left: 8px solid var(--primary);
+        }
+ 
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 5px;
+        }
+ 
+        .results-table th {
+            text-align: left;
+            padding: 8px;
+            border-bottom: 2px solid #000;
+            font-size: 10pt;
+            text-transform: uppercase;
+            font-weight: 900;
+        }
+ 
+        .results-table td {
+            padding: 5px 8px;
+            border-bottom: 1px solid #eee;
+            font-size: 11pt;
+        }
+ 
+        .param-name { font-weight: 700; width: 40%; }
+ 
+        .resultado-val {
+            font-weight: 900;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 12pt;
+        }
+ 
+        .page-header-mini {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 2px solid #000;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+        }
+ 
+        .page-header-mini span { font-size: 10pt; font-weight: 800; text-transform: uppercase; }
+ 
+        .signature-block {
+            margin-top: auto;
+            padding-top: 20px;
+            text-align: center;
+            border-top: 1px solid #ddd;
+        }
+ 
+        .signature-block p { font-size: 12pt; line-height: 1.4; }
+ 
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
+ 
+        @media print {
+            @page { size: letter; margin: 0; }
+            body { background: white; overflow: visible; height: auto; }
+            body * { visibility: hidden; }
+            .preview-scroll, .preview-scroll * { visibility: visible; }
+            .preview-scroll {
+                position: absolute; left: 0; top: 0;
+                width: 100%; padding: 0; margin: 0;
+                background: none; overflow: visible;
+            }
+            .document-page {
+                box-shadow: none; margin: 0;
+                page-break-after: always; border: none;
+            }
         }
     </style>
+    <script src="/static/js/api.js"></script>
 </head>
-
+ 
 <body>
-
-    <div class="container">
-        <h1>Resultados Finalizados</h1>
-
-        <div class="layout">
-
-          
-            <div class="results-list">
-                <h3>Solicitudes Finalizadas</h3>
-                <div id="resultsList">
-                    <p style="text-align:center; color:#777;">Cargando resultados...</p>
-                </div>
-            </div>
-
-          
-            <div class="detail-container" id="detailContainer">
-                <div class="detail-header">
-                    <h3 id="detailTitle">Detalle del Resultado</h3>
-                    <div class="action-buttons">
-                        <button class="back-btn" onclick="volverAListaResultados()">Volver a lista</button>
-                        <button class="report-btn" onclick="generarReporte()">Generar Reporte</button>
-                    </div>
-                </div>
-
-                <input type="hidden" id="detailSolicitudId">
-
-                <div class="info-grid">
-                    <div class="detail-group">
-                        <label>Paciente</label>
-                        <input type="text" id="detailPaciente" readonly>
-                    </div>
-                    <div class="detail-group">
-                        <label>Estudio</label>
-                        <input type="text" id="detailTipo" readonly>
-                    </div>
-                    <div class="detail-group">
-                        <label>Fecha de recepción</label>
-                        <input type="text" id="detailFechaRecepcion" readonly>
-                    </div>
-                    <div class="detail-group">
-                        <label>Fecha de reporte</label>
-                        <input type="text" id="detailFechaReporte" readonly>
-                    </div>
-                    <div class="detail-group" style="grid-column: 1 / -1;">
-                        <label>Observaciones generales</label>
-                        <textarea id="detailObservaciones" readonly></textarea>
-                    </div>
-                </div>
-
-                <div class="results-section">
-                    <h4>Resultados</h4>
-                    <div class="results-grid" id="detailResultsGrid"></div>
-                </div>
-            </div>
-
+ 
+    <nav class="header">
+        <h2>Resultados Finalizados</h2>
+        <div class="header-actions">
+            <button class="btn-action" onclick="volver()">
+                <span class="material-symbols-outlined">dashboard</span> Dashboard
+            </button>
         </div>
-
-        <button class="back" onclick="volver()">Volver al Dashboard</button>
+    </nav>
+ 
+    <div class="main">
+        <aside class="left-panel">
+            <div class="left-panel-header">
+                <h3><span class="material-symbols-outlined">list_alt</span> Reportes Listos</h3>
+            </div>
+            <div id="resultsList" class="results-list"></div>
+        </aside>
+ 
+        <main class="right-panel">
+            <div id="emptyRight" class="empty-right">
+                <span class="material-symbols-outlined">description</span>
+                <p>Selecciona un paciente para ver su reporte</p>
+            </div>
+ 
+            <div id="docActionsBar" class="doc-actions-bar" style="display:none;">
+                <div class="patient-label" id="patientLabel"></div>
+                <button class="btn-action btn-print" id="btnImprimir" onclick="window.print()">
+                    <span class="material-symbols-outlined">print</span> Imprimir
+                </button>
+                <button class="btn-action btn-delete" id="btnEliminar" onclick="eliminarActual()">
+                    <span class="material-symbols-outlined">delete</span> Eliminar
+                </button>
+            </div>
+ 
+            <div id="previewScroll" class="preview-scroll" style="display:none;"></div>
+        </main>
     </div>
-
+ 
     <script>
-        window.addEventListener('pywebviewready', async () => {
+        let solicitudActualId = null;
+ 
+        async function cargarResultados() {
             try {
-                const finalizadas = await window.pywebview.api.obtenerSolicitudesFinalizadas() || [];
-                renderResultadosFinalizados(finalizadas);
+                const lista = await window.pywebview.api.obtenerSolicitudesFinalizadas();
+                const container = document.getElementById('resultsList');
+                container.innerHTML = '';
+ 
+                if (!lista || lista.length === 0) {
+                    container.innerHTML = '<p style="padding:20px; color:#94a3b8; font-size:0.9rem; text-align:center;">No hay resultados finalizados.</p>';
+                    return;
+                }
+ 
+                lista.forEach(res => {
+                    const div = document.createElement('div');
+                    div.className = 'result-item';
+                    if (solicitudActualId == res.id) div.classList.add('selected');
+                    const fecha = res.fecha_reporte ? res.fecha_reporte.substring(0, 10) : '—';
+                    div.innerHTML = `
+                        <strong>${res.paciente_nombre}</strong>
+                        <small>${res.tipo_estudio || 'Análisis'} — ${fecha}</small>
+                    `;
+                    div.onclick = () => verDetalle(res.id);
+                    container.appendChild(div);
+                });
             } catch (err) {
-                console.error("Error al cargar resultados:", err);
-                document.getElementById("resultsList").innerHTML =
-                    "<p style='color:#ef4444; text-align:center;'>Error al cargar resultados</p>";
+                console.error("Error al cargar lista:", err);
             }
-        }, { once: true });
-
-        function renderResultadosFinalizados(finalizadas) {
-            const lista = document.getElementById("resultsList");
-            lista.innerHTML = "";
-
-            if (finalizadas.length === 0) {
-                lista.innerHTML = "<p style='text-align:center; color:#777;'>No hay resultados finalizados aún.</p>";
-                return;
-            }
-
-            finalizadas.forEach(r => {
-                const item = document.createElement("div");
-                item.className = "result-item";
-                item.dataset.id = r.id;
-
-                item.innerHTML = `
-                    <div class="result-item-header">
-                        <div class="content">
-                            <strong>${r.paciente_nombre || 'Paciente desconocido'}</strong>
-                            <small>ID Muestra: ${r.id_muestra || '—'}</small><br>
-                            <small>Estudio: ${r.tipo_estudio}</small><br>
-                            <small>Fecha: ${r.fecha_reporte || '—'}</small>
-                        </div>
-                        <button class="delete-btn" onclick="event.stopPropagation(); confirmarEliminarSolicitudFinalizada(${r.id})">
-                            Eliminar
-                        </button>
-                    </div>
-                `;
-
-                item.querySelector(".content").addEventListener("click", () => cargarDetalleResultado(r.id));
-                lista.appendChild(item);
-            });
         }
-
-        async function cargarDetalleResultado(id) {
+ 
+        async function verDetalle(id) {
+            solicitudActualId = id;
+            document.querySelectorAll('.result-item').forEach(el => el.classList.remove('selected'));
+            document.querySelectorAll('.result-item').forEach(el => {
+                if (el.onclick.toString().includes(id)) el.classList.add('selected');
+            });
+ 
+            document.getElementById('emptyRight').style.display = 'none';
+            document.getElementById('docActionsBar').style.display = 'flex';
+            document.getElementById('previewScroll').style.display = 'flex';
+ 
             try {
                 const data = await window.pywebview.api.obtenerSolicitud(id);
-                if (!data) return alert("No se pudo cargar el detalle");
-
-                document.getElementById("detailSolicitudId").value = id;
-                document.getElementById("detailTitle").textContent = `Detalle - ${data.solicitud.tipo_estudio}`;
-                document.getElementById("detailPaciente").value = data.solicitud.paciente_nombre || '—';
-                document.getElementById("detailTipo").value = data.solicitud.tipo_estudio || '—';
-                document.getElementById("detailFechaRecepcion").value = data.solicitud.fecha_recepcion || '—';
-                document.getElementById("detailFechaReporte").value = data.solicitud.fecha_reporte || '—';
-                document.getElementById("detailObservaciones").value = data.solicitud.observaciones_generales || 'Sin observaciones';
-
-                const grid = document.getElementById("detailResultsGrid");
-                grid.innerHTML = "";
-
-                if (data.resultados && data.resultados.length > 0) {
-                    data.resultados.forEach(res => {
-                        const card = document.createElement("div");
-                        card.className = "result-card";
-                        card.innerHTML = `
-                            <strong>${res.parametro}</strong>
-                            <div class="valor">${res.resultado !== null ? res.resultado : '—'}</div>
-                            <div class="unidad">${res.unidades || ''}</div>
-                            <div class="referencia">Referencia: ${res.valor_referencia || '—'}</div>
-                            <div class="observacion">${res.observacion || 'Ninguna'}</div>
-                        `;
-                        grid.appendChild(card);
-                    });
-                } else {
-                    grid.innerHTML = '<p style="text-align:center; color:#777; padding: 3rem 0;">No hay parámetros registrados.</p>';
+                if (data) {
+                 
+                    const medico = data.solicitud.medico_solicitante;
+                    document.getElementById('patientLabel').textContent =
+                        data.solicitud.paciente_nombre + (medico ? ` — Dr(a). ${medico}` : '');
+                    renderizarDocumento(data);
                 }
-
-                document.getElementById("detailContainer").style.display = "block";
-
             } catch (err) {
                 console.error(err);
-                alert("Error al cargar detalle");
             }
         }
-
-        async function confirmarEliminarSolicitudFinalizada(solicitudId) {
-            if (!confirm("¿Realmente deseas ELIMINAR esta solicitud finalizada?")) return;
-
+ 
+        function renderizarDocumento(data) {
+            const scroll = document.getElementById('previewScroll');
+            scroll.innerHTML = '';
+ 
+            const sol       = data.solicitud;
+          
+            const todasFilas = data.resultados || [];
+ 
+            const FILAS_P1 = 13;
+            const FILAS_PN = 22;
+ 
+            if (todasFilas.length === 0) {
+                crearPagina(scroll, sol, 1, [], true);
+                return;
+            }
+ 
+            let filaActual = 0;
+            let numPagina  = 1;
+ 
+            while (filaActual < todasFilas.length) {
+                const limite     = (numPagina === 1) ? FILAS_P1 : FILAS_PN;
+                const filasSlice = todasFilas.slice(filaActual, filaActual + limite);
+                const esUltima   = (filaActual + limite) >= todasFilas.length;
+ 
+                crearPagina(scroll, sol, numPagina, filasSlice, esUltima);
+ 
+                filaActual += limite;
+                numPagina++;
+            }
+        }
+ 
+        function crearPagina(scroll, sol, numPagina, filas, esUltima) {
+            const page = document.createElement('div');
+            page.className = 'document-page';
+ 
+            const nombre     = sol.paciente_nombre || '—';
+            const edad       = sol.paciente_edad != null ? sol.paciente_edad + ' años' : '—';
+            const sexo       = formatSexo(sol.paciente_sexo);
+            const nacimiento = sol.paciente_fecha_nacimiento || '—';
+          
+            const medico     = sol.medico_solicitante || '—';
+            const fechaRep   = sol.fecha_reporte
+                ? sol.fecha_reporte.substring(0, 10)
+                : new Date().toLocaleDateString('es-MX');
+ 
+            let headerHtml;
+ 
+            if (numPagina === 1) {
+                headerHtml = `
+                <div class="doc-header">
+                    <img src="/static/Assets/Logo.png" class="doc-logo" alt="Logo" onerror="this.style.display='none'">
+                    <div class="header-text">
+                        <h1>Analitic</h1>
+                        <p>LABORATORIO CLÍNICO PROFESIONAL</p>
+                    </div>
+                </div>
+                <div class="patient-info">
+                    <div class="info-line full">
+                        <strong>Paciente</strong><span>${nombre}</span>
+                    </div>
+                    <div class="info-line">
+                        <strong>Edad</strong><span>${edad}</span>
+                    </div>
+                    <div class="info-line">
+                        <strong>Sexo</strong><span>${sexo}</span>
+                    </div>
+                    <div class="info-line">
+                        <strong>Fecha Reporte</strong><span>${fechaRep}</span>
+                    </div>
+                    <div class="info-line">
+                        <strong>F. Nacimiento</strong><span>${nacimiento}</span>
+                    </div>
+                    <div class="info-line" style="grid-column:2/-1;">
+                        <strong>Doctor(a)</strong><span>${medico}</span>
+                    </div>
+                </div>`;
+            } else {
+                headerHtml = `
+                <div class="page-header-mini">
+                    <span>Reporte de Resultados — Pág. ${numPagina}</span>
+                    <span>Paciente: ${nombre}</span>
+                </div>`;
+            }
+ 
+           
+            let tablaHtml = '';
+            if (filas.length > 0) {
+                const filasTR = filas.map(f => {
+                  
+                    const val = (f.resultado !== null && f.resultado !== undefined && f.resultado !== "")
+                        ? f.resultado
+                        : '—';
+                    return `<tr>
+                        <td class="param-name">${f.parametro}</td>
+                        <td class="resultado-val">${val}</td>
+                        <td style="width:15%; font-size:10pt;">${f.unidades || ''}</td>
+                        <td style="width:25%; font-size:10pt; font-style:italic; color:#555;">${f.valor_referencia || '—'}</td>
+                    </tr>`;
+                }).join('');
+ 
+                tablaHtml = `
+                <div class="study-title-row">${sol.tipo_estudio || 'Resultados'}</div>
+                <table class="results-table">
+                    <thead>
+                        <tr>
+                            <th>Parámetro</th>
+                            <th>Resultado</th>
+                            <th>Unidades</th>
+                            <th>Valores Ref.</th>
+                        </tr>
+                    </thead>
+                    <tbody>${filasTR}</tbody>
+                </table>`;
+            }
+ 
+            const firmaHtml = esUltima ? `
+                <div class="signature-block">
+                    <p>_______________________________________</p>
+                    <p><strong>Q. C. Ma. Eugenia Velásquez Trejo</strong></p>
+                    <p style="font-size:10pt; color:#444; font-weight:500;">Cédula Profesional 1536778 UV</p>
+                </div>` : '';
+ 
+            page.innerHTML = `
+                <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%) rotate(-30deg);
+                     font-size:90px; color:rgba(0,0,0,0.02); font-weight:900; pointer-events:none; z-index:0;">
+                    ANALITIC
+                </div>
+                ${headerHtml}
+                <div class="page-content">
+                    ${tablaHtml}
+                    ${firmaHtml}
+                </div>`;
+ 
+            scroll.appendChild(page);
+        }
+ 
+        function formatSexo(s) {
+            if (!s) return '—';
+            const l = s.toLowerCase();
+            if (l === 'm' || l.startsWith('mas')) return 'Masculino';
+            if (l === 'f' || l.startsWith('fem')) return 'Femenino';
+            return s;
+        }
+ 
+        async function eliminarActual() {
+            if (!solicitudActualId) return;
+            if (!confirm("¿Eliminar este resultado definitivamente? No se puede deshacer.")) return;
+ 
             try {
-                const exito = await window.pywebview.api.eliminarSolicitud(solicitudId);
-                if (exito) {
-                    alert("Solicitud eliminada correctamente");
-                    const finalizadas = await window.pywebview.api.obtenerSolicitudesFinalizadas() || [];
-                    renderResultadosFinalizados(finalizadas);
-                    document.getElementById("detailContainer").style.display = "none";
+                const ok = await window.pywebview.api.eliminarSolicitud(solicitudActualId);
+                if (ok) {
+                    solicitudActualId = null;
+                    document.getElementById('emptyRight').style.display = 'flex';
+                    document.getElementById('docActionsBar').style.display = 'none';
+                    document.getElementById('previewScroll').style.display = 'none';
+                    cargarResultados();
                 } else {
-                    alert("No se pudo eliminar la solicitud");
+                    alert("No se pudo eliminar.");
                 }
             } catch (err) {
                 console.error(err);
-                alert("Error al eliminar");
+                alert("Error al eliminar.");
             }
         }
-
-        async function generarReporte() {
-            const solicitudId = document.getElementById("detailSolicitudId").value;
-            if (!solicitudId) return alert("No hay solicitud seleccionada");
-
-            try {
-                const ruta = await window.pywebview.api.generarReporteFinalizado(solicitudId);
-                if (ruta) {
-                    alert("Reporte generado correctamente en:\n" + ruta);
-                } else {
-                    alert("No se pudo generar el reporte");
-                }
-            } catch (err) {
-                console.error(err);
-                alert("Error al generar el reporte");
-            }
-        }
-
-        function volverAListaResultados() {
-            document.getElementById("detailContainer").style.display = "none";
-        }
-
-        function volver() {
-            window.location.href = "dashboard.html";
-        }
+ 
+        function volver() { window.location.href = '/dashboard'; }
+ 
+        if (window.pywebview) cargarResultados();
+        else window.addEventListener('pywebviewready', cargarResultados);
     </script>
-
+ 
 </body>
-
 </html>
