@@ -250,10 +250,12 @@
                 });
         }
 
-        // Verificar si ya hay sesión activa (cookie JWT)
-        fetch("/api/check_auth", { credentials: "include" })
-            .then(r => { if (r.ok) window.location.href = "/dashboard"; })
-            .catch(() => {});
+        // Mostrar aviso si la sesión expiró
+        const params = new URLSearchParams(window.location.search);
+        if (params.get("expired") === "1") {
+            const err = document.getElementById("error");
+            if (err) err.innerText = "⏰ Tu sesión expiró. Inicia sesión nuevamente.";
+        }
 
         document.addEventListener("keypress", (e) => {
             if (e.key === "Enter") login();
