@@ -458,16 +458,7 @@
                         <div class="form-group">
                             <select id="estudio" required>
                                 <option value="" disabled selected>Seleccione estudio...</option>
-                                <option value="Quimica sanguinea 35 elementos">Quimica sanguinea 35 elementos</option>
-                                <option value="Perfil lipidico">Perfil lipidico</option>
-                                <option value="Citometria hematica completa">Citometria hematica completa</option>
-                                <option value="Examen General de Orina">Examen General de Orina</option>
-                                <option value="Glucosa">Glucosa</option>
-                                <option value="Ácido Úrico">Ácido Úrico</option>
-                                <option value="Perfil Tiroideo">Perfil Tiroideo</option>
-                                <option value="Tiempos de Coagulación">Tiempos de Coagulación</option>
-                                <option value="Prueba de Embarazo">Prueba de Embarazo</option>
-                                <option value="Otro">Otro</option>
+                                <!-- Cargado dinámicamente desde BD -->
                             </select>
                             <label>ESTUDIO SOLICITADO</label>
                         </div>
@@ -632,11 +623,34 @@
        
             const selectEstudio = document.getElementById('estudio');
             const estudioValor  = p.estudio || "";
-            let existe = [...selectEstudio.options].some(o => o.value === estudioValor);
-            if (!existe && estudioValor !== "") {
-                selectEstudio.add(new Option(estudioValor, estudioValor));
+
+            // Esperar a que los estudios estén cargados si aún no lo están
+            if (selectEstudio.options.length <= 1) {
+                await cargarEstudiosSelect();
             }
-            selectEstudio.value = estudioValor;
+
+            // Intentar seleccionar el estudio de la cita (comparación flexible)
+            let opcionEncontrada = [...selectEstudio.options].find(o =>
+                o.value.toLowerCase().trim() === estudioValor.toLowerCase().trim()
+            );
+
+            if (!opcionEncontrada && estudioValor !== "") {
+                // Si no existe exacto, agregar y seleccionar
+                selectEstudio.add(new Option(estudioValor, estudioValor));
+                selectEstudio.value = estudioValor;
+            } else if (opcionEncontrada) {
+                selectEstudio.value = opcionEncontrada.value;
+            }
+
+            // Bloquear el select si el estudio viene pre-seleccionado de una cita
+            if (estudioValor && p.tipo === 'cita') {
+                selectEstudio.disabled = true;
+                selectEstudio.style.opacity = '0.7';
+                selectEstudio.title = 'Estudio definido en la solicitud';
+            } else {
+                selectEstudio.disabled = false;
+                selectEstudio.style.opacity = '1';
+            }
  
             if (p.registrado) {
                 document.getElementById('pacienteRegistradoBox').style.display = 'block';
@@ -688,8 +702,11 @@
  
         async function guardarSolicitud() {
             if (!pSeleccionado) return;
-            
-            const estudio = document.getElementById('estudio').value;
+
+            // Re-habilitar temporalmente por si estaba disabled
+            const selectEstudio = document.getElementById('estudio');
+            selectEstudio.disabled = false;
+            const estudio = selectEstudio.value;
             if (!estudio) return alert("Selecciona un estudio.");
  
             try {
