@@ -715,23 +715,46 @@
         }
 
         async function importarCSV() {
-            const res = await window.pywebview.api.seleccionarYLeerCSV();
-            if (!res || !res.ok) {
-                if (res?.error) alert('Error al leer CSV: ' + res.error);
-                return;
-            }
+            // Crear input de archivo dinámico
+            const input = document.createElement("input");
+            input.type = "file";
+            input.accept = ".csv";
+            input.onchange = async function() {
+                const archivo = input.files[0];
+                if (!archivo) return;
 
-            const muestras = res.muestras;
-            let datosCsv;
+                const form = new FormData();
+                form.append("archivo", archivo);
 
-            if (muestras.length === 1) {
-                datosCsv = muestras[0].datos;
-            } else {
-                datosCsv = await mostrarSelectorMuestras(muestras);
-                if (!datosCsv) return;
-            }
+                try {
+                    const resp = await fetch("/api/upload_csv", {
+                        method: "POST",
+                        credentials: "include",
+                        body: form
+                    });
+                    const res = await resp.json();
 
-            procesarCSVCompleto(datosCsv);
+                    if (!res || !res.ok) {
+                        alert("Error al leer CSV: " + (res?.error || "desconocido"));
+                        return;
+                    }
+
+                    const muestras = res.muestras;
+                    let datosCsv;
+
+                    if (muestras.length === 1) {
+                        datosCsv = muestras[0].datos;
+                    } else {
+                        datosCsv = await mostrarSelectorMuestras(muestras);
+                        if (!datosCsv) return;
+                    }
+
+                    procesarCSVCompleto(datosCsv);
+                } catch(e) {
+                    alert("Error al subir CSV: " + e);
+                }
+            };
+            input.click();
         }
 
         let estudiosData         = [];
