@@ -271,6 +271,69 @@ def api_dispatch(metodo):
 
 
 # ──────────────────────────────────────────────────────────────
+# Respaldar pacientes → descarga Excel en el navegador
+# ──────────────────────────────────────────────────────────────
+@app.route("/api/descargar_respaldo", methods=["GET"])
+@requiere_token
+def descargar_respaldo():
+    import io
+    import pandas as pd
+
+    pacientes = _pacientes.obtener_todos()
+    if not pacientes:
+        return jsonify({"error": "No hay pacientes para respaldar"}), 400
+
+    df = pd.DataFrame(pacientes)
+
+    # Convertir fechas a string
+    for col in df.columns:
+        df[col] = df[col].apply(
+            lambda v: v.strftime("%Y-%m-%d %H:%M:%S")
+            if isinstance(v, (datetime.date, datetime.datetime)) else v
+        )
+
+    buffer = io.BytesIO()
+    with pd.ExcelWriter(buffer, engine="openpyxl") as writer:
+        df.to_excel(writer, index=False, sheet_name="Pacientes")
+    buffer.seek(0)
+
+    fecha_str = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    nombre = f"Respaldo_Pacientes_{fecha_str}.xlsx"
+
+    from flask import send_file
+    return send_file(
+        buffer,
+        mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        as_attachment=True,
+        download_name=nombre
+    )
+
+
+# ──────────────────────────────────────────────────────────────
+# Restaurar pacientes desde Excel subido
+# ──────────────────────────────────────────────────────────────
+@app.route("/api/restaurar_pacientes", methods=["POST"])
+@requiere_token
+def restaurar_pacientes():
+    import tempfile, os
+    archivo = request.files.get("archivo")
+    if not archivo:
+        return jsonify({"ok": False, "error": "No se recibió archivo"})
+
+    # Guardar temporalmente para procesarlo
+    with tempfile.NamedTemporaryFile(suffix=".xlsx", delete=False) as tmp:
+        archivo.save(tmp.name)
+        ruta_tmp = tmp.name
+
+    try:
+        resultado = _pacientes.restaurar_respaldo(ruta_tmp)
+    finally:
+        os.unlink(ruta_tmp)
+
+    return jsonify(resultado)
+
+
+# ──────────────────────────────────────────────────────────────
 # Upload CSV (reemplazo web de seleccionarYLeerCSV)
 # ──────────────────────────────────────────────────────────────
 @app.route("/api/upload_csv", methods=["POST"])

@@ -706,14 +706,49 @@
 
         async function respaldarPacientes() {
             document.getElementById("loadingOverlay").style.display = "flex";
-            const res = await window.pywebview.api.respaldar_pacientes();
-            document.getElementById("loadingOverlay").style.display = "none";
-            alert(res.ok ? "Respaldo exitoso" : "Error: " + res.error);
+            try {
+                const resp = await fetch("/api/descargar_respaldo", { credentials: "include" });
+                if (!resp.ok) { alert("Error al generar respaldo"); return; }
+                const blob = await resp.blob();
+                const header = resp.headers.get("Content-Disposition") || "";
+                const match = header.match(/filename="?([^"]+)"?/);
+                const nombre = match ? match[1] : "Respaldo_Pacientes.xlsx";
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url; a.download = nombre; a.click();
+                URL.revokeObjectURL(url);
+            } catch(e) { alert("Error: " + e); }
+            finally { document.getElementById("loadingOverlay").style.display = "none"; }
         }
 
-        async function restaurarPacientes() {
-            const res = await window.pywebview.api.seleccionar_y_restaurar_pacientes();
-            if (res.ok) { alert(res.mensaje); location.reload(); }
+        function restaurarPacientes() {
+            // Crear input de archivo dinámico
+            const input = document.createElement("input");
+            input.type = "file";
+            input.accept = ".xlsx,.xls";
+            input.onchange = async function() {
+                const archivo = input.files[0];
+                if (!archivo) return;
+                document.getElementById("loadingOverlay").style.display = "flex";
+                try {
+                    const form = new FormData();
+                    form.append("archivo", archivo);
+                    const resp = await fetch("/api/restaurar_pacientes", {
+                        method: "POST",
+                        credentials: "include",
+                        body: form
+                    });
+                    const res = await resp.json();
+                    if (res.ok) {
+                        alert("✅ Restauración exitosa: " + (res.mensaje || "Pacientes importados"));
+                        location.reload();
+                    } else {
+                        alert("❌ Error: " + res.error);
+                    }
+                } catch(e) { alert("Error: " + e); }
+                finally { document.getElementById("loadingOverlay").style.display = "none"; }
+            };
+            input.click();
         }
 
         function volver() { window.location.assign("/dashboard"); }
