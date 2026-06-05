@@ -584,29 +584,44 @@
 </div>
 
 <script>
-    const rol = localStorage.getItem("rolUsuario") || "";
+    // Obtener rol desde JWT (fuente de verdad) o localStorage como fallback
+    let rol = localStorage.getItem("rolUsuario") || "";
+
+    // Sincronizar rol desde el servidor en cada carga
+    fetch("/api/check_auth", { credentials: "include" })
+        .then(r => r.ok ? r.json() : null)
+        .then(data => {
+            if (data?.rol) {
+                rol = data.rol;
+                localStorage.setItem("rolUsuario", rol);
+                localStorage.setItem("usuarioLogueado", data.usuario || "");
+                aplicarRol(rol);
+            }
+        }).catch(() => {});
 
     document.getElementById("fechaHoy").textContent =
         new Date().toLocaleDateString('es-MX', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
 
-    document.getElementById("rol-actual-top").textContent =
-        rol.charAt(0).toUpperCase() + rol.slice(1);
+    function aplicarRol(r) {
+        const el = document.getElementById("rol-actual-top");
+        if (el) el.textContent = r.charAt(0).toUpperCase() + r.slice(1);
 
-    if (rol === "admin") {
-        document.body.classList.add("admin-active");
-        document.getElementById("adminSidebar").style.display = "flex";
-        document.getElementById("navbarLogo").style.display = "none";
-        document.getElementById("adminCard").style.display = "flex";
-    } else if (rol === "recepcion") {
-        // Oculta navbar verde, muestra navbar azul de recepción
-        document.getElementById("mainNavbar").style.display = "none";
-        document.getElementById("recepNav").style.display = "flex";
-    } else {
-        document.getElementById("horizontalMenu").style.display = "flex";
-        ({ laboratorista:["analisisBtn","resultadosBtn","ParametrosBtn"],
-           capturista:[] }[rol] || [])
-        .forEach(id => { const b = document.getElementById(id); if (b) b.style.display = ""; });
+        if (r === "admin") {
+            document.body.classList.add("admin-active");
+            document.getElementById("adminSidebar").style.display = "flex";
+            document.getElementById("navbarLogo").style.display = "none";
+            document.getElementById("adminCard").style.display = "flex";
+        } else if (r === "recepcion") {
+            document.getElementById("mainNavbar").style.display = "none";
+            document.getElementById("recepNav").style.display = "flex";
+        } else {
+            document.getElementById("horizontalMenu").style.display = "flex";
+            ({ laboratorista:["analisisBtn","resultadosBtn","ParametrosBtn"],
+               capturista:[] }[r] || [])
+            .forEach(id => { const b = document.getElementById(id); if (b) b.style.display = ""; });
+        }
     }
+    if (rol) aplicarRol(rol);
 
     const ir = p => location.href = p;
     const cerrarSesion = () => {
@@ -713,4 +728,7 @@
         if (window.pywebview?.api) { refresh(); setInterval(refresh, 7000); }
         else setTimeout(wait, 200);
     }
-    window.addEventListe
+    window.addEventListener('pywebviewready', () => { refresh(); setInterval(refresh, 7000); }, { once: true });
+</script>
+</body>
+</html>
