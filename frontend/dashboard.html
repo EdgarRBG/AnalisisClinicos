@@ -185,19 +185,14 @@
             margin-bottom: 20px;
         }
         .stat {
+            background: var(--surface);
+            border: 1px solid var(--border);
             border-radius: 14px;
             padding: 22px 26px;
             display: flex; align-items: center; gap: 18px;
-            transition: transform 0.15s, box-shadow 0.15s;
-            border: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
         }
-        .stat:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.10); }
-        .stat.blue   { background: linear-gradient(135deg, #1565c0, #1e88e5); }
-        .stat.green  { background: linear-gradient(135deg, #1b5e20, #2e7d32); }
-        .stat.orange { background: linear-gradient(135deg, #e65100, #f57c00); }
-        .stat .stat-val, .stat .stat-lbl { color: #fff; }
-        .stat .stat-ico { background: rgba(255,255,255,0.2) !important; }
-        .stat .stat-ico .material-symbols-outlined { color: #fff !important; }
+        .stat:hover { border-color: #c8d8c8; box-shadow: 0 4px 12px rgba(0,0,0,0.07); }
 
         .stat-ico {
             width: 50px; height: 50px; border-radius: 13px;
@@ -510,21 +505,21 @@
 
     <!-- Stats -->
     <div class="stats">
-        <div class="stat blue">
+        <div class="stat">
             <div class="stat-ico blue"><span class="material-symbols-outlined">person_add</span></div>
             <div>
                 <div class="stat-val blue" id="statPacientes">—</div>
                 <div class="stat-lbl">Pacientes registrados hoy</div>
             </div>
         </div>
-        <div class="stat green">
+        <div class="stat">
             <div class="stat-ico green"><span class="material-symbols-outlined">check_circle</span></div>
             <div>
                 <div class="stat-val green" id="statFinalizados">—</div>
                 <div class="stat-lbl">Análisis finalizados hoy</div>
             </div>
         </div>
-        <div class="stat orange">
+        <div class="stat">
             <div class="stat-ico orange"><span class="material-symbols-outlined">pending</span></div>
             <div>
                 <div class="stat-val orange" id="statPendientes">—</div>
