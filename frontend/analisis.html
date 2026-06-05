@@ -717,7 +717,7 @@
                 );
  
                 if (resS) {
-                    let url = "bloques.html?solicitudId=" + resS;
+                    let url = "/bloques?solicitudId=" + resS;
                     if (pSeleccionado.espera_id) url += "&esperaId=" + pSeleccionado.espera_id;
                     if (pSeleccionado.cita_id)   url += "&citaId="   + pSeleccionado.cita_id;
                     alert("¡Solicitud procesada con éxito!");
