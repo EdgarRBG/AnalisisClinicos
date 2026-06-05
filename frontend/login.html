@@ -257,4 +257,11 @@
             if (err) err.innerText = "⏰ Tu sesión expiró. Inicia sesión nuevamente.";
         }
 
-        document.addEventListener("keypress", 
+        document.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") login();
+        });
+    </script>
+
+</body>
+
+</html>
