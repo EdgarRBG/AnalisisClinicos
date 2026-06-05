@@ -53,7 +53,7 @@ class Bloques:
         finally:
             conn.close()
 
-        def guardar_bloques_solicitud(self, solicitud_id, bloques_json):
+    def guardar_bloques_solicitud(self, solicitud_id, bloques_json):
         """Guarda los bloques seleccionados para una solicitud"""
         conn = conectar()
         cursor = conn.cursor(dictionary=True)
