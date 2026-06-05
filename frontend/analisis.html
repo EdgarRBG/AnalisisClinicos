@@ -493,7 +493,18 @@
             if (window.pywebview && window.pywebview.api) {
                 cargarHoy();
             } else {
-                window.addEventListener('pywebviewready', cargarHoy);
+                async function cargarEstudiosSelect() {
+            const sel = document.getElementById('estudio');
+            const estudios = await window.pywebview.api.obtenerEstudiosDisponibles();
+            if (!estudios) return;
+            while (sel.options.length > 1) sel.remove(1);
+            estudios.forEach(e => sel.add(new Option(e.nombre, e.nombre)));
+        }
+
+        window.addEventListener('pywebviewready', async () => {
+            await cargarEstudiosSelect();
+            cargarHoy();
+        });
             }
         }
  

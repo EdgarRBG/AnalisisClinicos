@@ -477,6 +477,7 @@
                         <label>ESTUDIO / ANÁLISIS</label>
                         <select id="tipoEstudio">
                             <option value="" disabled selected>Selecciona un estudio...</option>
+                            <!-- Cargado dinámicamente -->
                             <option value="Quimica sanguinea 35 elementos">Quimica sanguinea 35 elementos</option>
                             <option value="Perfil lipidico">Perfil lipidico</option>
                             <option value="Citometria hematica completa">Citometria hematica completa</option>
@@ -542,8 +543,20 @@
         let mesAct = new Date().getMonth();
         let anioAct = new Date().getFullYear();
 
+        async function cargarEstudios() {
+            const sel = document.getElementById('tipoEstudio');
+            const estudios = await window.pywebview.api.obtenerEstudiosDisponibles();
+            if (!estudios) return;
+            // Limpiar opciones previas excepto la primera
+            while (sel.options.length > 1) sel.remove(1);
+            estudios.forEach(e => {
+                sel.add(new Option(e.nombre, e.nombre));
+            });
+        }
+
         window.addEventListener('pywebviewready', async () => {
             try {
+                await cargarEstudios();
                 pacientes = await window.pywebview.api.obtenerTodosLosPacientes() || [];
                 citas = await window.pywebview.api.obtenerCitas() || [];
                 emergencias = await window.pywebview.api.obtenerPacientesEnEspera() || [];
